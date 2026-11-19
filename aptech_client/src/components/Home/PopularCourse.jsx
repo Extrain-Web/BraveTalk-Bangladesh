@@ -9,7 +9,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import PopularCourseCard from "./PopularCourseCard";
 import SectionHeader from "./SectionHeader";
 
-const MAX_CARDS = 8;
+const MAX_CARDS = 6; // 2 full rows of 3
 
 function CardSkeleton() {
     return (
@@ -109,7 +109,7 @@ const PopularCourse = () => {
                     transition={{ duration: 0.5, delay: 0.15 }}
                 >
                     {loading && list.length === 0 ? (
-                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                             {Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)}
                         </div>
                     ) : error && list.length === 0 ? (
@@ -132,7 +132,7 @@ const PopularCourse = () => {
                             </p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                             {shown.map((course) => (
                                 <PopularCourseCard key={course._id || course.id} course={course} categoryName={catNameOf(course)} />
                             ))}
