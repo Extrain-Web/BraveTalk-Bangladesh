@@ -1,17 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import {
-    LuMic,
     LuArrowRight,
     LuCheck,
-    LuSpellCheck,
-    LuAudioLines,
-    LuLanguages,
-    LuTarget,
     LuUsers,
+    LuBookOpen,
+    LuMonitorPlay,
+    LuCirclePlay,
+    LuAward,
     LuBadgeCheck,
 } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
@@ -27,17 +26,15 @@ const COPY = {
         ctaPrimary: "Explore courses",
         ctaSecondary: "Contact us",
         ticks: ["Online & offline", "Recorded classes", "Pay with bKash"],
-        panelCta: "View courses",
-        panelHint: "Popular right now",
         photoTag: "Be a Speaker, Be a Leader!",
         photoCardTitle: "Live practice",
         photoCardText: "Mentor feedback in every class",
-        tabs: [
-            { key: "speaking", label: "Speaking", icon: LuMic, title: "Speak without hesitation", text: "Daily live speaking practice with your mentor.", points: ["Live conversation rounds", "Mistakes corrected by mentors", "Real-life topics"] },
-            { key: "grammar", label: "Grammar", icon: LuSpellCheck, title: "Grammar that sticks", text: "Simple rules, explained in Bangla and English.", points: ["Easy rules with examples", "Practice after each class", "Weekly progress check"] },
-            { key: "pronunciation", label: "Pronunciation", icon: LuAudioLines, title: "Sound clear and natural", text: "Fix common accent problems step by step.", points: ["Sound drills", "Record and compare", "Stress and intonation"] },
-            { key: "vocabulary", label: "Vocabulary", icon: LuLanguages, title: "Words you will use", text: "Build everyday and professional vocabulary.", points: ["Daily word sets", "Learn in sentences", "Interview & meeting phrases"] },
-            { key: "public-speaking", label: "Public Speaking", icon: LuTarget, title: "Speak on any stage", text: "Build stage confidence, leadership and debate skills.", points: ["Speech & presentation practice", "Debate and leadership sessions", "Mentor feedback on every talk"] },
+        cardCta: "Explore",
+        cards: [
+            { key: "books", title: "Books", text: "Printed & digital books with video lessons.", href: "/books", icon: LuBookOpen, color: "#e5251f", tint: "#fdeceb" },
+            { key: "online", title: "Online Courses", text: "Live classes with mentors — join from anywhere.", href: "/courses?type=Online", icon: LuMonitorPlay, color: "#0142b2", tint: "#e8effc" },
+            { key: "recorded", title: "Recorded Courses", text: "Learn at your own pace, watch anytime.", href: "/courses?type=Recorded", icon: LuCirclePlay, color: "#027a1e", tint: "#e6f4ea" },
+            { key: "certification", title: "Certification", text: "QR-verified certificates you can share.", href: "/certification", icon: LuAward, color: "#0b1b4a", tint: "#e9ebf2" },
         ],
     },
     bn: {
@@ -48,17 +45,15 @@ const COPY = {
         ctaPrimary: "কোর্স দেখুন",
         ctaSecondary: "যোগাযোগ করুন",
         ticks: ["অনলাইন ও অফলাইন", "রেকর্ডেড ক্লাস", "বিকাশে পেমেন্ট"],
-        panelCta: "কোর্স দেখুন",
-        panelHint: "এখন জনপ্রিয়",
         photoTag: "বক্তা হও, নেতা হও!",
         photoCardTitle: "লাইভ প্র্যাকটিস",
         photoCardText: "প্রতিটি ক্লাসে মেন্টরের ফিডব্যাক",
-        tabs: [
-            { key: "speaking", label: "স্পিকিং", icon: LuMic, title: "জড়তা ছাড়াই কথা বলুন", text: "মেন্টরের সাথে প্রতিদিন লাইভ স্পিকিং প্র্যাকটিস।", points: ["লাইভ কথোপকথন রাউন্ড", "মেন্টর ভুল শুধরে দেবেন", "বাস্তব জীবনের টপিক"] },
-            { key: "grammar", label: "গ্রামার", icon: LuSpellCheck, title: "গ্রামার যা মনে থাকে", text: "সহজ নিয়ম, বাংলা ও ইংরেজিতে বোঝানো।", points: ["উদাহরণসহ সহজ নিয়ম", "প্রতি ক্লাসের পর প্র্যাকটিস", "সাপ্তাহিক প্রগ্রেস চেক"] },
-            { key: "pronunciation", label: "উচ্চারণ", icon: LuAudioLines, title: "স্পষ্ট ও স্বাভাবিক উচ্চারণ", text: "ধাপে ধাপে উচ্চারণের সমস্যা ঠিক করুন।", points: ["সাউন্ড ড্রিল", "রেকর্ড করে মিলিয়ে দেখুন", "স্ট্রেস ও ইন্টোনেশন"] },
-            { key: "vocabulary", label: "ভোকাবুলারি", icon: LuLanguages, title: "কাজের শব্দভান্ডার", text: "দৈনন্দিন ও প্রফেশনাল শব্দ শিখুন।", points: ["দৈনিক ওয়ার্ড সেট", "বাক্যে শেখা", "ইন্টারভিউ ও মিটিং ফ্রেজ"] },
-            { key: "public-speaking", label: "পাবলিক স্পিকিং", icon: LuTarget, title: "যেকোনো মঞ্চে কথা বলুন", text: "মঞ্চে আত্মবিশ্বাস, লিডারশিপ ও বিতর্কের দক্ষতা গড়ুন।", points: ["বক্তৃতা ও প্রেজেন্টেশন প্র্যাকটিস", "বিতর্ক ও লিডারশিপ সেশন", "প্রতিটি বক্তৃতায় মেন্টরের ফিডব্যাক"] },
+        cardCta: "দেখুন",
+        cards: [
+            { key: "books", title: "বই", text: "ছাপা ও ডিজিটাল বই, সাথে ভিডিও লেসন।", href: "/books", icon: LuBookOpen, color: "#e5251f", tint: "#fdeceb" },
+            { key: "online", title: "অনলাইন কোর্স", text: "মেন্টরের সাথে লাইভ ক্লাস, যেকোনো জায়গা থেকে।", href: "/courses?type=Online", icon: LuMonitorPlay, color: "#0142b2", tint: "#e8effc" },
+            { key: "recorded", title: "রেকর্ডেড কোর্স", text: "নিজের সময়ে শিখুন, যখন খুশি দেখুন।", href: "/courses?type=Recorded", icon: LuCirclePlay, color: "#027a1e", tint: "#e6f4ea" },
+            { key: "certification", title: "সার্টিফিকেশন", text: "QR দিয়ে যাচাইযোগ্য সার্টিফিকেট।", href: "/certification", icon: LuAward, color: "#0b1b4a", tint: "#e9ebf2" },
         ],
     },
 };
@@ -70,10 +65,6 @@ const Hero = () => {
     const c = COPY[language === "bn" ? "bn" : "en"];
     const bn = language === "bn" ? "hind-siliguri" : "";
     const heroImage = useSiteImage("heroImage");
-
-    const [activeTab, setActiveTab] = useState(0);
-    const tab = c.tabs[activeTab];
-    const TabIcon = tab.icon;
 
     const fadeUp = {
         hidden: { opacity: 0, y: 16 },
@@ -167,70 +158,32 @@ const Hero = () => {
                     </motion.div>
                 </div>
 
-                {/* ---------------- Tabs + content panel (always visible on the first screen) ---------------- */}
+                {/* ---------------- 4 category cards ---------------- */}
                 <motion.div
                     initial={{ opacity: 0, y: 12 }}
                     animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
                     transition={{ duration: 0.45, delay: 0.3 }}
-                    className="mt-10 lg:mt-0 overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm"
+                    className="mt-10 lg:mt-0 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
                 >
-                    <div className="flex overflow-x-auto border-b border-slate-200 bg-slate-50 [scrollbar-width:none]" role="tablist">
-                        {c.tabs.map((tb, i) => {
-                            const Icon = tb.icon;
-                            const active = i === activeTab;
-                            return (
-                                <button
-                                    key={tb.key}
-                                    type="button"
-                                    role="tab"
-                                    aria-selected={active}
-                                    onClick={() => setActiveTab(i)}
-                                    className={`flex shrink-0 items-center gap-1.5 border-b-2 px-4 sm:px-5 py-3 text-[13px] font-semibold transition work ${bn} ${
-                                        active
-                                            ? "border-[#e5251f] bg-white text-[#0b1b4a]"
-                                            : "border-transparent text-slate-500 hover:text-[#0b1b4a]"
-                                    }`}
-                                >
-                                    <Icon className={`text-sm ${active ? "text-[#e5251f]" : ""}`} /> {tb.label}
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    <motion.div
-                        key={tab.key}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.25 }}
-                        className="grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.4fr)_auto] md:items-center md:gap-6"
-                    >
-                        <div className="flex items-start gap-3">
-                            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-[#0142b2]">
-                                <TabIcon className="text-xl" />
-                            </span>
-                            <div>
-                                <p className={`text-[11px] font-semibold uppercase tracking-wider text-[#e5251f] work ${bn}`}>{c.panelHint}</p>
-                                <h3 className={`text-base sm:text-lg font-bold leading-tight text-[#0b1b4a] outfit ${bn}`}>{tab.title}</h3>
-                                <p className={`mt-0.5 text-sm text-slate-600 work ${bn}`}>{tab.text}</p>
-                            </div>
-                        </div>
-
-                        <ul className="grid gap-2 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3 md:border-l md:border-slate-200 md:pl-6">
-                            {tab.points.map((p) => (
-                                <li key={p} className={`flex items-center gap-2 text-sm font-medium text-slate-700 work ${bn}`}>
-                                    <LuCheck className="shrink-0 text-[#027a1e]" />
-                                    {p}
-                                </li>
-                            ))}
-                        </ul>
-
+                    {c.cards.map(({ key, title, text, href, icon: Icon, color, tint }) => (
                         <Link
-                            href={tab.href || "/courses"}
-                            className={`inline-flex items-center justify-center gap-2 rounded-md bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#01368f] work ${bn}`}
+                            key={key}
+                            href={href}
+                            className="group relative flex flex-col rounded-md border border-slate-200 bg-white p-4 sm:p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
                         >
-                            {c.panelCta} <LuArrowRight />
+                            <span className="absolute inset-x-0 top-0 h-[3px] rounded-t-md" style={{ backgroundColor: color }} />
+                            <div className="flex items-center gap-3">
+                                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md" style={{ backgroundColor: tint, color }}>
+                                    <Icon className="text-xl" />
+                                </span>
+                                <h3 className={`text-[15px] sm:text-base font-bold leading-tight text-[#0b1b4a] outfit ${bn}`}>{title}</h3>
+                            </div>
+                            <p className={`mt-3 hidden sm:block text-[13px] leading-relaxed text-slate-600 work ${bn}`}>{text}</p>
+                            <span className={`mt-3 inline-flex items-center gap-1.5 text-[13px] font-semibold work ${bn}`} style={{ color }}>
+                                {c.cardCta} <LuArrowRight className="transition-transform group-hover:translate-x-0.5" />
+                            </span>
                         </Link>
-                    </motion.div>
+                    ))}
                 </motion.div>
             </div>
         </section>
