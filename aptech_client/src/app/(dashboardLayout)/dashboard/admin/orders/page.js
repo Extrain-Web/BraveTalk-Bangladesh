@@ -265,9 +265,9 @@ export default function OrdersPage() {
           { label: 'Collected', value: `৳${totalRevenue.toLocaleString()}`, icon: FiDollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
           { label: 'Paid Orders', value: paidOrders, icon: FiCheckCircle, color: 'text-blue-600', bg: 'bg-blue-50' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm">
+          <div key={s.label} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}>
+              <div className={`w-10 h-10 rounded-md ${s.bg} flex items-center justify-center`}>
                 <s.icon size={18} className={s.color} />
               </div>
               <div>
@@ -286,12 +286,12 @@ export default function OrdersPage() {
             <FiSearch className="absolute left-3 top-3 text-slate-400" size={16} />
             <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by name, course, or transaction ID..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
+              className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
           </div>
-          <div className="flex gap-1 bg-slate-100 rounded-xl p-1 flex-wrap">
+          <div className="flex gap-1 bg-slate-100 rounded-md p-1 flex-wrap">
             {['all', 'pending', 'active', 'cancelled', 'deleted'].map(s => (
               <button key={s} onClick={() => setFilterStatus(s)}
-                className={`px-3 py-2 rounded-lg text-sm capitalize transition ${filterStatus === s ? 'bg-white text-teal-600 shadow-sm font-medium' : 'text-slate-500'}`}>
+                className={`px-3 py-2 rounded-md text-sm capitalize transition ${filterStatus === s ? 'bg-white text-teal-600 shadow-sm font-medium' : 'text-slate-500'}`}>
                 {s === 'deleted' ? '🗑️ Deleted' : s}
               </button>
             ))}
@@ -306,7 +306,7 @@ export default function OrdersPage() {
           <div className="relative">
             <FiGlobe size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
             <select value={filterType} onChange={(e) => setFilterType(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-lg border text-sm cursor-pointer outline-none transition ${
+              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition ${
                 filterType !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
               }`}>
               <option value="all">All Types</option>
@@ -321,7 +321,7 @@ export default function OrdersPage() {
           <div className="relative">
             <FiBookOpen size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
             <select value={filterCourse} onChange={(e) => setFilterCourse(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-lg border text-sm cursor-pointer outline-none transition max-w-[220px] truncate ${
+              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition max-w-[220px] truncate ${
                 filterCourse !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
               }`}>
               <option value="all">All Courses</option>
@@ -335,7 +335,7 @@ export default function OrdersPage() {
           {/* Clear all filters */}
           {(filterStatus !== 'all' || filterType !== 'all' || filterCourse !== 'all' || searchTerm) && (
             <button onClick={() => { setFilterStatus('all'); setFilterType('all'); setFilterCourse('all'); setSearchTerm(''); }}
-              className="px-3 py-1.5 rounded-lg text-sm text-rose-500 hover:bg-rose-50 transition border border-rose-200">
+              className="px-3 py-1.5 rounded-md text-sm text-rose-500 hover:bg-rose-50 transition border border-rose-200">
               ✕ Clear
             </button>
           )}
@@ -345,7 +345,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
         {loading ? (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -393,7 +393,7 @@ export default function OrdersPage() {
                         {/* Student */}
                         <td className="px-5 py-3.5">
                           <Link href={`/dashboard/admin/user/${student._id || ''}`} className="flex items-center gap-2.5 group">
-                            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
+                            <div className="w-9 h-9 rounded-md bg-[#027a1e] flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
                               {studentName.charAt(0).toUpperCase()}
                             </div>
                             <div className="min-w-0">
@@ -469,18 +469,18 @@ export default function OrdersPage() {
                             <button
                               onClick={() => { setEditMode(false); setDetailsOrder(order); }}
                               title="View order details"
-                              className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#c9871a] hover:bg-[#FEF6E7] transition border border-transparent hover:border-[#F0DFB4]"
+                              className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-[#0142b2] hover:bg-[#eef3fc] transition border border-transparent hover:border-[#c9d8f5]"
                             >
                               <FiEye size={15} />
                             </button>
                             {order.status === 'pending' && (
                               <>
                                 <button onClick={() => handleApprove(order._id)} disabled={processing === order._id}
-                                  className="px-4 py-2 bg-emerald-500 text-white text-sm rounded-lg hover:bg-emerald-600 disabled:opacity-50 transition">
+                                  className="px-4 py-2 bg-emerald-500 text-white text-sm rounded-md hover:bg-emerald-600 disabled:opacity-50 transition">
                                   ✓ Approve
                                 </button>
                                 <button onClick={() => handleStatusChange(order._id, 'cancelled')} disabled={processing === order._id}
-                                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition">
+                                  className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition">
                                   <FiX size={16} />
                                 </button>
                               </>
@@ -493,7 +493,7 @@ export default function OrdersPage() {
                               onClick={() => handleDeleteOrder(order._id)}
                               disabled={processing === order._id}
                               title="Permanently delete this order"
-                              className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 transition border border-transparent hover:border-red-200 disabled:opacity-50"
+                              className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 transition border border-transparent hover:border-red-200 disabled:opacity-50"
                             >
                               <FiTrash2 size={15} />
                             </button>
@@ -523,16 +523,16 @@ export default function OrdersPage() {
 
         return (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => { setEditMode(false); setDetailsOrder(null); }}>
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="bg-white rounded-md shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
               {/* Header */}
-              <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#F3A522] to-[#d88f13] shrink-0">
+              <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#0142b2] to-[#01368f] shrink-0">
                 <div>
                   <h3 className="text-white font-bold text-lg outfit">Order Details</h3>
                   <p className="text-white/80 text-xs font-mono">#{String(o._id).slice(-8).toUpperCase()}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   {!editMode && (
-                    <button onClick={() => startEdit(o)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-bold rounded-lg transition">
+                    <button onClick={() => startEdit(o)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-bold rounded-md transition">
                       <FiEdit2 size={13} /> Edit
                     </button>
                   )}
@@ -546,14 +546,14 @@ export default function OrdersPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase border ${getStatusColor(o.status)}`}>{o.status}</span>
                   <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase border ${getPaymentColor(p.status)}`}>Payment: {p.status || '—'}</span>
-                  {c.type && <span className="px-2.5 py-1 rounded-md text-[11px] font-bold uppercase bg-[#FEF6E7] text-[#c9871a] border border-[#F0DFB4]">{c.type}</span>}
+                  {c.type && <span className="px-2.5 py-1 rounded-md text-[11px] font-bold uppercase bg-[#eef3fc] text-[#0142b2] border border-[#c9d8f5]">{c.type}</span>}
                 </div>
 
                 {/* Student */}
-                <div className="rounded-xl border border-slate-100 p-4">
+                <div className="rounded-md border border-slate-100 p-4">
                   <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5"><FiUser size={12} /> Student</h4>
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center text-white font-bold text-lg outfit shrink-0">{name.charAt(0).toUpperCase()}</div>
+                    <div className="w-11 h-11 rounded-md bg-gradient-to-br from-[#0142b2] to-[#01368f] flex items-center justify-center text-white font-bold text-lg outfit shrink-0">{name.charAt(0).toUpperCase()}</div>
                     <div>
                       <p className="font-bold text-slate-800">{name}</p>
                       <p className="text-xs text-slate-400 capitalize">{s.gender || '—'}</p>
@@ -567,10 +567,10 @@ export default function OrdersPage() {
                 </div>
 
                 {/* Course */}
-                <div className="rounded-xl border border-slate-100 p-4">
+                <div className="rounded-md border border-slate-100 p-4">
                   <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5"><FiBookOpen size={12} /> Course</h4>
                   <div className="flex items-center gap-3">
-                    <div className="w-16 h-11 rounded-lg overflow-hidden bg-slate-100 shrink-0">
+                    <div className="w-16 h-11 rounded-md overflow-hidden bg-slate-100 shrink-0">
                       {c.image && <img src={c.image} alt="" className="w-full h-full object-cover" />}
                     </div>
                     <div className="min-w-0">
@@ -582,26 +582,26 @@ export default function OrdersPage() {
 
                 {/* Payment — edit form (admin) vs read-only view */}
                 {editMode && editForm ? (
-                  <div className="rounded-xl border border-[#F0DFB4] bg-[#FEF6E7]/40 p-4 space-y-3">
-                    <h4 className="text-[11px] font-bold text-[#c9871a] uppercase tracking-wider flex items-center gap-1.5"><FiEdit2 size={12} /> Edit Payment</h4>
+                  <div className="rounded-md border border-[#c9d8f5] bg-[#eef3fc]/40 p-4 space-y-3">
+                    <h4 className="text-[11px] font-bold text-[#0142b2] uppercase tracking-wider flex items-center gap-1.5"><FiEdit2 size={12} /> Edit Payment</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="text-[10px] font-bold text-slate-500 uppercase">Course Price (৳)</label>
                         <input type="number" min="0" value={editForm.customFee}
                           onChange={e => setEditForm({ ...editForm, customFee: e.target.value })}
                           placeholder={`Default: ${total}`}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F3A522]/20 focus:border-[#F3A522]" />
+                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2]" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold text-slate-500 uppercase">Amount Paid (৳)</label>
                         <input type="number" min="0" value={editForm.amount}
                           onChange={e => setEditForm({ ...editForm, amount: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F3A522]/20 focus:border-[#F3A522]" />
+                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2]" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold text-slate-500 uppercase">Method</label>
                         <select value={editForm.method} onChange={e => setEditForm({ ...editForm, method: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none bg-white">
+                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none bg-white">
                           <option value="manual">Manual (bank/mobile)</option>
                           <option value="cash">Hand Cash</option>
                           <option value="bkash">bKash</option>
@@ -612,7 +612,7 @@ export default function OrdersPage() {
                       <div>
                         <label className="text-[10px] font-bold text-slate-500 uppercase">Payment Status</label>
                         <select value={editForm.status} onChange={e => setEditForm({ ...editForm, status: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none bg-white">
+                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none bg-white">
                           <option value="pending">Pending</option>
                           <option value="paid">Paid</option>
                           <option value="failed">Failed</option>
@@ -623,19 +623,19 @@ export default function OrdersPage() {
                         <label className="text-[10px] font-bold text-slate-500 uppercase">Transaction ID</label>
                         <input type="text" value={editForm.transactionId}
                           onChange={e => setEditForm({ ...editForm, transactionId: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none font-mono" />
+                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none font-mono" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold text-slate-500 uppercase">Paid From (number)</label>
                         <input type="text" value={editForm.senderNumber}
                           onChange={e => setEditForm({ ...editForm, senderNumber: e.target.value })}
                           placeholder="01XXXXXXXXX"
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none" />
+                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none" />
                       </div>
                       <div>
                         <label className="text-[10px] font-bold text-slate-500 uppercase">Payment Via</label>
                         <select value={editForm.paymentType} onChange={e => setEditForm({ ...editForm, paymentType: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none bg-white">
+                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none bg-white">
                           <option value="">—</option>
                           <option value="bkash">bKash</option>
                           <option value="nagad">Nagad</option>
@@ -647,16 +647,16 @@ export default function OrdersPage() {
                         <label className="text-[10px] font-bold text-slate-500 uppercase">Notes</label>
                         <input type="text" value={editForm.notes}
                           onChange={e => setEditForm({ ...editForm, notes: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none" />
+                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none" />
                       </div>
                     </div>
                     <div className="flex items-center gap-2 pt-1">
                       <button onClick={() => saveEdit(o._id)} disabled={savingEdit}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition">
+                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-md hover:bg-emerald-700 disabled:opacity-50 transition">
                         {savingEdit ? <FiLoader className="animate-spin" size={14} /> : <FiSave size={14} />} Save Changes
                       </button>
                       <button onClick={() => setEditMode(false)} disabled={savingEdit}
-                        className="px-4 py-2 border border-slate-200 text-slate-600 text-sm font-semibold rounded-lg hover:bg-slate-50 transition">
+                        className="px-4 py-2 border border-slate-200 text-slate-600 text-sm font-semibold rounded-md hover:bg-slate-50 transition">
                         Cancel
                       </button>
                     </div>
@@ -664,7 +664,7 @@ export default function OrdersPage() {
                 ) : (
                   <>
                     {/* Payment */}
-                    <div className="rounded-xl border border-slate-100 p-4">
+                    <div className="rounded-md border border-slate-100 p-4">
                       <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5"><FiCreditCard size={12} /> Payment</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <DetailRow icon={FiCreditCard} label="Method" value={`${p.method || '—'}${p.gatewayData?.paymentType ? ` · ${p.gatewayData.paymentType}` : ''}`} />
@@ -676,11 +676,11 @@ export default function OrdersPage() {
 
                     {/* Amount summary */}
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-xl bg-slate-50 border border-slate-100 p-3 text-center">
+                      <div className="rounded-md bg-slate-50 border border-slate-100 p-3 text-center">
                         <p className="text-lg font-bold text-slate-800 outfit">৳{total.toLocaleString()}</p>
                         <p className="text-[11px] text-slate-400">Course Price</p>
                       </div>
-                      <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-3 text-center">
+                      <div className="rounded-md bg-emerald-50 border border-emerald-100 p-3 text-center">
                         <p className="text-lg font-bold text-emerald-600 outfit">৳{paid.toLocaleString()}</p>
                         <p className="text-[11px] text-emerald-500">{p.status === 'paid' ? 'Paid' : 'Submitted (pending)'}</p>
                       </div>
@@ -697,13 +697,13 @@ export default function OrdersPage() {
                   <>
                     <button
                       onClick={() => { handleApprove(o._id); setDetailsOrder(null); }}
-                      className="px-5 py-2.5 bg-emerald-500 text-white text-sm font-bold rounded-lg hover:bg-emerald-600 transition"
+                      className="px-5 py-2.5 bg-emerald-500 text-white text-sm font-bold rounded-md hover:bg-emerald-600 transition"
                     >
                       ✓ Approve Order
                     </button>
                     <button
                       onClick={() => { handleStatusChange(o._id, 'cancelled'); setDetailsOrder(null); }}
-                      className="px-4 py-2.5 border border-slate-200 text-slate-600 text-sm font-semibold rounded-lg hover:bg-slate-50 transition"
+                      className="px-4 py-2.5 border border-slate-200 text-slate-600 text-sm font-semibold rounded-md hover:bg-slate-50 transition"
                     >
                       Cancel Order
                     </button>
@@ -711,7 +711,7 @@ export default function OrdersPage() {
                 )}
                 <button
                   onClick={() => { handleDeleteOrder(o._id); setDetailsOrder(null); }}
-                  className="ml-auto inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-red-500 border border-red-200 rounded-lg hover:bg-red-50 transition"
+                  className="ml-auto inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-red-500 border border-red-200 rounded-md hover:bg-red-50 transition"
                 >
                   <FiTrash2 size={14} /> Delete
                 </button>

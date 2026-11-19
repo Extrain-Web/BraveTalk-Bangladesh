@@ -209,9 +209,9 @@ export default function CertificationPage() {
     return (
       <div className="poppins space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white rounded-md border border-slate-200/60 p-4 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-600 flex items-center justify-center text-white">
+            <div className="w-11 h-11 rounded-md bg-[#027a1e] flex items-center justify-center text-white">
               <FiAward size={20} />
             </div>
             <div>
@@ -219,7 +219,7 @@ export default function CertificationPage() {
               <p className="text-xs text-slate-400">Manage student certificates by batch</p>
             </div>
           </div>
-          <button onClick={loadBatches} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition">
+          <button onClick={loadBatches} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 transition">
             <FiRefreshCw size={12} className={loading ? 'animate-spin' : ''} /> Reload
           </button>
         </div>
@@ -234,9 +234,9 @@ export default function CertificationPage() {
           ].map(s => {
             const Icon = s.icon;
             return (
-              <div key={s.label} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm">
+              <div key={s.label} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}>
+                  <div className={`w-10 h-10 rounded-md ${s.bg} flex items-center justify-center`}>
                     <Icon size={18} className={s.color} />
                   </div>
                   <div>
@@ -256,13 +256,13 @@ export default function CertificationPage() {
               <FiSearch className="absolute left-3 top-3 text-slate-400" size={16} />
               <input value={batchSearch} onChange={e => setBatchSearch(e.target.value)}
                 placeholder="Search batch by name, ID or course..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
+                className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
             </div>
             <div className="flex items-center gap-2">
               <div className="relative">
                 <FiBook size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
                 <select value={courseFilter} onChange={e => setCourseFilter(e.target.value)}
-                  className={`appearance-none pl-8 pr-7 py-1.5 rounded-lg border text-sm cursor-pointer outline-none transition max-w-[220px] truncate ${courseFilter !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'}`}>
+                  className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition max-w-[220px] truncate ${courseFilter !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'}`}>
                   <option value="all">All Courses</option>
                   {courseList.map(c => (
                     <option key={c.id} value={c.id}>{c.title}</option>
@@ -272,7 +272,7 @@ export default function CertificationPage() {
               </div>
               {hasActiveFilter && (
                 <button onClick={() => { setBatchSearch(''); setCourseFilter('all'); }}
-                  className="px-3 py-1.5 rounded-lg text-sm text-rose-500 hover:bg-rose-50 transition border border-rose-200">
+                  className="px-3 py-1.5 rounded-md text-sm text-rose-500 hover:bg-rose-50 transition border border-rose-200">
                   ✕ Clear
                 </button>
               )}
@@ -281,7 +281,7 @@ export default function CertificationPage() {
         </div>
 
         {/* Tabs + Batch List */}
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm">
           <div className="flex items-center justify-between px-4 pt-4 pb-0">
             <div className="flex items-center gap-1">
               {[
@@ -292,7 +292,7 @@ export default function CertificationPage() {
                 const isActive = tab === t.key;
                 return (
                   <button key={t.key} onClick={() => setTab(t.key)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-t-lg text-xs font-medium transition-all border-b-2 ${isActive ? `border-${t.color}-500 text-${t.color}-600 bg-${t.color}-50/50` : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}>
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-t-md text-xs font-medium transition-all border-b-2 ${isActive ? `border-${t.color}-500 text-${t.color}-600 bg-${t.color}-50/50` : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}>
                     <Icon size={13} />
                     {t.label}
                     <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${isActive ? `bg-${t.color}-100 text-${t.color}-600` : 'bg-slate-100 text-slate-500'}`}>{t.count}</span>
@@ -313,7 +313,7 @@ export default function CertificationPage() {
             {loading ? (
               <div className="space-y-3">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="h-[80px] bg-slate-50 rounded-xl animate-pulse" />
+                  <div key={i} className="h-[80px] bg-slate-50 rounded-md animate-pulse" />
                 ))}
               </div>
             ) : currentBatches.length === 0 ? (
@@ -334,13 +334,13 @@ export default function CertificationPage() {
 
                   return (
                     <div key={batch._id} onClick={() => openBatch(batch)}
-                      className="bg-white border border-slate-200/60 rounded-xl p-4 cursor-pointer hover:shadow-md hover:border-teal-200 transition-all group">
+                      className="bg-white border border-slate-200/60 rounded-md p-4 cursor-pointer hover:shadow-md hover:border-teal-200 transition-all group">
                       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 shrink-0">
+                        <div className="w-14 h-14 rounded-md overflow-hidden bg-slate-100 shrink-0">
                           {batch.courseId?.image ? (
                             <img src={batch.courseId.image} alt="" className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-teal-400 to-emerald-500 flex items-center justify-center text-white font-bold text-lg">
+                            <div className="w-full h-full bg-[#027a1e] flex items-center justify-center text-white font-bold text-lg">
                               {(batch.courseName || 'B')?.charAt(0)}
                             </div>
                           )}
@@ -380,7 +380,7 @@ export default function CertificationPage() {
                             </span>
                           </div>
                           <div className="w-full bg-slate-100 rounded-full h-2">
-                            <div className={`h-2 rounded-full transition-all ${seatPct >= 80 ? 'bg-gradient-to-r from-emerald-400 to-emerald-500' : seatPct >= 50 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : 'bg-gradient-to-r from-teal-400 to-teal-500'}`}
+                            <div className={`h-2 rounded-full transition-all ${seatPct >= 80 ? 'bg-[#027a1e]' : seatPct >= 50 ? 'bg-[#0142b2]' : 'bg-[#027a1e]'}`}
                               style={{ width: `${Math.min(seatPct, 100)}%` }} />
                           </div>
                           <p className="text-[10px] text-slate-400 mt-1 text-center">{batch.certifiedCount || 0}/{batch.studentCount || 0}</p>
@@ -404,9 +404,9 @@ export default function CertificationPage() {
   return (
     <div className="poppins space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white rounded-md border border-slate-200/60 p-4 shadow-sm">
         <div className="flex items-center gap-3">
-          <button onClick={goBack} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-teal-50 hover:text-teal-600 transition shrink-0">
+          <button onClick={goBack} className="w-9 h-9 rounded-md bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-teal-50 hover:text-teal-600 transition shrink-0">
             <FiArrowLeft size={16} />
           </button>
           <div>
@@ -428,17 +428,17 @@ export default function CertificationPage() {
         </div>
         <div className="flex items-center gap-2">
           {!bulkMode ? (
-            <button onClick={() => setBulkMode(true)} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-violet-600 rounded-lg hover:bg-violet-700 transition shadow-sm">
+            <button onClick={() => setBulkMode(true)} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-violet-600 rounded-md hover:bg-violet-700 transition shadow-sm">
               <FiZap size={12} /> Bulk Grant
             </button>
           ) : (
             <>
               <button onClick={handleBulkGrant} disabled={selectedStudents.length === 0 || bulkLoading}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition shadow-sm">
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 rounded-md hover:bg-emerald-700 disabled:opacity-50 transition shadow-sm">
                 {bulkLoading ? <FiLoader className="animate-spin" size={12} /> : <FiCheck size={12} />}
                 Grant ({selectedStudents.length})
               </button>
-              <button onClick={() => { setBulkMode(false); setSelectedStudents([]); }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition">
+              <button onClick={() => { setBulkMode(false); setSelectedStudents([]); }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 transition">
                 Cancel
               </button>
             </>
@@ -452,10 +452,10 @@ export default function CertificationPage() {
           <FiSearch className="absolute left-3 top-3 text-slate-400" size={16} />
           <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search by name, email or phone..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
+            className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
         </div>
         {bulkMode && (
-          <button onClick={toggleSelectAll} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition">
+          <button onClick={toggleSelectAll} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 transition">
             {selectedStudents.length === filteredStudents.filter(s => !s.hasCertificate || s.certificateStatus === 'revoked').length ? 'Deselect All' : 'Select All Uncertified'}
           </button>
         )}
@@ -464,19 +464,19 @@ export default function CertificationPage() {
 
       {/* Student Table */}
       {loading ? (
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
           {[1, 2, 3, 4, 5].map(i => (
             <div key={i} className="h-[56px] border-b border-slate-50 bg-slate-50/50 animate-pulse" />
           ))}
         </div>
       ) : filteredStudents.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200/60 p-16 text-center shadow-sm">
+        <div className="bg-white rounded-md border border-slate-200/60 p-16 text-center shadow-sm">
           <FiUsers className="mx-auto text-slate-300 mb-3" size={36} />
           <h3 className="font-medium text-slate-600 text-base">No Students Found</h3>
           <p className="text-sm text-slate-400 mt-1">No enrolled students in this batch.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -538,7 +538,7 @@ export default function CertificationPage() {
                       {/* Student */}
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2.5">
-                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${isCertified ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 text-white' : 'bg-gradient-to-br from-teal-400 to-teal-600 text-white'}`}>
+                          <div className={`w-8 h-8 rounded-md flex items-center justify-center text-xs font-bold flex-shrink-0 ${isCertified ? 'bg-[#027a1e] text-white' : 'bg-[#027a1e] text-white'}`}>
                             {student.studentName?.charAt(0)?.toUpperCase() || '?'}
                           </div>
                           <div className="min-w-0">
@@ -614,12 +614,12 @@ export default function CertificationPage() {
                         <div className="flex items-center justify-center gap-1">
                           {isCertified && (
                             <button onClick={() => setViewCert({ ...student, id: student.certificateId, courseName: batchInfo?.courseName || selectedBatch?.courseName, batchNumber: batchInfo?.batchId || selectedBatch?.id, startDate: batchInfo?.startDate || selectedBatch?.startDate, endDate: batchInfo?.endDate || selectedBatch?.endDate, issueDate: student.issueDate || new Date() })}
-                              className="inline-flex items-center gap-1 px-2 py-1.5 text-xs font-medium text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 rounded-lg transition">
+                              className="inline-flex items-center gap-1 px-2 py-1.5 text-xs font-medium text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 rounded-md transition">
                               <FiEye size={11} /> View
                             </button>
                           )}
                           <button onClick={() => toggleEligibility(student)} disabled={isLoading}
-                            className={`inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg border transition disabled:opacity-50 ${isLoading ? 'bg-slate-50 text-slate-400 border-slate-200' : isCertified ? 'text-red-500 bg-red-50 hover:bg-red-100 border-red-200' : 'text-white bg-emerald-600 hover:bg-emerald-700 border-emerald-600 shadow-sm'}`}>
+                            className={`inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md border transition disabled:opacity-50 ${isLoading ? 'bg-slate-50 text-slate-400 border-slate-200' : isCertified ? 'text-red-500 bg-red-50 hover:bg-red-100 border-red-200' : 'text-white bg-emerald-600 hover:bg-emerald-700 border-emerald-600 shadow-sm'}`}>
                             {isLoading ? <FiLoader className="animate-spin" size={12} /> : isCertified ? <><FiShield size={12} /> Revoke</> : <><FiCheck size={12} /> Grant</>}
                           </button>
                         </div>

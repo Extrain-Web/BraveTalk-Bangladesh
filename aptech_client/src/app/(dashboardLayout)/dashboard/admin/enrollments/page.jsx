@@ -204,9 +204,9 @@ export default function EnrollmentsPage() {
           { label: 'No Batch', value: withoutBatch, icon: FiHash, color: 'text-amber-600', bg: 'bg-amber-50' },
           { label: 'Courses', value: courseSet.size, icon: FiBook, color: 'text-blue-600', bg: 'bg-blue-50' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm">
+          <div key={s.label} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}>
+              <div className={`w-10 h-10 rounded-md ${s.bg} flex items-center justify-center`}>
                 <s.icon size={18} className={s.color} />
               </div>
               <div>
@@ -225,12 +225,12 @@ export default function EnrollmentsPage() {
             <FiSearch className="absolute left-3 top-3 text-slate-400" size={16} />
             <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by student or course..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
+              className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
           </div>
-          <div className="flex gap-1 bg-slate-100 rounded-xl p-1">
+          <div className="flex gap-1 bg-slate-100 rounded-md p-1">
             {['all', 'unassigned', 'assigned'].map(s => (
               <button key={s} onClick={() => setFilterBatch(s)}
-                className={`px-3 py-2 rounded-lg text-sm capitalize transition ${filterBatch === s ? 'bg-white text-teal-600 shadow-sm font-medium' : 'text-slate-500'}`}>
+                className={`px-3 py-2 rounded-md text-sm capitalize transition ${filterBatch === s ? 'bg-white text-teal-600 shadow-sm font-medium' : 'text-slate-500'}`}>
                 {s}
               </button>
             ))}
@@ -245,7 +245,7 @@ export default function EnrollmentsPage() {
           <div className="relative">
             <FiGlobe size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
             <select value={filterType} onChange={(e) => setFilterType(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-lg border text-sm cursor-pointer outline-none transition ${filterType !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
+              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition ${filterType !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
                 }`}>
               <option value="all">All Types</option>
               <option value="online">Online</option>
@@ -259,7 +259,7 @@ export default function EnrollmentsPage() {
           <div className="relative">
             <FiBookOpen size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
             <select value={filterCourse} onChange={(e) => setFilterCourse(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-lg border text-sm cursor-pointer outline-none transition max-w-[220px] truncate ${filterCourse !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
+              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition max-w-[220px] truncate ${filterCourse !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
                 }`}>
               <option value="all">All Courses</option>
               {courseList.map(c => (
@@ -273,7 +273,7 @@ export default function EnrollmentsPage() {
           <div className="relative">
             <FiUserCheck size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
             <select value={filterStudentStatus} onChange={(e) => setFilterStudentStatus(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-lg border text-sm cursor-pointer outline-none transition ${filterStudentStatus !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
+              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition ${filterStudentStatus !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
                 }`}>
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -287,7 +287,7 @@ export default function EnrollmentsPage() {
           {/* Clear */}
           {(filterBatch !== 'all' || filterType !== 'all' || filterCourse !== 'all' || filterStudentStatus !== 'all' || searchTerm) && (
             <button onClick={() => { setFilterBatch('all'); setFilterType('all'); setFilterCourse('all'); setFilterStudentStatus('all'); setSearchTerm(''); }}
-              className="px-3 py-1.5 rounded-lg text-sm text-rose-500 hover:bg-rose-50 transition border border-rose-200">
+              className="px-3 py-1.5 rounded-md text-sm text-rose-500 hover:bg-rose-50 transition border border-rose-200">
               ✕ Clear
             </button>
           )}
@@ -298,7 +298,7 @@ export default function EnrollmentsPage() {
 
       {/* Table */}
       {loading ? (
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -313,13 +313,13 @@ export default function EnrollmentsPage() {
           </div>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-slate-200/60 p-16 text-center shadow-sm">
+        <div className="bg-white rounded-md border border-slate-200/60 p-16 text-center shadow-sm">
           <FiUsers className="mx-auto text-slate-300 mb-3" size={36} />
           <h3 className="font-medium text-slate-600 text-base">No Enrollments Found</h3>
           <p className="text-sm text-slate-400 mt-1">Active enrollments will appear here after orders are approved.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -366,7 +366,7 @@ export default function EnrollmentsPage() {
                       {/* Student */}
                       <td className="px-5 py-3">
                         <Link href={`/dashboard/admin/user/${student._id || ''}`} className="flex items-center gap-2.5 group">
-                          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
+                          <div className="w-9 h-9 rounded-md bg-[#027a1e] flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
                             {studentName.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0">
@@ -458,7 +458,7 @@ export default function EnrollmentsPage() {
                       <td className="px-5 py-3 text-center">
                         <div className="flex items-center justify-center gap-1.5">
                           <button onClick={() => openTransfer(enrollment)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-violet-600 bg-violet-50 hover:bg-violet-100 rounded-lg border border-violet-200 transition"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-violet-600 bg-violet-50 hover:bg-violet-100 rounded-md border border-violet-200 transition"
                             title="Transfer to another course">
                             <FiRefreshCw size={11} /> Transfer
                           </button>
@@ -466,7 +466,7 @@ export default function EnrollmentsPage() {
                             onClick={() => handleDeleteEnrollment(enrollment._id)}
                             disabled={deleting === enrollment._id}
                             title="Delete this enrollment"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-red-500 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition disabled:opacity-50"
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-red-500 bg-red-50 hover:bg-red-100 rounded-md border border-red-200 transition disabled:opacity-50"
                           >
                             {deleting === enrollment._id ? <FiLoader size={11} className="animate-spin" /> : <FiTrash2 size={11} />}
                             Delete
@@ -485,13 +485,13 @@ export default function EnrollmentsPage() {
       {/* ══════ Transfer Modal ══════ */}
       {transferModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+          <div className="bg-white rounded-md shadow-2xl w-full max-w-lg">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
               <h3 className="text-lg font-bold text-slate-800">🔄 Course Transfer</h3>
-              <button onClick={() => setTransferModal(null)} className="p-2 hover:bg-slate-100 rounded-lg"><FiX size={18} /></button>
+              <button onClick={() => setTransferModal(null)} className="p-2 hover:bg-slate-100 rounded-md"><FiX size={18} /></button>
             </div>
             <div className="p-6 space-y-4">
-              <div className="bg-slate-50 rounded-lg p-3">
+              <div className="bg-slate-50 rounded-md p-3">
                 <p className="text-xs text-slate-400">Student</p>
                 <p className="text-sm font-bold text-slate-700">{`${transferModal.studentId?.firstName || ''} ${transferModal.studentId?.lastName || ''}`.trim()}</p>
                 <p className="text-xs text-slate-400 mt-1">Current Course: <span className="text-slate-600 font-medium">{transferModal.courseId?.title || '—'}</span></p>
@@ -499,7 +499,7 @@ export default function EnrollmentsPage() {
               <div>
                 <label className="text-xs font-bold text-slate-500 mb-1 block">New Course *</label>
                 <select value={transferCourseId} onChange={e => { setTransferCourseId(e.target.value); setTransferBatchId(''); }}
-                  className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm outline-none focus:border-teal-400">
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm outline-none focus:border-teal-400">
                   <option value="">— Select Course —</option>
                   {allCourses.filter(c => c._id !== transferModal.courseId?._id).map(c => (
                     <option key={c._id} value={c._id}>{c.title}</option>
@@ -510,7 +510,7 @@ export default function EnrollmentsPage() {
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">New Batch (optional)</label>
                   <select value={transferBatchId} onChange={e => setTransferBatchId(e.target.value)}
-                    className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm outline-none focus:border-teal-400">
+                    className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm outline-none focus:border-teal-400">
                     <option value="">— Select Batch —</option>
                     {getBatchesForTransferCourse(transferCourseId).map(b => (
                       <option key={b._id} value={b._id}>{b.name || b.id} — {b.courseName}</option>
@@ -518,14 +518,14 @@ export default function EnrollmentsPage() {
                   </select>
                 </div>
               )}
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-700">
+              <div className="bg-amber-50 border border-amber-200 rounded-md p-3 text-xs text-amber-700">
                 ⚠️ Transfer করলে student-এর পুরানো batch assignment ও progress reset হয়ে যাবে।
               </div>
             </div>
             <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-100">
-              <button onClick={() => setTransferModal(null)} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg">Cancel</button>
+              <button onClick={() => setTransferModal(null)} className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-md">Cancel</button>
               <button onClick={handleTransfer} disabled={!transferCourseId || transferring}
-                className="flex items-center gap-2 px-5 py-2.5 bg-violet-600 text-white rounded-lg text-sm font-bold hover:bg-violet-700 disabled:opacity-50 transition">
+                className="flex items-center gap-2 px-5 py-2.5 bg-violet-600 text-white rounded-md text-sm font-bold hover:bg-violet-700 disabled:opacity-50 transition">
                 {transferring ? <FiLoader className="animate-spin" size={14} /> : <FiRefreshCw size={14} />}
                 Transfer
               </button>

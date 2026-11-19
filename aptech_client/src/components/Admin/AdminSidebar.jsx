@@ -4,51 +4,150 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  FiHome, FiUsers, FiAward, FiFileText, FiUserCheck,
-  FiMenu, FiX, FiLogOut, FiChevronDown, FiArrowLeft,
-  FiSettings, FiLayers, FiShoppingCart, FiDollarSign, FiPlus,
-  FiBarChart2, FiBell, FiChevronLeft, FiHeadphones, FiTag, FiGlobe, FiClipboard, FiBook,
+  FiHome, FiUsers, FiAward, FiFileText, FiUserCheck, FiMenu, FiX, FiLogOut, FiChevronDown, FiArrowLeft,
+  FiSettings, FiShoppingCart, FiDollarSign, FiBarChart2, FiBell, FiTag, FiGlobe, FiClipboard, FiBook,
+  FiLayers, FiCalendar, FiUser, FiEdit3,
 } from 'react-icons/fi';
+import { useSettings } from '@/context/SettingsContext';
+
+// Brand: blue #0142b2, navy #0b1b4a, red #e5251f
+const MENU = [
+  {
+    label: 'Overview',
+    items: [{ title: 'Dashboard', href: '/dashboard/admin', icon: FiHome, exact: true }],
+  },
+  {
+    label: 'Payments & Reports',
+    items: [
+      { title: 'Payment History', href: '/dashboard/admin/payments', icon: FiDollarSign, deny: ['trainingManager'] },
+      { title: 'Income Analytics', href: '/dashboard/admin/analytics', icon: FiBarChart2, deny: ['trainingManager'] },
+      { title: 'Reports', href: '/dashboard/admin/reports', icon: FiFileText },
+    ],
+  },
+  {
+    label: 'Sales',
+    items: [
+      { title: 'Orders', href: '/dashboard/admin/orders', icon: FiShoppingCart },
+      { title: 'Enrollments', href: '/dashboard/admin/enrollments', icon: FiUserCheck },
+      { title: 'Coupons', href: '/dashboard/admin/coupons', icon: FiTag },
+    ],
+  },
+  {
+    label: 'Courses',
+    items: [
+      {
+        title: 'Courses', icon: FiLayers,
+        submenu: [
+          { title: 'All Courses', href: '/dashboard/admin/course', exact: true },
+          { title: 'Add Course', href: '/dashboard/admin/course/create' },
+          { title: 'Categories', href: '/dashboard/admin/category', exact: true },
+          { title: 'Add Category', href: '/dashboard/admin/category/create' },
+        ],
+      },
+      {
+        title: 'Batches', icon: FiCalendar,
+        submenu: [
+          { title: 'All Batches', href: '/dashboard/admin/batch', exact: true },
+          { title: 'Add Batch', href: '/dashboard/admin/batch/create' },
+        ],
+      },
+      {
+        title: 'Mentors', icon: FiUser,
+        submenu: [
+          { title: 'All Mentors', href: '/dashboard/admin/mentor', exact: true },
+          { title: 'Add Mentor', href: '/dashboard/admin/mentor/create' },
+        ],
+      },
+      { title: 'Certifications', href: '/dashboard/admin/certification', icon: FiAward },
+    ],
+  },
+  {
+    label: 'Bookstore',
+    items: [
+      {
+        title: 'Books', icon: FiBook,
+        submenu: [
+          { title: 'All Books', href: '/dashboard/admin/books', exact: true },
+          { title: 'Add Book', href: '/dashboard/admin/books/create' },
+          { title: 'Book Orders', href: '/dashboard/admin/books/orders' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Communication',
+    items: [
+      { title: 'Notice Board', href: '/dashboard/admin/notice-board', icon: FiClipboard },
+      { title: 'Notifications', href: '/dashboard/admin/notifications', icon: FiBell },
+    ],
+  },
+  {
+    label: 'Website',
+    items: [
+      {
+        title: 'Site Content', icon: FiGlobe,
+        submenu: [
+          { title: 'Contact Page', href: '/dashboard/admin/site-content/contact' },
+          { title: 'Site Photos', href: '/dashboard/admin/site-content/images' },
+        ],
+      },
+      {
+        title: 'Blog', icon: FiEdit3,
+        submenu: [
+          { title: 'All Posts', href: '/dashboard/admin/blog', exact: true },
+          { title: 'Add Post', href: '/dashboard/admin/blog/create' },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Administration',
+    items: [
+      {
+        title: 'Users', icon: FiUsers,
+        submenu: [
+          { title: 'Team / Staff', href: '/dashboard/admin/user/staff', deny: ['trainingManager'] },
+          { title: 'Students', href: '/dashboard/admin/user/students' },
+        ],
+      },
+      { title: 'Settings', href: '/dashboard/admin/settings', icon: FiSettings },
+    ],
+  },
+];
+
+// Hide items a role isn't allowed to see; drop submenu parents left empty.
+const filterByRole = (items, r) => items
+  .filter((it) => !(it.deny && it.deny.includes(r)))
+  .map((it) => (it.submenu ? { ...it, submenu: filterByRole(it.submenu, r) } : it))
+  .filter((it) => !it.submenu || it.submenu.length > 0);
+
+const readUser = () => {
+  if (typeof window === 'undefined') return {};
+  try { return JSON.parse(localStorage.getItem('user') || '{}') || {}; } catch { return {}; }
+};
 
 const AdminSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
-  const [openMenus, setOpenMenus] = useState(() => new Set(['Create New']));
-  const [userName, setUserName] = useState('Admin');
-  const [userEmail, setUserEmail] = useState('');
-  const [role, setRole] = useState('admin');
+  const [openMenus, setOpenMenus] = useState(() => new Set());
+  const [user, setUser] = useState({});
   const pathname = usePathname();
+  const { settings } = useSettings() || {};
+  const logoSrc = settings?.logo || '/images/logo.png';
 
-  useEffect(() => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      try {
-        const u = JSON.parse(user);
-        setUserName(u.firstName || u.name || 'Admin');
-        setUserEmail(u.email || '');
-        if (u.role) setRole(u.role);
-      } catch (e) { }
-    }
-  }, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setUser(readUser()); }, []);
 
-  // Hide items a role isn't allowed to see; drop submenu parents left empty.
-  const filterByRole = (items, r) => items
-    .filter(it => !(it.deny && it.deny.includes(r)))
-    .map(it => it.submenu ? { ...it, submenu: filterByRole(it.submenu, r) } : it)
-    .filter(it => !it.submenu || it.submenu.length > 0);
+  const role = user.role || 'admin';
+  const userName = user.firstName || user.name || 'Admin';
 
-  const isActive = (href) =>
-    pathname === href || (href !== '/dashboard/admin' && pathname.startsWith(href + '/'));
-  const isExactActive = (href) => pathname === href;
-
-  // Does this item (or any nested child) point at the current route?
-  const hasActiveChild = (item) => {
-    if (item.href) return item.exact ? isExactActive(item.href) : isActive(item.href);
-    if (item.submenu) return item.submenu.some(hasActiveChild);
-    return false;
+  const isActive = (item) => {
+    if (!item.href) return false;
+    if (item.exact) return pathname === item.href;
+    return pathname === item.href || pathname.startsWith(item.href + '/');
   };
+  const hasActiveChild = (item) => (item.submenu ? item.submenu.some(isActive) : isActive(item));
 
-  const toggleMenu = (key) => setOpenMenus(prev => {
+  const toggleMenu = (key) => setOpenMenus((prev) => {
     const next = new Set(prev);
     if (next.has(key)) next.delete(key); else next.add(key);
     return next;
@@ -60,299 +159,115 @@ const AdminSidebar = () => {
     window.location.href = '/login';
   };
 
-  const menuGroups = [
-    {
-      label: 'Overview',
-      items: [
-        { title: 'Dashboard', href: '/dashboard/admin', icon: FiHome, exact: true },
-      ],
-    },
-    {
-      label: 'Payments & Reports',
-      items: [
-        { title: 'Payment History', href: '/dashboard/admin/payments', icon: FiDollarSign, deny: ['trainingManager'] },
-        { title: 'Income Analytics', href: '/dashboard/admin/analytics', icon: FiBarChart2, deny: ['trainingManager'] },
-        { title: 'Reports', href: '/dashboard/admin/reports', icon: FiFileText },
-      ],
-    },
-    {
-      label: 'Courses & Sales',
-      items: [
-        { title: 'Orders', href: '/dashboard/admin/orders', icon: FiShoppingCart },
-        { title: 'Enrollments', href: '/dashboard/admin/enrollments', icon: FiUserCheck },
-        { title: 'Coupons', href: '/dashboard/admin/coupons', icon: FiTag },
-        {
-          title: 'Create New', icon: FiPlus,
-          submenu: [
-            {
-              title: 'Course',
-              submenu: [
-                { title: 'All Course', href: '/dashboard/admin/course' },
-                { title: 'Create Course', href: '/dashboard/admin/course/create' },
-              ],
-            },
-            {
-              title: 'Category',
-              submenu: [
-                { title: 'All Category', href: '/dashboard/admin/category' },
-                { title: 'Create Category', href: '/dashboard/admin/category/create' },
-              ],
-            },
-            {
-              title: 'Batch',
-              submenu: [
-                { title: 'All Batch', href: '/dashboard/admin/batch' },
-                { title: 'Create Batch', href: '/dashboard/admin/batch/create' },
-              ],
-            },
-            {
-              title: 'Mentor',
-              submenu: [
-                { title: 'All Mentor', href: '/dashboard/admin/mentor' },
-                { title: 'Create Mentor', href: '/dashboard/admin/mentor/create' },
-              ],
-            },
-            {
-              title: 'Blog',
-              submenu: [
-                { title: 'All Blog', href: '/dashboard/admin/blog' },
-                { title: 'Create Blog', href: '/dashboard/admin/blog/create' },
-              ],
-            },
-          ],
-        },
-        { title: 'Certifications', href: '/dashboard/admin/certification', icon: FiAward },
-      ],
-    },
-    {
-      label: 'Bookstore',
-      items: [
-        {
-          title: 'Books', icon: FiBook,
-          submenu: [
-            { title: 'All Books', href: '/dashboard/admin/books', exact: true },
-            { title: 'Add Book', href: '/dashboard/admin/books/create' },
-            { title: 'Book Orders', href: '/dashboard/admin/books/orders' },
-          ],
-        },
-      ],
-    },
-    {
-      label: 'Communication',
-      items: [
-        { title: 'Notice Board', href: '/dashboard/admin/notice-board', icon: FiClipboard },
-        { title: 'Notifications', href: '/dashboard/admin/notifications', icon: FiBell },
-      ],
-    },
-    {
-      label: 'Website & Users',
-      items: [
-        {
-          title: 'Site Content', icon: FiGlobe,
-          submenu: [
-            { title: 'Contact Page', href: '/dashboard/admin/site-content/contact' },
-            { title: 'Site Photos', href: '/dashboard/admin/site-content/images' },
-          ],
-        },
-        {
-          title: 'Users', icon: FiUsers,
-          submenu: [
-            { title: 'Team / Staff', href: '/dashboard/admin/user/staff', deny: ['trainingManager'] },
-            { title: 'Students', href: '/dashboard/admin/user/students' },
-          ],
-        },
-        { title: 'Settings', href: '/dashboard/admin/settings', icon: FiSettings },
-      ],
-    },
-  ];
+  const groups = MENU
+    .map((g) => ({ ...g, items: filterByRole(g.items, role) }))
+    .filter((g) => g.items.length > 0);
 
-  const sidebarWidth = collapsed ? 'w-[72px]' : 'w-[260px]';
+  const rowBase = 'group relative flex w-full items-center gap-2.5 rounded-md px-2.5 py-[7px] text-[13px] transition-colors';
+  const rowIdle = 'text-slate-600 hover:bg-slate-100 hover:text-[#0b1b4a]';
+  const rowActive = 'bg-[#eef3fc] text-[#0142b2] font-semibold';
 
-  // Role-aware menu: drop denied items + any group left empty.
-  const visibleGroups = menuGroups
-    .map(g => ({ ...g, items: filterByRole(g.items, role) }))
-    .filter(g => g.items.length > 0);
-
-  // ─── Recursive item renderer (supports nested submenus) ─────
-  const renderItem = (item, level = 0) => {
+  const renderItem = (item) => {
     const Icon = item.icon;
-    const pad = level === 0 ? 'px-3 py-[9px]' : 'px-3 py-[7px]';
-    const textSize = level === 0 ? 'text-[14px]' : 'text-[13px]';
+    const active = hasActiveChild(item);
 
     if (item.submenu) {
-      const active = hasActiveChild(item);
       const expanded = openMenus.has(item.title) || active;
       return (
         <div key={item.title}>
-          <button
-            onClick={() => toggleMenu(item.title)}
-            className={`group w-full flex items-center justify-between rounded-lg transition-all ${pad}
-              ${active ? 'bg-[#FEF6E7] text-[#a5680f]' : 'text-gray-500 hover:text-[#c9871a] hover:bg-[#FEF6E7]/60'}`}
-          >
-            <span className="flex items-center gap-3">
-              {Icon && <Icon size={level === 0 ? 16 : 14} className={active ? 'text-[#c9871a]' : 'text-gray-400 group-hover:text-[#c9871a]'} strokeWidth={active ? 2.5 : 2} />}
-              <span className={`${textSize} ${active ? 'font-semibold' : 'font-medium'}`}>{item.title}</span>
-            </span>
-            <FiChevronDown size={13} className={`transition-transform duration-200 ${active ? 'text-[#c9871a]' : 'text-gray-400'} ${expanded ? 'rotate-180' : ''}`} />
+          <button type="button" onClick={() => toggleMenu(item.title)} className={`${rowBase} ${active ? 'text-[#0142b2] font-semibold' : rowIdle}`}>
+            <Icon size={15} className={active ? 'text-[#0142b2]' : 'text-slate-400 group-hover:text-[#0142b2]'} />
+            <span className="flex-1 text-left">{item.title}</span>
+            <FiChevronDown size={13} className={`text-slate-400 transition-transform ${expanded ? 'rotate-180' : ''}`} />
           </button>
-          <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'max-h-[700px]' : 'max-h-0'}`}>
-            <div className="ml-[26px] mt-1 pl-3 border-l-2 border-[#F0DFB4]/60 space-y-0.5">
-              {item.submenu.map(sub => renderItem(sub, level + 1))}
+          {expanded && (
+            <div className="ml-[18px] mt-0.5 mb-1 space-y-px border-l border-slate-200 pl-2.5">
+              {item.submenu.map((sub) => {
+                const subActive = isActive(sub);
+                return (
+                  <Link
+                    key={sub.href}
+                    href={sub.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block rounded-md px-2.5 py-1.5 text-[12.5px] transition-colors ${subActive ? 'bg-[#eef3fc] font-semibold text-[#0142b2]' : 'text-slate-500 hover:bg-slate-100 hover:text-[#0b1b4a]'}`}
+                  >
+                    {sub.title}
+                  </Link>
+                );
+              })}
             </div>
-          </div>
+          )}
         </div>
       );
     }
 
-    // Leaf link
-    const active = item.exact ? isExactActive(item.href) : isActive(item.href);
-    const leafActiveClass = level === 0
-      ? 'bg-[#FEF6E7] text-[#a5680f]'
-      : 'bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white font-semibold shadow-sm shadow-[#F3A522]/25';
     return (
-      <Link
-        key={item.href}
-        href={item.href}
-        onClick={() => setIsOpen(false)}
-        className={`group relative flex items-center gap-3 rounded-lg transition-all ${pad}
-          ${active ? leafActiveClass : 'text-gray-500 hover:text-[#c9871a] hover:bg-[#FEF6E7]/60'}`}
-      >
-        {active && level === 0 && (
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-[#F3A522] rounded-r-full" />
-        )}
-        {Icon && <Icon size={16} className={`flex-shrink-0 ${active ? 'text-[#c9871a]' : 'text-gray-400 group-hover:text-[#c9871a]'}`} strokeWidth={active ? 2.5 : 2} />}
-        <span className={`${textSize} ${active ? 'font-semibold' : 'font-medium'}`}>{item.title}</span>
-      </Link>
-    );
-  };
-
-  // Collapsed: only top-level icons (no expansion)
-  const renderCollapsedItem = (item) => {
-    const Icon = item.icon;
-    const active = hasActiveChild(item);
-    const cls = `flex justify-center py-2.5 mx-1 rounded-lg transition-all ${active ? 'bg-[#FEF6E7] text-[#c9871a]' : 'text-gray-400 hover:text-[#c9871a] hover:bg-[#FEF6E7]/60'}`;
-    if (item.submenu) {
-      return <div key={item.title} title={item.title} className={cls}>{Icon && <Icon size={18} />}</div>;
-    }
-    return (
-      <Link key={item.href} href={item.href} title={item.title} onClick={() => setIsOpen(false)} className={cls}>
-        {Icon && <Icon size={18} />}
+      <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className={`${rowBase} ${active ? rowActive : rowIdle}`}>
+        {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r bg-[#0142b2]" />}
+        <Icon size={15} className={active ? 'text-[#0142b2]' : 'text-slate-400 group-hover:text-[#0142b2]'} />
+        <span>{item.title}</span>
       </Link>
     );
   };
 
   return (
     <>
-      {/* Mobile Toggle */}
+      {/* Mobile toggle */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 left-4 z-[60] w-10 h-10 rounded-xl bg-white shadow-lg border border-gray-100 flex items-center justify-center text-gray-700 hover:bg-[#FEF6E7] active:scale-95 transition-all"
+        className="lg:hidden fixed top-3 left-3 z-[60] flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 shadow-sm"
         aria-label="Toggle menu"
       >
-        {isOpen ? <FiX size={18} /> : <FiMenu size={18} />}
+        {isOpen ? <FiX size={17} /> : <FiMenu size={17} />}
       </button>
 
-      {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-screen transition-all duration-300 ease-in-out z-[50]
-          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-          ${sidebarWidth} bg-white border-r border-gray-100`}
+        className={`fixed left-0 top-0 z-[50] flex h-screen w-[240px] flex-col border-r border-slate-200 bg-white transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
-        <div className="h-[3px] w-full bg-gradient-to-r from-[#F3A522] via-[#e2941c] to-[#9AA0A8]"></div>
+        {/* Logo */}
+        <div className="flex h-14 shrink-0 items-center gap-2 border-b border-slate-200 px-4">
+          <Link href="/dashboard/admin" className="flex items-center" onClick={() => setIsOpen(false)}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logoSrc} alt="Brave Talk Bangladesh" className="h-8 w-auto" />
+          </Link>
+          <span className="ml-auto rounded-sm bg-[#0b1b4a] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">Admin</span>
+        </div>
 
-        <div className="flex flex-col h-[calc(100%-3px)]">
-          {/* Header */}
-          <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'} px-4 h-16 border-b border-gray-100`}>
-            {!collapsed ? (
-              <Link href="/dashboard/admin" className="flex items-center gap-2.5 group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/logo.png" alt="Brave Talk Bangladesh" className="h-8 w-auto" />
-              </Link>
-            ) : (
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center shadow-md shadow-[#F3A522]/25">
-                <span className="text-white font-black text-xs">BT</span>
-              </div>
-            )}
-            <button
-              onClick={() => setCollapsed(!collapsed)}
-              className="hidden lg:flex w-6 h-6 rounded-md border border-gray-200 items-center justify-center text-gray-400 hover:text-[#c9871a] hover:bg-[#FEF6E7] hover:border-[#F0DFB4] transition-all"
-            >
-              <FiChevronLeft size={12} className={`transition-transform duration-300 ${collapsed ? 'rotate-180' : ''}`} />
+        {/* Navigation */}
+        <nav className="admin-sidebar-scroll flex-1 overflow-y-auto px-3 py-3">
+          {groups.map((group, gi) => (
+            <div key={group.label} className={gi > 0 ? 'mt-4' : ''}>
+              <p className="mb-1 px-2.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">{group.label}</p>
+              <div className="space-y-px">{group.items.map(renderItem)}</div>
+            </div>
+          ))}
+        </nav>
+
+        {/* Footer */}
+        <div className="shrink-0 border-t border-slate-200 p-3">
+          <Link href="/" className={`${rowBase} ${rowIdle}`}>
+            <FiArrowLeft size={15} className="text-slate-400" /> Back to website
+          </Link>
+          <div className="mt-2 flex items-center gap-2.5 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-2">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0142b2] text-xs font-bold text-white">
+              {userName.charAt(0).toUpperCase()}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13px] font-semibold text-[#0b1b4a]">{userName}</p>
+              <p className="truncate text-[11px] text-slate-400">{user.email || ''}</p>
+            </div>
+            <button onClick={handleLogout} title="Logout" className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-slate-400 hover:bg-rose-50 hover:text-[#e5251f]">
+              <FiLogOut size={14} />
             </button>
-          </div>
-
-          {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 sidebar-scroll">
-            {visibleGroups.map((group) => (
-              <div key={group.label}>
-                {!collapsed ? (
-                  <p className="px-3 mb-2 text-[10px] font-bold text-gray-300 uppercase tracking-[0.14em]">
-                    {group.label}
-                  </p>
-                ) : (
-                  <div className="mb-2 border-t border-gray-100" />
-                )}
-                <div className="space-y-0.5">
-                  {group.items.map(item => collapsed ? renderCollapsedItem(item) : renderItem(item, 0))}
-                </div>
-              </div>
-            ))}
-          </nav>
-
-          {/* User + Logout */}
-          <div className="border-t border-gray-100 p-3">
-            <Link
-              href="/"
-              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-400 hover:text-[#c9871a] hover:bg-[#FEF6E7] transition-all mb-1 ${collapsed ? 'justify-center' : ''}`}
-              title="Back to Website"
-            >
-              <FiArrowLeft size={15} />
-              {!collapsed && <span className="text-[14px] font-medium">Back to Website</span>}
-            </Link>
-
-            {!collapsed ? (
-              <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-[#FEF6E7]/60 border border-[#F0DFB4]/60 mt-1">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-sm shadow-[#F3A522]/25">
-                  {userName.charAt(0).toUpperCase()}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-gray-700 truncate">{userName}</p>
-                  <p className="text-[11px] text-gray-400 truncate">{userEmail}</p>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="w-7 h-7 rounded-md flex items-center justify-center text-gray-400 hover:text-rose-500 hover:bg-rose-50 transition-all flex-shrink-0"
-                  title="Logout"
-                >
-                  <FiLogOut size={14} />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={handleLogout}
-                className="w-full flex justify-center py-2.5 text-gray-400 hover:text-rose-500 transition-all"
-                title="Logout"
-              >
-                <FiLogOut size={16} />
-              </button>
-            )}
           </div>
         </div>
       </aside>
 
-      {/* Mobile Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm lg:hidden z-[45]"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 z-[45] bg-slate-900/30 lg:hidden" onClick={() => setIsOpen(false)} />}
 
       <style jsx global>{`
-        .sidebar-scroll::-webkit-scrollbar { width: 3px; }
-        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: #F0DFB4; border-radius: 10px; }
-        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: #F3A522; }
+        .admin-sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .admin-sidebar-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
       `}</style>
     </>
   );

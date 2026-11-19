@@ -110,7 +110,7 @@ export default function CourseCouponsPage() {
   };
 
   const F = (k, v) => setForm({ ...form, [k]: v });
-  const inp = 'w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F3A522]/15 focus:border-[#F3A522]';
+  const inp = 'w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0142b2]/15 focus:border-[#0142b2]';
   const lbl = 'text-[10px] font-bold text-slate-500 uppercase block mb-1';
   const valueLabel = (c) => c.discountType === 'percentage' ? `${c.discountValue}%` : `৳${c.discountValue}`;
 
@@ -133,7 +133,7 @@ export default function CourseCouponsPage() {
   const STAT_CARDS = [
     { label: 'Total Coupons', value: stats.total, icon: FiTag, color: 'text-slate-700', bg: 'bg-slate-100' },
     { label: 'Active Now', value: stats.active, icon: FiZap, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { label: 'Total Redemptions', value: stats.redemptions, icon: FiUsers, color: 'text-[#c9871a]', bg: 'bg-[#FEF6E7]' },
+    { label: 'Total Redemptions', value: stats.redemptions, icon: FiUsers, color: 'text-[#0142b2]', bg: 'bg-[#eef3fc]' },
     { label: 'Expired / Off', value: stats.expired, icon: FiCalendar, color: 'text-slate-400', bg: 'bg-slate-50' },
   ];
 
@@ -151,7 +151,7 @@ export default function CourseCouponsPage() {
           <h1 className="text-2xl font-bold text-slate-900 outfit">Course Coupons</h1>
           <p className="text-sm text-slate-500 mt-1">Discount codes students apply at course checkout — works on every course.</p>
         </div>
-        <button onClick={openNew} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/20 hover:shadow-xl transition">
+        <button onClick={openNew} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/20 hover:shadow-xl transition">
           <FiPlus size={16} /> New Coupon
         </button>
       </div>
@@ -159,8 +159,8 @@ export default function CourseCouponsPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {STAT_CARDS.map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}><s.icon className={s.color} size={18} /></div>
+          <div key={s.label} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-md ${s.bg} flex items-center justify-center`}><s.icon className={s.color} size={18} /></div>
             <div><p className="text-xl font-bold text-slate-900">{loading ? '—' : s.value}</p><p className="text-[11px] text-slate-400">{s.label}</p></div>
           </div>
         ))}
@@ -171,12 +171,12 @@ export default function CourseCouponsPage() {
         <div className="relative flex-1">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={15} />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by code..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-sm bg-white shadow-sm focus:outline-none focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15" />
+            className="w-full pl-9 pr-4 py-2 rounded-md border border-slate-200 text-sm bg-white shadow-sm focus:outline-none focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15" />
         </div>
-        <div className="flex gap-1 bg-slate-100 rounded-xl p-1">
+        <div className="flex gap-1 bg-slate-100 rounded-md p-1">
           {[['all', 'All'], ['active', 'Active'], ['inactive', 'Inactive / Expired']].map(([id, label]) => (
             <button key={id} onClick={() => setFilter(id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${filter === id ? 'bg-white text-[#c9871a] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${filter === id ? 'bg-white text-[#0142b2] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
               {label}
             </button>
           ))}
@@ -185,14 +185,14 @@ export default function CourseCouponsPage() {
 
       {/* List */}
       {loading ? (
-        <div className="flex justify-center py-16"><FiLoader className="animate-spin text-[#F3A522]" size={28} /></div>
+        <div className="flex justify-center py-16"><FiLoader className="animate-spin text-[#0142b2]" size={28} /></div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-16 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[#FEF6E7] flex items-center justify-center mx-auto mb-4"><FiTag className="text-[#F3A522]" size={26} /></div>
+        <div className="bg-white rounded-md border border-dashed border-slate-200 p-16 text-center">
+          <div className="w-16 h-16 rounded-md bg-[#eef3fc] flex items-center justify-center mx-auto mb-4"><FiTag className="text-[#0142b2]" size={26} /></div>
           <h3 className="text-base font-bold text-slate-700">{list.length === 0 ? 'No coupons yet' : 'No coupons match'}</h3>
           <p className="text-sm text-slate-400 mt-1">{list.length === 0 ? 'Create your first discount code for course students.' : 'Try a different search or filter.'}</p>
           {list.length === 0 && (
-            <button onClick={openNew} className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#F3A522] text-white text-sm font-bold"><FiPlus size={14} /> New Coupon</button>
+            <button onClick={openNew} className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#0142b2] text-white text-sm font-bold"><FiPlus size={14} /> New Coupon</button>
           )}
         </div>
       ) : (
@@ -201,24 +201,24 @@ export default function CourseCouponsPage() {
             const s = statusOf(c);
             const pct = c.maxUses > 0 ? Math.min(100, Math.round(((c.usedCount || 0) / c.maxUses) * 100)) : 0;
             return (
-              <div key={c._id} className="group bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden">
+              <div key={c._id} className="group bg-white rounded-md border border-slate-200 shadow-sm hover:shadow-md transition overflow-hidden">
                 {/* ticket top */}
                 <div className="relative p-5 pb-4">
                   <div className="flex items-start justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center text-white shrink-0">
+                    <div className="w-10 h-10 rounded-md bg-gradient-to-br from-[#0142b2] to-[#01368f] flex items-center justify-center text-white shrink-0">
                       {c.discountType === 'percentage' ? <FiPercent size={18} /> : <FiDollarSign size={18} />}
                     </div>
                     <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${badge(s)}`}>{badgeText(s)}</span>
                   </div>
 
                   <button onClick={() => copyCode(c.code)} title="Copy code"
-                    className="mt-3 inline-flex items-center gap-1.5 font-mono font-black text-slate-800 tracking-wide hover:text-[#c9871a] transition">
+                    className="mt-3 inline-flex items-center gap-1.5 font-mono font-black text-slate-800 tracking-wide hover:text-[#0142b2] transition">
                     {c.code}
                     {copied === c.code ? <FiCheck size={13} className="text-emerald-500" /> : <FiCopy size={12} className="text-slate-300 group-hover:text-slate-400" />}
                   </button>
 
                   <div className="flex items-baseline gap-2 mt-1.5">
-                    <span className="text-2xl font-extrabold text-[#c9871a]">{valueLabel(c)}</span>
+                    <span className="text-2xl font-extrabold text-[#0142b2]">{valueLabel(c)}</span>
                     <span className="text-[11px] text-slate-400">off · min ৳{c.minPurchase || 0}</span>
                   </div>
                 </div>
@@ -230,13 +230,13 @@ export default function CourseCouponsPage() {
                     <span className={`font-bold ${pct >= 100 ? 'text-rose-500' : 'text-slate-500'}`}>{c.usedCount || 0} / {c.maxUses || 0}</span>
                   </div>
                   <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div className={`h-full rounded-full ${pct >= 100 ? 'bg-rose-400' : 'bg-gradient-to-r from-[#F3A522] to-[#d88f13]'}`} style={{ width: `${pct}%` }} />
+                    <div className={`h-full rounded-full ${pct >= 100 ? 'bg-rose-400' : 'bg-gradient-to-r from-[#0142b2] to-[#01368f]'}`} style={{ width: `${pct}%` }} />
                   </div>
                   <p className="text-[10px] text-slate-400 mt-2 flex items-center gap-1"><FiCalendar size={10} /> {fmtDate(c.validFrom)} → {fmtDate(c.validUntil)}</p>
                 </div>
 
                 <div className="flex border-t border-slate-100">
-                  <button onClick={() => openEdit(c)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[#c9871a] hover:bg-[#FEF6E7] text-xs font-bold transition"><FiEdit3 size={13} /> Edit</button>
+                  <button onClick={() => openEdit(c)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[#0142b2] hover:bg-[#eef3fc] text-xs font-bold transition"><FiEdit3 size={13} /> Edit</button>
                   <button onClick={() => del(c)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-rose-500 hover:bg-rose-50 text-xs font-bold transition border-l border-slate-100"><FiTrash2 size={13} /> Delete</button>
                 </div>
               </div>
@@ -248,8 +248,8 @@ export default function CourseCouponsPage() {
       {/* Form Modal */}
       {form && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => !saving && setForm(null)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[92vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white shrink-0">
+          <div className="bg-white rounded-md shadow-2xl w-full max-w-lg max-h-[92vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white shrink-0">
               <h3 className="font-bold text-lg outfit">{editId ? 'Edit Coupon' : 'New Coupon'}</h3>
               <button onClick={() => setForm(null)}><FiX size={20} /></button>
             </div>
@@ -267,10 +267,10 @@ export default function CourseCouponsPage() {
                 <div><label className={lbl}>Valid From</label><input type="date" value={form.validFrom} onChange={e => F('validFrom', e.target.value)} className={inp} /></div>
                 <div><label className={lbl}>Valid Until *</label><input type="date" min={form.validFrom || undefined} value={form.validUntil} onChange={e => F('validUntil', e.target.value)} className={inp} /></div>
               </div>
-              <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer pt-1"><input type="checkbox" checked={form.isActive} onChange={e => F('isActive', e.target.checked)} className="accent-[#F3A522]" /> Active</label>
+              <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer pt-1"><input type="checkbox" checked={form.isActive} onChange={e => F('isActive', e.target.checked)} className="accent-[#0142b2]" /> Active</label>
 
               {form.discountValue && Number(form.discountValue) > 0 && (
-                <div className="rounded-lg bg-[#FEF6E7]/60 border border-[#F0DFB4] px-3 py-2 text-[11px] text-[#a5680f]">
+                <div className="rounded-md bg-[#eef3fc]/60 border border-[#c9d8f5] px-3 py-2 text-[11px] text-[#01368f]">
                   Preview: on a ৳1000 order → {form.discountType === 'percentage'
                     ? `৳${Math.round((1000 * Number(form.discountValue)) / 100)} off (pay ৳${Math.max(0, 1000 - Math.round((1000 * Number(form.discountValue)) / 100))})`
                     : `৳${Math.min(Number(form.discountValue), 1000)} off (pay ৳${Math.max(0, 1000 - Number(form.discountValue))})`}
@@ -278,8 +278,8 @@ export default function CourseCouponsPage() {
               )}
             </div>
             <div className="flex justify-end gap-2 px-6 py-4 border-t border-slate-100 shrink-0">
-              <button onClick={() => setForm(null)} className="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
-              <button onClick={save} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#F3A522] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
+              <button onClick={() => setForm(null)} className="px-4 py-2.5 rounded-md border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
+              <button onClick={save} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#0142b2] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
                 {saving ? <FiLoader className="animate-spin" size={15} /> : <FiSave size={15} />} {editId ? 'Update' : 'Create'}
               </button>
             </div>

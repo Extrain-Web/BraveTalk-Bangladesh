@@ -29,7 +29,7 @@ const SettingsPage = () => {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-800 outfit flex items-center gap-3">
-          <FiSettings className="text-[#F3A522]" />
+          <FiSettings className="text-[#0142b2]" />
           Settings
         </h1>
         <p className="text-slate-500 text-sm mt-1">নিজের প্রোফাইল, পাসওয়ার্ড এবং ওয়েবসাইট সেটিংস পরিচালনা করুন</p>
@@ -41,7 +41,7 @@ const SettingsPage = () => {
           const active = tab === t.key;
           return (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-t-lg -mb-px border-b-2 transition ${active ? 'border-[#F3A522] text-[#c9871a] bg-white' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>
+              className={`inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-t-md -mb-px border-b-2 transition ${active ? 'border-[#0142b2] text-[#0142b2] bg-white' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>
               <t.icon size={16} /> {t.label}
             </button>
           );
@@ -99,21 +99,21 @@ const ProfileTab = ({ showToast }) => {
     finally { setSaving(false); }
   };
 
-  if (loading) return <div className="flex justify-center py-20"><FiLoader className="animate-spin text-[#F3A522]" size={28} /></div>;
+  if (loading) return <div className="flex justify-center py-20"><FiLoader className="animate-spin text-[#0142b2]" size={28} /></div>;
 
-  const inp = 'w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#F3A522]/20 focus:border-[#F3A522] outline-none text-sm';
+  const inp = 'w-full px-3 py-2.5 border border-slate-200 rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none text-sm';
 
   return (
     <form onSubmit={save} className="max-w-2xl">
-      <div className="bg-white rounded-xl border border-slate-200 p-6">
+      <div className="bg-white rounded-md border border-slate-200 p-6">
         {/* identity strip */}
         <div className="flex items-center gap-4 pb-5 mb-5 border-b border-slate-100">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center text-white font-bold text-lg shrink-0">
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#0142b2] to-[#01368f] flex items-center justify-center text-white font-bold text-lg shrink-0">
             {(profile.firstName?.[0] || 'U')}{profile.lastName?.[0] || ''}
           </div>
           <div>
             <p className="font-bold text-slate-800">{profile.firstName} {profile.lastName}</p>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#c9871a] bg-[#FEF6E7] px-2 py-0.5 rounded-full mt-1"><FiShield size={11} /> {roleLabel(profile.role)}</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#0142b2] bg-[#eef3fc] px-2 py-0.5 rounded-full mt-1"><FiShield size={11} /> {roleLabel(profile.role)}</span>
           </div>
         </div>
 
@@ -141,7 +141,7 @@ const ProfileTab = ({ showToast }) => {
         </div>
 
         <div className="mt-6">
-          <button type="submit" disabled={saving} className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#F3A522] hover:bg-[#e0941c] text-white font-semibold rounded-lg transition disabled:opacity-50">
+          <button type="submit" disabled={saving} className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#0142b2] hover:bg-[#e0941c] text-white font-semibold rounded-md transition disabled:opacity-50">
             {saving ? <><FiLoader className="animate-spin" size={16} /> Saving...</> : <><FiSave size={16} /> Save Profile</>}
           </button>
         </div>
@@ -176,7 +176,7 @@ const PasswordTab = ({ showToast }) => {
     finally { setSaving(false); }
   };
 
-  const inp = 'w-full px-3 py-2.5 pr-10 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#F3A522]/20 focus:border-[#F3A522] outline-none text-sm';
+  const inp = 'w-full px-3 py-2.5 pr-10 border border-slate-200 rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none text-sm';
   const Row = ({ label, k, sk, ph }) => (
     <div>
       <label className="block text-sm font-medium text-slate-700 mb-1">{label}</label>
@@ -191,15 +191,15 @@ const PasswordTab = ({ showToast }) => {
 
   return (
     <form onSubmit={submit} className="max-w-md">
-      <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
+      <div className="bg-white rounded-md border border-slate-200 p-6 space-y-4">
         <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
-          <FiLock className="text-[#F3A522]" />
+          <FiLock className="text-[#0142b2]" />
           <h2 className="font-semibold text-slate-800">Change Password</h2>
         </div>
         <Row label="Current Password" k="currentPassword" sk="cur" ph="বর্তমান পাসওয়ার্ড" />
         <Row label="New Password" k="newPassword" sk="next" ph="নতুন পাসওয়ার্ড (min ৬)" />
         <Row label="Confirm New Password" k="confirmPassword" sk="conf" ph="আবার লিখুন" />
-        <button type="submit" disabled={saving} className="w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#F3A522] hover:bg-[#e0941c] text-white font-semibold rounded-lg transition disabled:opacity-50">
+        <button type="submit" disabled={saving} className="w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#0142b2] hover:bg-[#e0941c] text-white font-semibold rounded-md transition disabled:opacity-50">
           {saving ? <><FiLoader className="animate-spin" size={16} /> Updating...</> : <><FiLock size={16} /> Update Password</>}
         </button>
       </div>
@@ -276,7 +276,7 @@ const SiteSettingsTab = ({ showToast }) => {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="w-10 h-10 border-4 border-[#41bfb8] border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <div className="w-10 h-10 border-4 border-[#0142b2] border-t-transparent rounded-full animate-spin mx-auto"></div>
           <p className="text-gray-500 mt-3">Loading settings...</p>
         </div>
       </div>
@@ -287,23 +287,23 @@ const SiteSettingsTab = ({ showToast }) => {
     <form onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Brand / Identity */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 lg:col-span-2">
+        <div className="bg-white rounded-md border border-gray-200 p-6 lg:col-span-2">
           <div className="flex items-center gap-2 mb-4">
-            <LuGlobe className="text-[#41bfb8]" />
+            <LuGlobe className="text-[#0142b2]" />
             <h2 className="text-lg font-semibold text-gray-800">Brand / Identity</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Brand Name (English)</label>
-              <input type="text" name="brandName" value={settings.brandName} onChange={handleChange} placeholder="BraveTalk Bangladesh" className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="text" name="brandName" value={settings.brandName} onChange={handleChange} placeholder="BraveTalk Bangladesh" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">ব্র্যান্ডের নাম (বাংলা)</label>
-              <input type="text" name="brandNameBn" value={settings.brandNameBn} onChange={handleChange} placeholder="ব্রেভটক বাংলাদেশ" className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="text" name="brandNameBn" value={settings.brandNameBn} onChange={handleChange} placeholder="ব্রেভটক বাংলাদেশ" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Website URL</label>
-              <input type="url" name="websiteUrl" value={settings.websiteUrl} onChange={handleChange} placeholder="" className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="url" name="websiteUrl" value={settings.websiteUrl} onChange={handleChange} placeholder="" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
           </div>
 
@@ -312,7 +312,7 @@ const SiteSettingsTab = ({ showToast }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">Site Logo</label>
             <div className="flex items-center gap-4 flex-wrap">
               {/* Preview on a dark strip (site header is dark) */}
-              <div className="h-14 px-4 rounded-lg bg-slate-800 flex items-center justify-center min-w-[150px]">
+              <div className="h-14 px-4 rounded-md bg-slate-800 flex items-center justify-center min-w-[150px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={settings.logo || '/images/logo.png'}
@@ -321,14 +321,14 @@ const SiteSettingsTab = ({ showToast }) => {
                 />
               </div>
               <div className="flex items-center gap-2">
-                <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#41bfb8] text-white text-sm font-semibold cursor-pointer hover:bg-[#38a89d] transition ${uploadingLogo ? 'opacity-60 pointer-events-none' : ''}`}>
+                <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#0142b2] text-white text-sm font-semibold cursor-pointer hover:bg-[#38a89d] transition ${uploadingLogo ? 'opacity-60 pointer-events-none' : ''}`}>
                   {uploadingLogo ? <FiLoader className="animate-spin" size={15} /> : <FiUploadCloud size={15} />}
                   {uploadingLogo ? 'Uploading...' : 'Upload Logo'}
                   <input type="file" accept="image/*" onChange={uploadLogo} className="hidden" disabled={uploadingLogo} />
                 </label>
                 {settings.logo && (
                   <button type="button" onClick={() => setSettings(prev => ({ ...prev, logo: '' }))}
-                    className="px-3 py-2 rounded-lg border border-gray-200 text-gray-500 text-sm font-medium hover:bg-gray-50 transition">
+                    className="px-3 py-2 rounded-md border border-gray-200 text-gray-500 text-sm font-medium hover:bg-gray-50 transition">
                     Reset to default
                   </button>
                 )}
@@ -339,45 +339,45 @@ const SiteSettingsTab = ({ showToast }) => {
         </div>
 
         {/* Hero Section - English */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-md border border-gray-200 p-6">
           <div className="flex items-center gap-2 mb-4">
-            <LuGlobe className="text-[#41bfb8]" />
+            <LuGlobe className="text-[#0142b2]" />
             <h2 className="text-lg font-semibold text-gray-800">Hero Section (English)</h2>
           </div>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Badge Text</label>
-              <input type="text" name="heroBadge" value={settings.heroBadge} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="text" name="heroBadge" value={settings.heroBadge} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Heading 1</label>
-                <input type="text" name="heroHeading1" value={settings.heroHeading1} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+                <input type="text" name="heroHeading1" value={settings.heroHeading1} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Heading 2</label>
-                <input type="text" name="heroHeading2" value={settings.heroHeading2} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+                <input type="text" name="heroHeading2" value={settings.heroHeading2} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">"With" Text</label>
-                <input type="text" name="heroHeadingWith" value={settings.heroHeadingWith} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+                <input type="text" name="heroHeadingWith" value={settings.heroHeadingWith} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Academy Name</label>
-                <input type="text" name="heroAcademyName" value={settings.heroAcademyName} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+                <input type="text" name="heroAcademyName" value={settings.heroAcademyName} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <textarea name="heroDescription" value={settings.heroDescription} onChange={handleChange} rows="3" className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm resize-none" />
+              <textarea name="heroDescription" value={settings.heroDescription} onChange={handleChange} rows="3" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm resize-none" />
             </div>
           </div>
         </div>
 
         {/* Hero Section - Bengali */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-md border border-gray-200 p-6">
           <div className="flex items-center gap-2 mb-4">
             <LuGlobe className="text-[#9AA0A8]" />
             <h2 className="text-lg font-semibold text-gray-800">Hero Section (বাংলা)</h2>
@@ -385,45 +385,45 @@ const SiteSettingsTab = ({ showToast }) => {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">ব্যাজ টেক্সট</label>
-              <input type="text" name="heroBadgeBn" value={settings.heroBadgeBn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="text" name="heroBadgeBn" value={settings.heroBadgeBn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">শিরোনাম ১</label>
-                <input type="text" name="heroHeading1Bn" value={settings.heroHeading1Bn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+                <input type="text" name="heroHeading1Bn" value={settings.heroHeading1Bn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">শিরোনাম ২</label>
-                <input type="text" name="heroHeading2Bn" value={settings.heroHeading2Bn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+                <input type="text" name="heroHeading2Bn" value={settings.heroHeading2Bn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">"সাথে" টেক্সট</label>
-                <input type="text" name="heroHeadingWithBn" value={settings.heroHeadingWithBn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+                <input type="text" name="heroHeadingWithBn" value={settings.heroHeadingWithBn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">একাডেমির নাম</label>
-                <input type="text" name="heroAcademyNameBn" value={settings.heroAcademyNameBn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+                <input type="text" name="heroAcademyNameBn" value={settings.heroAcademyNameBn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">বিবরণ</label>
-              <textarea name="heroDescriptionBn" value={settings.heroDescriptionBn} onChange={handleChange} rows="3" className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm resize-none" />
+              <textarea name="heroDescriptionBn" value={settings.heroDescriptionBn} onChange={handleChange} rows="3" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm resize-none" />
             </div>
           </div>
         </div>
 
         {/* Contact Information */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-md border border-gray-200 p-6">
           <div className="flex items-center gap-2 mb-4">
-            <LuPhone className="text-[#41bfb8]" />
+            <LuPhone className="text-[#0142b2]" />
             <h2 className="text-lg font-semibold text-gray-800">Contact Information</h2>
           </div>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1"><LuPhone className="inline mr-1" /> Phone Number</label>
-              <input type="text" name="phoneNumber" value={settings.phoneNumber} onChange={handleChange} placeholder="+880 1323-878569" className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="text" name="phoneNumber" value={settings.phoneNumber} onChange={handleChange} placeholder="+880 1323-878569" className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
@@ -432,8 +432,8 @@ const SiteSettingsTab = ({ showToast }) => {
                 </span>
                 WhatsApp Number
               </label>
-              <input type="text" name="whatsappNumber" value={settings.whatsappNumber} onChange={(e) => { const value = e.target.value.replace(/[^0-9]/g, ''); setSettings(prev => ({ ...prev, whatsappNumber: value })); }} placeholder="8801323878569" maxLength={15} className="w-full px-4 py-3 border-2 border-gray-100 rounded-xl focus:ring-4 focus:ring-green-50 focus:border-green-400 outline-none text-lg font-mono transition-all" />
-              <div className="mt-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100">
+              <input type="text" name="whatsappNumber" value={settings.whatsappNumber} onChange={(e) => { const value = e.target.value.replace(/[^0-9]/g, ''); setSettings(prev => ({ ...prev, whatsappNumber: value })); }} placeholder="8801323878569" maxLength={15} className="w-full px-4 py-3 border-2 border-gray-100 rounded-md focus:ring-4 focus:ring-green-50 focus:border-green-400 outline-none text-lg font-mono transition-all" />
+              <div className="mt-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-md border border-green-100">
                 <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2"><span>📝</span> সঠিক ফরম্যাট:</h4>
                 <ul className="space-y-1.5 text-xs text-gray-600">
                   <li className="flex items-center gap-2"><span className="text-green-500">✓</span><code className="bg-white px-2 py-0.5 rounded border">8801323878569</code><span className="text-gray-400">- Country code সহ, শুধু সংখ্যা</span></li>
@@ -446,45 +446,45 @@ const SiteSettingsTab = ({ showToast }) => {
                 </div>
               </div>
               {settings.whatsappNumber && settings.whatsappNumber.length < 10 && (
-                <p className="text-xs text-red-500 mt-2 flex items-center gap-1 bg-red-50 p-2 rounded-lg"><span>⚠️</span> নম্বরটি সম্পূর্ণ মনে হচ্ছে না। Country code (88) সহ সম্পূর্ণ নম্বর দিন।</p>
+                <p className="text-xs text-red-500 mt-2 flex items-center gap-1 bg-red-50 p-2 rounded-md"><span>⚠️</span> নম্বরটি সম্পূর্ণ মনে হচ্ছে না। Country code (88) সহ সম্পূর্ণ নম্বর দিন।</p>
               )}
               {settings.whatsappNumber && settings.whatsappNumber.length >= 10 && (
-                <p className="text-xs text-green-600 mt-2 flex items-center gap-1 bg-green-50 p-2 rounded-lg"><span>✅</span> নম্বরটি সঠিক মনে হচ্ছে! WhatsApp বাটনে ক্লিক করে টেস্ট করুন।</p>
+                <p className="text-xs text-green-600 mt-2 flex items-center gap-1 bg-green-50 p-2 rounded-md"><span>✅</span> নম্বরটি সঠিক মনে হচ্ছে! WhatsApp বাটনে ক্লিক করে টেস্ট করুন।</p>
               )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1"><LuMail className="inline mr-1" /> Email</label>
-              <input type="email" name="email" value={settings.email} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="email" name="email" value={settings.email} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1"><LuMapPin className="inline mr-1" /> Address (English)</label>
-              <input type="text" name="address" value={settings.address} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="text" name="address" value={settings.address} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1"><LuMapPin className="inline mr-1" /> ঠিকানা (বাংলা)</label>
-              <input type="text" name="addressBn" value={settings.addressBn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="text" name="addressBn" value={settings.addressBn} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
           </div>
         </div>
 
         {/* Social Links */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-md border border-gray-200 p-6">
           <div className="flex items-center gap-2 mb-4">
-            <LuGlobe className="text-[#41bfb8]" />
+            <LuGlobe className="text-[#0142b2]" />
             <h2 className="text-lg font-semibold text-gray-800">Social Links</h2>
           </div>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1"><LuFacebook className="inline mr-1 text-blue-600" /> Facebook URL</label>
-              <input type="url" name="facebookUrl" value={settings.facebookUrl} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="url" name="facebookUrl" value={settings.facebookUrl} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1"><LuYoutube className="inline mr-1 text-red-600" /> YouTube URL</label>
-              <input type="url" name="youtubeUrl" value={settings.youtubeUrl} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="url" name="youtubeUrl" value={settings.youtubeUrl} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1"><LuLinkedin className="inline mr-1 text-blue-700" /> LinkedIn URL</label>
-              <input type="url" name="linkedinUrl" value={settings.linkedinUrl} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8] focus:border-[#41bfb8] outline-none text-sm" />
+              <input type="url" name="linkedinUrl" value={settings.linkedinUrl} onChange={handleChange} className="w-full px-3 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-[#0142b2] focus:border-[#0142b2] outline-none text-sm" />
             </div>
           </div>
         </div>
@@ -492,10 +492,10 @@ const SiteSettingsTab = ({ showToast }) => {
 
       {/* Save Button */}
       <div className="mt-6 flex gap-3">
-        <button type="submit" disabled={saving} className="flex items-center gap-2 px-6 py-3 bg-[#41bfb8] hover:bg-[#38a89d] text-white font-medium rounded-lg transition-colors disabled:opacity-50">
+        <button type="submit" disabled={saving} className="flex items-center gap-2 px-6 py-3 bg-[#0142b2] hover:bg-[#38a89d] text-white font-medium rounded-md transition-colors disabled:opacity-50">
           {saving ? (<><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Saving...</>) : (<><FiSave /> Save Settings</>)}
         </button>
-        <button type="button" onClick={fetchSettings} className="flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors">
+        <button type="button" onClick={fetchSettings} className="flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-md transition-colors">
           <FiRefreshCw /> Reset
         </button>
       </div>

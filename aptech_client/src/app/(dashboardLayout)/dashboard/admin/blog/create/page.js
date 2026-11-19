@@ -112,7 +112,7 @@ export default function CreateBlog() {
                 <div className="flex items-center gap-4">
                     <Link
                         href="/dashboard/admin/blog"
-                        className="p-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
+                        className="p-2 border border-slate-200 rounded-md text-slate-600 hover:bg-slate-50 transition-colors"
                     >
                         <FiArrowLeft />
                     </Link>
@@ -125,7 +125,7 @@ export default function CreateBlog() {
                     <button
                         type="button"
                         onClick={() => setPreview(!preview)}
-                        className="flex items-center gap-2 px-4 py-2.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2.5 border border-slate-200 rounded-md text-slate-600 hover:bg-slate-50 transition-colors"
                     >
                         <FiEye />
                         {preview ? 'Edit' : 'Preview'}
@@ -133,7 +133,7 @@ export default function CreateBlog() {
                     <button
                         onClick={handleSubmit}
                         disabled={loading}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-[#41bfb8] text-white font-medium rounded-lg hover:bg-[#38a89d] transition-all shadow-lg shadow-teal-100 disabled:opacity-50"
+                        className="flex items-center gap-2 px-5 py-2.5 bg-[#0142b2] text-white font-medium rounded-md hover:bg-[#38a89d] transition-all shadow-lg shadow-teal-100 disabled:opacity-50"
                     >
                         <FiSave />
                         {loading ? 'Publishing...' : 'Publish Blog'}
@@ -147,9 +147,9 @@ export default function CreateBlog() {
                     {!preview ? (
                         <>
                             {/* Title - English */}
-                            <div className="bg-white rounded-xl border border-slate-200 p-6">
+                            <div className="bg-white rounded-md border border-slate-200 p-6">
                                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                                    <FiType className="text-[#41bfb8]" />
+                                    <FiType className="text-[#0142b2]" />
                                     Blog Title (English) *
                                 </label>
                                 <input
@@ -158,14 +158,14 @@ export default function CreateBlog() {
                                     value={formData.title}
                                     onChange={handleChange}
                                     placeholder="Enter an engaging title for your blog..."
-                                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all ${errors.title ? 'border-red-400' : 'border-slate-200'
+                                    className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all ${errors.title ? 'border-red-400' : 'border-slate-200'
                                         }`}
                                 />
                                 {errors.title && <p className="text-red-500 text-xs mt-2">{errors.title}</p>}
                             </div>
 
                             {/* Title - Bengali */}
-                            <div className="bg-white rounded-xl border border-slate-200 p-6">
+                            <div className="bg-white rounded-md border border-slate-200 p-6">
                                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
                                     <FiType className="text-[#9AA0A8]" />
                                     Blog Title (Bengali)
@@ -176,14 +176,14 @@ export default function CreateBlog() {
                                     value={formData.titleBn}
                                     onChange={handleChange}
                                     placeholder="ব্লগের শিরোনাম বাংলায় লিখুন..."
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all hind-siliguri"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all hind-siliguri"
                                 />
                             </div>
 
                             {/* Excerpt - English */}
-                            <div className="bg-white rounded-xl border border-slate-200 p-6">
+                            <div className="bg-white rounded-md border border-slate-200 p-6">
                                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                                    <FiAlignLeft className="text-[#41bfb8]" />
+                                    <FiAlignLeft className="text-[#0142b2]" />
                                     Short Excerpt (English)
                                 </label>
                                 <textarea
@@ -192,12 +192,12 @@ export default function CreateBlog() {
                                     onChange={handleChange}
                                     placeholder="Write a brief summary of your blog (displayed in listings)..."
                                     rows={3}
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all resize-none"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all resize-none"
                                 />
                             </div>
 
                             {/* Excerpt - Bengali */}
-                            <div className="bg-white rounded-xl border border-slate-200 p-6">
+                            <div className="bg-white rounded-md border border-slate-200 p-6">
                                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
                                     <FiAlignLeft className="text-[#9AA0A8]" />
                                     Short Excerpt (Bengali)
@@ -208,14 +208,14 @@ export default function CreateBlog() {
                                     onChange={handleChange}
                                     placeholder="ব্লগের সংক্ষিপ্ত বিবরণ বাংলায় লিখুন..."
                                     rows={3}
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all resize-none hind-siliguri"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all resize-none hind-siliguri"
                                 />
                             </div>
 
                             {/* Content - English */}
-                            <div className="bg-white rounded-xl border border-slate-200 p-6">
+                            <div className="bg-white rounded-md border border-slate-200 p-6">
                                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                                    <FiAlignLeft className="text-[#41bfb8]" />
+                                    <FiAlignLeft className="text-[#0142b2]" />
                                     Full Content (English) *
                                 </label>
                                 <textarea
@@ -224,14 +224,14 @@ export default function CreateBlog() {
                                     onChange={handleChange}
                                     placeholder="Write your complete blog content here... You can use markdown formatting."
                                     rows={12}
-                                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all resize-none ${errors.content ? 'border-red-400' : 'border-slate-200'
+                                    className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all resize-none ${errors.content ? 'border-red-400' : 'border-slate-200'
                                         }`}
                                 />
                                 {errors.content && <p className="text-red-500 text-xs mt-2">{errors.content}</p>}
                             </div>
 
                             {/* Content - Bengali */}
-                            <div className="bg-white rounded-xl border border-slate-200 p-6">
+                            <div className="bg-white rounded-md border border-slate-200 p-6">
                                 <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
                                     <FiAlignLeft className="text-[#9AA0A8]" />
                                     Full Content (Bengali)
@@ -242,25 +242,25 @@ export default function CreateBlog() {
                                     onChange={handleChange}
                                     placeholder="এখানে সম্পূর্ণ ব্লগ কন্টেন্ট বাংলায় লিখুন..."
                                     rows={12}
-                                    className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all resize-none hind-siliguri"
+                                    className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all resize-none hind-siliguri"
                                 />
                             </div>
                         </>
                     ) : (
                         /* Preview Mode */
-                        <div className="bg-white rounded-xl border border-slate-200 p-8">
+                        <div className="bg-white rounded-md border border-slate-200 p-8">
                             <h2 className="text-3xl font-bold text-slate-800 outfit mb-4">{formData.title || 'Untitled Blog'}</h2>
                             {formData.image && (
-                                <img src={formData.image} alt="Preview" className="w-full h-64 object-cover rounded-xl mb-6" />
+                                <img src={formData.image} alt="Preview" className="w-full h-64 object-cover rounded-md mb-6" />
                             )}
                             <div className="flex items-center gap-4 mb-6">
-                                <span className="px-3 py-1 bg-[#41bfb8]/10 text-[#41bfb8] rounded-full text-sm font-medium">
+                                <span className="px-3 py-1 bg-[#0142b2]/10 text-[#0142b2] rounded-full text-sm font-medium">
                                     {formData.category || 'Category'}
                                 </span>
                                 <span className="text-sm text-slate-500">By {formData.author || 'Author'}</span>
                             </div>
                             {formData.excerpt && (
-                                <p className="text-lg text-slate-600 italic mb-6 border-l-4 border-[#41bfb8] pl-4">
+                                <p className="text-lg text-slate-600 italic mb-6 border-l-4 border-[#0142b2] pl-4">
                                     {formData.excerpt}
                                 </p>
                             )}
@@ -283,9 +283,9 @@ export default function CreateBlog() {
                 {/* Sidebar Settings */}
                 <div className="space-y-6">
                     {/* Featured Image */}
-                    <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <div className="bg-white rounded-md border border-slate-200 p-6">
                         <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                            <FiImage className="text-[#41bfb8]" />
+                            <FiImage className="text-[#0142b2]" />
                             Featured Image *
                         </label>
                         <input
@@ -294,7 +294,7 @@ export default function CreateBlog() {
                             value={formData.image}
                             onChange={handleChange}
                             placeholder="https://example.com/image.jpg"
-                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all ${errors.image ? 'border-red-400' : 'border-slate-200'
+                            className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all ${errors.image ? 'border-red-400' : 'border-slate-200'
                                 }`}
                         />
                         <div className="mt-2 flex items-center gap-2">
@@ -313,23 +313,23 @@ export default function CreateBlog() {
                             <img
                                 src={formData.image}
                                 alt="Preview"
-                                className="mt-4 w-full h-40 object-cover rounded-lg border border-slate-200"
+                                className="mt-4 w-full h-40 object-cover rounded-md border border-slate-200"
                                 onError={(e) => e.target.style.display = 'none'}
                             />
                         )}
                     </div>
 
                     {/* Category */}
-                    <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <div className="bg-white rounded-md border border-slate-200 p-6">
                         <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                            <FiTag className="text-[#41bfb8]" />
+                            <FiTag className="text-[#0142b2]" />
                             Category *
                         </label>
                         <select
                             name="category"
                             value={formData.category}
                             onChange={handleChange}
-                            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all ${errors.category ? 'border-red-400' : 'border-slate-200'
+                            className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all ${errors.category ? 'border-red-400' : 'border-slate-200'
                                 }`}
                         >
                             <option value="">Select Category</option>
@@ -341,9 +341,9 @@ export default function CreateBlog() {
                     </div>
 
                     {/* Author */}
-                    <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <div className="bg-white rounded-md border border-slate-200 p-6">
                         <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
-                            <FiUser className="text-[#41bfb8]" />
+                            <FiUser className="text-[#0142b2]" />
                             Author Name
                         </label>
                         <input
@@ -352,12 +352,12 @@ export default function CreateBlog() {
                             value={formData.author}
                             onChange={handleChange}
                             placeholder="Enter author name"
-                            className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all"
+                            className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all"
                         />
                     </div>
 
                     {/* Tags */}
-                    <div className="bg-white rounded-xl border border-slate-200 p-6">
+                    <div className="bg-white rounded-md border border-slate-200 p-6">
                         <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
                             <FiTag className="text-[#9AA0A8]" />
                             Tags
@@ -369,12 +369,12 @@ export default function CreateBlog() {
                                 onChange={(e) => setTagInput(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
                                 placeholder="Add a tag..."
-                                className="flex-1 px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all"
+                                className="flex-1 px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all"
                             />
                             <button
                                 type="button"
                                 onClick={addTag}
-                                className="px-4 py-3 bg-slate-100 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors"
+                                className="px-4 py-3 bg-slate-100 rounded-md text-slate-600 hover:bg-slate-200 transition-colors"
                             >
                                 Add
                             </button>
@@ -384,7 +384,7 @@ export default function CreateBlog() {
                                 {formData.tags.map((tag, idx) => (
                                     <span
                                         key={idx}
-                                        className="inline-flex items-center gap-1 px-3 py-1 bg-[#41bfb8]/10 text-[#41bfb8] rounded-full text-sm"
+                                        className="inline-flex items-center gap-1 px-3 py-1 bg-[#0142b2]/10 text-[#0142b2] rounded-full text-sm"
                                     >
                                         {tag}
                                         <button type="button" onClick={() => removeTag(tag)} className="hover:text-red-500">
@@ -397,14 +397,14 @@ export default function CreateBlog() {
                     </div>
 
                     {/* Status & Featured */}
-                    <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
+                    <div className="bg-white rounded-md border border-slate-200 p-6 space-y-4">
                         <div>
                             <label className="text-sm font-bold text-slate-700 mb-3 block">Status</label>
                             <select
                                 name="status"
                                 value={formData.status}
                                 onChange={handleChange}
-                                className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all"
+                                className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none transition-all"
                             >
                                 <option value="published">Published</option>
                                 <option value="draft">Draft</option>
@@ -416,7 +416,7 @@ export default function CreateBlog() {
                                 name="featured"
                                 checked={formData.featured}
                                 onChange={handleChange}
-                                className="w-5 h-5 rounded border-slate-300 text-[#41bfb8] focus:ring-[#41bfb8]"
+                                className="w-5 h-5 rounded border-slate-300 text-[#0142b2] focus:ring-[#0142b2]"
                             />
                             <span className="text-sm font-medium text-slate-700">Featured Post</span>
                         </label>

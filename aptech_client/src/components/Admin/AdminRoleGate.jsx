@@ -23,7 +23,7 @@ export default function AdminRoleGate({ allow = ['superAdmin', 'admin'], childre
   if (ok === null) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 gap-3">
-        <FiLoader className="text-3xl text-[#F3A522] animate-spin" />
+        <FiLoader className="text-3xl text-[#0142b2] animate-spin" />
         <p className="text-slate-400 text-sm font-medium">Checking access…</p>
       </div>
     );

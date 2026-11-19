@@ -124,15 +124,15 @@ export default function AdminNotificationsPage() {
         <div className="flex items-center gap-2">
           {unread > 0 && (
             <button onClick={markAllRead}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-teal-600 bg-teal-50 border border-teal-200 rounded-lg hover:bg-teal-100 transition">
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-teal-600 bg-teal-50 border border-teal-200 rounded-md hover:bg-teal-100 transition">
               <FiCheckCircle size={13} /> Mark All Read
             </button>
           )}
           <button onClick={() => setShowSendForm(!showSendForm)}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg transition ${
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-md transition ${
               showSendForm
                 ? 'text-slate-600 bg-slate-100 border border-slate-200'
-                : 'text-white bg-gradient-to-r from-teal-500 to-emerald-500 shadow-sm hover:shadow-md'
+                : 'text-white bg-[#027a1e] shadow-sm hover:shadow-md'
             }`}>
             {showSendForm ? <><FiX size={13} /> Close</> : <><FiPlus size={13} /> Send Notification</>}
           </button>
@@ -141,7 +141,7 @@ export default function AdminNotificationsPage() {
 
       {/* Send Notification Form */}
       {showSendForm && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+        <div className="bg-white rounded-md border border-slate-200 shadow-sm p-5">
           <h3 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
             <FiSend size={16} className="text-teal-500" /> Send New Notification
           </h3>
@@ -149,7 +149,7 @@ export default function AdminNotificationsPage() {
             <div>
               <label className="block text-xs font-bold text-slate-600 mb-1.5">Type</label>
               <select value={form.type} onChange={e => setForm({...form, type: e.target.value})}
-                className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:border-teal-400 outline-none">
+                className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm focus:border-teal-400 outline-none">
                 <option value="system">📢 System Announcement</option>
                 <option value="reminder">⏰ Reminder</option>
                 <option value="class">📅 Class Update</option>
@@ -160,7 +160,7 @@ export default function AdminNotificationsPage() {
             <div>
               <label className="block text-xs font-bold text-slate-600 mb-1.5">Send To</label>
               <select value={form.role} onChange={e => setForm({...form, role: e.target.value})}
-                className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:border-teal-400 outline-none">
+                className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm focus:border-teal-400 outline-none">
                 <option value="student">👨‍🎓 All Students</option>
                 <option value="mentor">👨‍🏫 All Mentors</option>
                 <option value="admin">👤 All Admins</option>
@@ -170,23 +170,23 @@ export default function AdminNotificationsPage() {
               <label className="block text-xs font-bold text-slate-600 mb-1.5">Title *</label>
               <input value={form.title} onChange={e => setForm({...form, title: e.target.value})} required
                 placeholder="e.g. Important Announcement"
-                className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:border-teal-400 outline-none" />
+                className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm focus:border-teal-400 outline-none" />
             </div>
             <div className="md:col-span-2">
               <label className="block text-xs font-bold text-slate-600 mb-1.5">Message *</label>
               <textarea value={form.message} onChange={e => setForm({...form, message: e.target.value})} required
                 placeholder="Write your notification message..."
                 rows={3}
-                className="w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm resize-none focus:border-teal-400 outline-none" />
+                className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm resize-none focus:border-teal-400 outline-none" />
             </div>
             {result && (
-              <div className={`md:col-span-2 p-3 rounded-xl text-sm font-semibold ${result.success ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}`}>
+              <div className={`md:col-span-2 p-3 rounded-md text-sm font-semibold ${result.success ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}`}>
                 {result.success ? <FiCheck className="inline mr-1" /> : '⚠️'} {result.message}
               </div>
             )}
             <div className="md:col-span-2">
               <button type="submit" disabled={sending}
-                className="px-6 py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-bold text-sm flex items-center gap-2 hover:shadow-lg disabled:opacity-50 transition">
+                className="px-6 py-2.5 bg-[#027a1e] text-white rounded-md font-bold text-sm flex items-center gap-2 hover:shadow-lg disabled:opacity-50 transition">
                 {sending ? (
                   <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Sending...</>
                 ) : (
@@ -207,7 +207,7 @@ export default function AdminNotificationsPage() {
                 { title: '🎓 Certificates Ready', msg: 'Certificates for completed courses are now ready.' },
               ].map((t, i) => (
                 <button key={i} onClick={() => setForm({...form, title: t.title, message: t.msg})}
-                  className="px-3 py-1.5 rounded-lg border border-slate-200 hover:border-teal-300 hover:bg-teal-50/30 transition text-xs font-medium text-slate-600">
+                  className="px-3 py-1.5 rounded-md border border-slate-200 hover:border-teal-300 hover:bg-teal-50/30 transition text-xs font-medium text-slate-600">
                   {t.title}
                 </button>
               ))}
@@ -218,19 +218,19 @@ export default function AdminNotificationsPage() {
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-        <div className="flex items-center gap-1 bg-slate-100 rounded-xl p-1">
+        <div className="flex items-center gap-1 bg-slate-100 rounded-md p-1">
           {[
             { key: 'all', label: 'All' },
             { key: 'unread', label: `Unread (${unread})` },
             { key: 'read', label: 'Read' },
           ].map(f => (
             <button key={f.key} onClick={() => setFilterRead(f.key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${filterRead === f.key ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${filterRead === f.key ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
               {f.label}
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 flex-1 max-w-xs">
+        <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-md px-2.5 py-1.5 flex-1 max-w-xs">
           <FiSearch size={13} className="text-slate-400" />
           <input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
             placeholder="Search notifications..."
@@ -242,7 +242,7 @@ export default function AdminNotificationsPage() {
           )}
         </div>
         <select value={filterType} onChange={e => setFilterType(e.target.value)}
-          className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-medium text-slate-600 outline-none bg-white">
+          className="px-3 py-1.5 border border-slate-200 rounded-md text-xs font-medium text-slate-600 outline-none bg-white">
           <option value="all">All Types</option>
           {Object.entries(typeConfig).map(([key, cfg]) => (
             <option key={key} value={key}>{cfg.icon} {cfg.label}</option>
@@ -251,7 +251,7 @@ export default function AdminNotificationsPage() {
       </div>
 
       {/* Notification List */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-md border border-slate-200 overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-16">
             <FiLoader className="animate-spin text-teal-500" size={24} />
@@ -259,7 +259,7 @@ export default function AdminNotificationsPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-16 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
+            <div className="w-14 h-14 rounded-md bg-slate-100 flex items-center justify-center mx-auto mb-3">
               <FiBell className="text-slate-300" size={24} />
             </div>
             <p className="text-sm font-medium text-slate-500">No notifications found</p>
@@ -276,7 +276,7 @@ export default function AdminNotificationsPage() {
                   className={`group relative flex items-start gap-3 px-5 py-4 transition hover:bg-slate-50/50 cursor-pointer ${!n.isRead ? config.bg : ''}`}
                   onClick={() => { if (!n.isRead) markRead(n._id); }}>
                   {/* Icon */}
-                  <div className={`w-10 h-10 rounded-xl ${!n.isRead ? 'bg-white shadow-sm border border-slate-100' : 'bg-slate-100'} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                  <div className={`w-10 h-10 rounded-md ${!n.isRead ? 'bg-white shadow-sm border border-slate-100' : 'bg-slate-100'} flex items-center justify-center flex-shrink-0 mt-0.5`}>
                     <span className="text-lg">{config.icon}</span>
                   </div>
 
@@ -307,12 +307,12 @@ export default function AdminNotificationsPage() {
                   <div className="flex items-center gap-1 flex-shrink-0 opacity-0 group-hover:opacity-100 transition">
                     {!n.isRead && (
                       <button onClick={(e) => { e.stopPropagation(); markRead(n._id); }}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-teal-600 hover:bg-teal-50 transition" title="Mark as read">
+                        className="p-1.5 rounded-md text-slate-400 hover:text-teal-600 hover:bg-teal-50 transition" title="Mark as read">
                         <FiCheckCircle size={14} />
                       </button>
                     )}
                     <button onClick={(e) => { e.stopPropagation(); removeOne(n._id); }}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition" title="Delete">
+                      className="p-1.5 rounded-md text-slate-400 hover:text-red-500 hover:bg-red-50 transition" title="Delete">
                       <FiTrash2 size={14} />
                     </button>
                   </div>

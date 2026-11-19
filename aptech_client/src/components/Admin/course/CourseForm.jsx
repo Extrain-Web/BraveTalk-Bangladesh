@@ -120,8 +120,8 @@ const courseSchema = z.object({
 
 // ─── Small UI helpers ────────────────────────────────────────
 const inputClass =
-  'w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-800 ' +
-  'placeholder:text-gray-300 focus:outline-none focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15 transition-all';
+  'w-full px-3.5 py-2.5 rounded-md border border-gray-200 bg-white text-sm text-gray-800 ' +
+  'placeholder:text-gray-300 focus:outline-none focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15 transition-all';
 const labelClass = 'block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5';
 
 const FieldError = ({ msg }) => msg
@@ -130,8 +130,8 @@ const FieldError = ({ msg }) => msg
 
 const SectionTitle = ({ icon: Icon, title, hint }) => (
   <div className="flex items-center gap-3 pb-4 mb-5 border-b border-gray-100">
-    <div className="w-9 h-9 rounded-lg bg-[#FEF6E7] flex items-center justify-center shrink-0">
-      <Icon className="text-[#c9871a]" size={16} />
+    <div className="w-9 h-9 rounded-md bg-[#eef3fc] flex items-center justify-center shrink-0">
+      <Icon className="text-[#0142b2]" size={16} />
     </div>
     <div>
       <h2 className="text-sm font-bold text-gray-800 outfit leading-tight">{title}</h2>
@@ -141,7 +141,7 @@ const SectionTitle = ({ icon: Icon, title, hint }) => (
 );
 
 const Card = ({ children, className = '' }) => (
-  <div className={`bg-white rounded-2xl border border-gray-100 shadow-sm p-6 ${className}`}>{children}</div>
+  <div className={`bg-white rounded-md border border-gray-100 shadow-sm p-6 ${className}`}>{children}</div>
 );
 
 // Tag-style input for string arrays (type + Enter to add)
@@ -155,17 +155,17 @@ const ChipsInput = ({ value = [], onChange, placeholder, invalid }) => {
   };
   return (
     <div
-      className={`flex flex-wrap items-center gap-2 px-3 py-2 rounded-lg border bg-white min-h-[46px] transition-all
-        focus-within:border-[#F3A522] focus-within:ring-2 focus-within:ring-[#F3A522]/15
+      className={`flex flex-wrap items-center gap-2 px-3 py-2 rounded-md border bg-white min-h-[46px] transition-all
+        focus-within:border-[#0142b2] focus-within:ring-2 focus-within:ring-[#0142b2]/15
         ${invalid ? 'border-red-300' : 'border-gray-200'}`}
     >
       {value.map(chip => (
-        <span key={chip} className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 bg-[#FEF6E7] border border-[#F0DFB4] rounded-md text-xs font-semibold text-[#a5680f]">
+        <span key={chip} className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 bg-[#eef3fc] border border-[#c9d8f5] rounded-md text-xs font-semibold text-[#01368f]">
           {chip}
           <button
             type="button"
             onClick={() => onChange(value.filter(c => c !== chip))}
-            className="w-4 h-4 flex items-center justify-center rounded hover:bg-[#F3A522]/20 text-[#c9871a]"
+            className="w-4 h-4 flex items-center justify-center rounded hover:bg-[#0142b2]/20 text-[#0142b2]"
           >
             <FiX size={11} />
           </button>
@@ -451,7 +451,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
   if (fetching) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#faf9f6] gap-3">
-        <FiLoader className="animate-spin text-[#F3A522]" size={34} />
+        <FiLoader className="animate-spin text-[#0142b2]" size={34} />
         <p className="text-sm text-gray-400 work">Loading course form...</p>
       </div>
     );
@@ -465,25 +465,25 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
     <div className="min-h-screen bg-[#faf9f6] pb-24">
       {/* ─── Sticky Top Bar ──────────────────────────────────── */}
       <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-gray-100">
-        <div className="h-[3px] w-full bg-gradient-to-r from-[#F3A522] via-[#e2941c] to-[#9AA0A8]"></div>
+        <div className="h-[3px] w-full bg-gradient-to-r from-[#0142b2] via-[#01368f] to-[#9AA0A8]"></div>
         <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between gap-4">
           <div className="min-w-0">
             <Link
               href="/dashboard/admin/course"
-              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider hover:text-[#c9871a] transition-colors"
+              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider hover:text-[#0142b2] transition-colors"
             >
               <FiArrowLeft size={12} /> Courses
             </Link>
             <h1 className="text-lg md:text-xl font-bold text-gray-900 outfit truncate">
               {isEdit ? (
-                <>Edit Course{courseDoc?.title ? <span className="text-[#c9871a]">: {courseDoc.title}</span> : ''}</>
+                <>Edit Course{courseDoc?.title ? <span className="text-[#0142b2]">: {courseDoc.title}</span> : ''}</>
               ) : 'Create New Course'}
             </h1>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <div className="hidden sm:block">
-              <select {...register('status')} className="px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-600 focus:outline-none focus:border-[#F3A522] cursor-pointer">
+              <select {...register('status')} className="px-3 py-2.5 rounded-md border border-gray-200 bg-white text-xs font-bold text-gray-600 focus:outline-none focus:border-[#0142b2] cursor-pointer">
                 <option value="published">✓ Published</option>
                 <option value="draft">◌ Draft</option>
                 <option value="archived">⊘ Archived</option>
@@ -493,7 +493,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
               <button
                 onClick={handleSubmit(onSubmit)}
                 disabled={saving || uploading}
-                className="flex items-center gap-2 px-5 md:px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/25 hover:shadow-xl hover:shadow-[#F3A522]/30 disabled:opacity-50 transition-all"
+                className="flex items-center gap-2 px-5 md:px-6 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/25 hover:shadow-xl hover:shadow-[#0142b2]/30 disabled:opacity-50 transition-all"
               >
                 {saving ? <FiLoader className="animate-spin" /> : <FiSave />}
                 <span className="hidden sm:inline">{saveLabel}</span>
@@ -521,21 +521,21 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                   key={key}
                   type="button"
                   onClick={() => setValue('type', key, { shouldValidate: true })}
-                  className={`relative flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all duration-300
+                  className={`relative flex items-start gap-3 p-4 rounded-md border-2 text-left transition-all duration-300
                     ${active
-                      ? 'border-[#F3A522] bg-[#FEF6E7] shadow-md shadow-[#F3A522]/10'
-                      : 'border-gray-100 bg-white hover:border-[#F3A522]/40'}`}
+                      ? 'border-[#0142b2] bg-[#eef3fc] shadow-md shadow-[#0142b2]/10'
+                      : 'border-gray-100 bg-white hover:border-[#0142b2]/40'}`}
                 >
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors
-                    ${active ? 'bg-[#F3A522] text-white' : 'bg-gray-50 text-gray-400'}`}>
+                  <div className={`w-10 h-10 rounded-md flex items-center justify-center shrink-0 transition-colors
+                    ${active ? 'bg-[#0142b2] text-white' : 'bg-gray-50 text-gray-400'}`}>
                     <Icon size={18} />
                   </div>
                   <div className="min-w-0">
-                    <p className={`text-sm font-bold outfit ${active ? 'text-[#a5680f]' : 'text-gray-700'}`}>{label}</p>
+                    <p className={`text-sm font-bold outfit ${active ? 'text-[#01368f]' : 'text-gray-700'}`}>{label}</p>
                     <p className="text-[11px] text-gray-400 work leading-snug mt-0.5">{desc}</p>
                   </div>
                   {active && (
-                    <span className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[#F3A522] text-white flex items-center justify-center">
+                    <span className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[#0142b2] text-white flex items-center justify-center">
                       <FiCheckCircle size={12} />
                     </span>
                   )}
@@ -547,7 +547,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
 
         {/* ─── Tabs (Recorded only) ──────────────────────────── */}
         {isRecorded && (
-          <div className="flex bg-white rounded-xl border border-gray-100 p-1.5 shadow-sm">
+          <div className="flex bg-white rounded-md border border-gray-100 p-1.5 shadow-sm">
             {[
               { id: 'info', label: 'Course Info', Icon: LuInfo },
               { id: 'modules', label: 'Modules & Lessons', Icon: LuLayers },
@@ -556,9 +556,9 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                 key={id}
                 type="button"
                 onClick={() => setActiveTab(id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all
+                className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-md text-sm font-bold transition-all
                   ${activeTab === id
-                    ? 'bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white shadow-md shadow-[#F3A522]/20'
+                    ? 'bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white shadow-md shadow-[#0142b2]/20'
                     : 'text-gray-500 hover:bg-gray-50'}`}
               >
                 <Icon size={16} /> {label}
@@ -578,18 +578,18 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
             </Card>
           ) : (
             <Card className="text-center py-16">
-              <div className="w-20 h-20 bg-[#FEF6E7] rounded-2xl flex items-center justify-center mx-auto mb-5">
-                <LuLayers className="text-3xl text-[#F3A522]" />
+              <div className="w-20 h-20 bg-[#eef3fc] rounded-md flex items-center justify-center mx-auto mb-5">
+                <LuLayers className="text-3xl text-[#0142b2]" />
               </div>
               <h3 className="text-lg font-bold text-gray-800 outfit mb-2">Save the course first</h3>
               <p className="text-sm text-gray-400 work max-w-md mx-auto mb-6">
-                Fill in the course info and hit <span className="font-bold text-[#c9871a]">Save &amp; Add Modules</span> —
+                Fill in the course info and hit <span className="font-bold text-[#0142b2]">Save &amp; Add Modules</span> —
                 you will land right here to build modules and lessons.
               </p>
               <button
                 type="button"
                 onClick={() => setActiveTab('info')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/25 hover:shadow-xl transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/25 hover:shadow-xl transition-all"
               >
                 <FiArrowLeft /> Back to Course Info
               </button>
@@ -603,7 +603,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
 
             {/* Validation summary */}
             {errorList.length > 0 && (
-              <div className="p-4 bg-red-50 border border-red-100 rounded-xl">
+              <div className="p-4 bg-red-50 border border-red-100 rounded-md">
                 <p className="flex items-center gap-2 text-xs font-bold text-red-600 mb-1.5">
                   <FiAlertCircle /> Please fix the following:
                 </p>
@@ -689,14 +689,14 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                     <div className="space-y-2.5">
                       {curriculums.fields.map((field, index) => (
                         <div key={field.id} className="flex items-center gap-2">
-                          <span className="w-8 h-8 rounded-lg bg-[#FEF6E7] text-[#c9871a] text-xs font-bold outfit flex items-center justify-center shrink-0">
+                          <span className="w-8 h-8 rounded-md bg-[#eef3fc] text-[#0142b2] text-xs font-bold outfit flex items-center justify-center shrink-0">
                             {String(index + 1).padStart(2, '0')}
                           </span>
                           <input {...register(`curriculum.${index}`)} className={inputClass} placeholder={`Topic ${index + 1} — e.g. Introduction & Fundamentals`} />
                           <button
                             type="button"
                             onClick={() => curriculums.remove(index)}
-                            className="p-2 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-2 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
                           >
                             <FiTrash2 size={15} />
                           </button>
@@ -707,7 +707,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                     <button
                       type="button"
                       onClick={() => curriculums.append('')}
-                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#c9871a] hover:text-[#a5680f] transition-colors"
+                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#0142b2] hover:text-[#01368f] transition-colors"
                     >
                       <FiPlus size={14} /> Add Topic
                     </button>
@@ -716,8 +716,8 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
 
                 {/* Recorded note instead of curriculum */}
                 {isRecorded && (
-                  <div className="flex items-start gap-3 p-4 bg-[#FEF6E7]/60 border border-[#F0DFB4] rounded-2xl">
-                    <LuLayers className="text-[#c9871a] mt-0.5 shrink-0" size={18} />
+                  <div className="flex items-start gap-3 p-4 bg-[#eef3fc]/60 border border-[#c9d8f5] rounded-md">
+                    <LuLayers className="text-[#0142b2] mt-0.5 shrink-0" size={18} />
                     <p className="text-xs text-[#7a5210] work leading-relaxed">
                       <span className="font-bold">Recorded course</span> — the curriculum is built from
                       <span className="font-bold"> Modules &amp; Lessons</span> (videos, quizzes, assignments).
@@ -737,7 +737,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                       const Ic = (ICON_OPTIONS.find(o => o.value === iconVal) || ICON_OPTIONS[6]).Icon;
                       return (
                         <div key={field.id} className="flex items-center gap-2">
-                          <span className="w-9 h-9 rounded-lg bg-[#FEF6E7] text-[#c9871a] flex items-center justify-center shrink-0">
+                          <span className="w-9 h-9 rounded-md bg-[#eef3fc] text-[#0142b2] flex items-center justify-center shrink-0">
                             <Ic size={16} />
                           </span>
                           <select {...register(`courseIncludes.${index}.icon`)} className={`${inputClass} w-44 shrink-0`}>
@@ -747,7 +747,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                           <button
                             type="button"
                             onClick={() => includes.remove(index)}
-                            className="p-2 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-2 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
                           >
                             <FiTrash2 size={15} />
                           </button>
@@ -759,7 +759,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                   <button
                     type="button"
                     onClick={() => includes.append({ icon: 'FaCheckCircle', text: '' })}
-                    className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#c9871a] hover:text-[#a5680f] transition-colors"
+                    className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-[#0142b2] hover:text-[#01368f] transition-colors"
                   >
                     <FiPlus size={14} /> Add Benefit
                   </button>
@@ -833,8 +833,8 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                     onClick={() => !uploading && imageMode === 'upload' && fileInputRef.current?.click()}
                     onDragOver={e => e.preventDefault()}
                     onDrop={e => { e.preventDefault(); handleImageFile(e.dataTransfer.files?.[0]); }}
-                    className={`relative w-full aspect-video rounded-xl overflow-hidden border-2 border-dashed transition-all
-                      ${errors.image ? 'border-red-300' : 'border-gray-200 hover:border-[#F3A522]/60'}
+                    className={`relative w-full aspect-video rounded-md overflow-hidden border-2 border-dashed transition-all
+                      ${errors.image ? 'border-red-300' : 'border-gray-200 hover:border-[#0142b2]/60'}
                       ${imageMode === 'upload' ? 'cursor-pointer' : ''} bg-gray-50 group`}
                   >
                     {imageUrl ? (
@@ -852,7 +852,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                     ) : (
                       <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gray-300">
                         {uploading
-                          ? <FiLoader className="animate-spin text-[#F3A522]" size={26} />
+                          ? <FiLoader className="animate-spin text-[#0142b2]" size={26} />
                           : <FiUploadCloud size={26} />}
                         <p className="text-[11px] font-bold work text-gray-400">
                           {uploading ? 'Uploading...' : 'Click or drop an image here'}
@@ -861,7 +861,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                     )}
                     {uploading && imageUrl && (
                       <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
-                        <FiLoader className="animate-spin text-[#F3A522]" size={26} />
+                        <FiLoader className="animate-spin text-[#0142b2]" size={26} />
                       </div>
                     )}
                   </div>
@@ -878,16 +878,16 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                     <button
                       type="button"
                       onClick={() => setImageMode('upload')}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-bold transition-all
-                        ${imageMode === 'upload' ? 'bg-[#FEF6E7] text-[#a5680f] border border-[#F0DFB4]' : 'bg-gray-50 text-gray-400 border border-transparent hover:bg-gray-100'}`}
+                      className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-[11px] font-bold transition-all
+                        ${imageMode === 'upload' ? 'bg-[#eef3fc] text-[#01368f] border border-[#c9d8f5]' : 'bg-gray-50 text-gray-400 border border-transparent hover:bg-gray-100'}`}
                     >
                       <FiUploadCloud size={13} /> Upload
                     </button>
                     <button
                       type="button"
                       onClick={() => setImageMode('url')}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-bold transition-all
-                        ${imageMode === 'url' ? 'bg-[#FEF6E7] text-[#a5680f] border border-[#F0DFB4]' : 'bg-gray-50 text-gray-400 border border-transparent hover:bg-gray-100'}`}
+                      className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-[11px] font-bold transition-all
+                        ${imageMode === 'url' ? 'bg-[#eef3fc] text-[#01368f] border border-[#c9d8f5]' : 'bg-gray-50 text-gray-400 border border-transparent hover:bg-gray-100'}`}
                     >
                       <FiLink size={13} /> Use URL
                     </button>
@@ -906,7 +906,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                     <div>
                       <label className={labelClass}>Course Access *</label>
                       <input type="hidden" {...register('pricingType')} />
-                      <div role="radiogroup" aria-label="Course pricing" className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-gray-100">
+                      <div role="radiogroup" aria-label="Course pricing" className="grid grid-cols-2 gap-1 p-1 rounded-md bg-gray-100">
                         {[
                           { key: 'free', label: 'Free', desc: 'Anyone can enroll' },
                           { key: 'paid', label: 'Paid', desc: 'One-time payment' },
@@ -922,7 +922,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                               role="radio"
                               aria-checked={active}
                               onClick={() => setPricingType(opt.key)}
-                              className={`flex flex-col items-center justify-center py-2.5 rounded-lg transition-all
+                              className={`flex flex-col items-center justify-center py-2.5 rounded-md transition-all
                                 ${active ? activeCls : 'text-gray-500 hover:bg-white/70'}`}
                             >
                               <span className="text-sm font-bold outfit">{opt.label}</span>
@@ -934,7 +934,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
                     </div>
 
                     {isFreeCourse ? (
-                      <div className="flex items-start gap-2.5 p-3 rounded-lg bg-[#027a1e]/[0.07] border border-[#027a1e]/20">
+                      <div className="flex items-start gap-2.5 p-3 rounded-md bg-[#027a1e]/[0.07] border border-[#027a1e]/20">
                         <FiCheckCircle className="text-[#027a1e] mt-0.5 shrink-0" size={15} />
                         <p className="text-[11px] text-[#025c17] work leading-relaxed">
                           This course is <span className="font-bold">FREE</span> — students enroll instantly with one click,
@@ -1014,7 +1014,7 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
               <button
                 type="submit"
                 disabled={saving || uploading}
-                className="flex items-center gap-2 px-8 py-3 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/25 hover:shadow-xl disabled:opacity-50 transition-all"
+                className="flex items-center gap-2 px-8 py-3 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/25 hover:shadow-xl disabled:opacity-50 transition-all"
               >
                 {saving ? <FiLoader className="animate-spin" /> : <FiSave />} {saveLabel}
               </button>
@@ -1025,11 +1025,11 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
 
       {/* ─── Toast ───────────────────────────────────────────── */}
       {toast && (
-        <div className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 pl-4 pr-5 py-3.5 rounded-xl shadow-2xl text-sm font-semibold work
+        <div className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 pl-4 pr-5 py-3.5 rounded-md shadow-2xl text-sm font-semibold work
           ${toast.type === 'success' ? 'bg-[#14100c] text-white' : 'bg-red-600 text-white'}`}
         >
           {toast.type === 'success'
-            ? <FiCheckCircle className="text-[#F3A522]" size={18} />
+            ? <FiCheckCircle className="text-[#0142b2]" size={18} />
             : <FiAlertCircle size={18} />}
           {toast.msg}
         </div>

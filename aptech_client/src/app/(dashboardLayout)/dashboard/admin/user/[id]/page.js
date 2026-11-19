@@ -76,7 +76,7 @@ export default function StudentDetailPage() {
     <div className="space-y-6 max-w-5xl">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <button onClick={() => window.history.back()} className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition">
+        <button onClick={() => window.history.back()} className="w-10 h-10 rounded-md bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition">
           <FiArrowLeft size={16} />
         </button>
         <div>
@@ -86,9 +86,9 @@ export default function StudentDetailPage() {
       </div>
 
       {/* Profile Card */}
-      <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-6">
+      <div className="bg-white rounded-md border border-slate-200/60 shadow-sm p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white text-2xl font-bold">
+          <div className="w-16 h-16 rounded-md bg-[#027a1e] flex items-center justify-center text-white text-2xl font-bold">
             {(student?.firstName || student?.name || 'S').charAt(0).toUpperCase()}
           </div>
           <div className="flex-1">
@@ -118,7 +118,7 @@ export default function StudentDetailPage() {
       <div>
         <h3 className="text-lg font-bold text-slate-800 mb-3">Enrolled Courses ({enrollments.length})</h3>
         {enrollments.length === 0 ? (
-          <div className="bg-white rounded-xl border border-slate-200/60 p-12 text-center shadow-sm">
+          <div className="bg-white rounded-md border border-slate-200/60 p-12 text-center shadow-sm">
             <FiBook className="mx-auto text-slate-300 mb-3" size={32} />
             <p className="text-sm text-slate-400">No enrollments found for this student.</p>
           </div>
@@ -130,11 +130,11 @@ export default function StudentDetailPage() {
               const batch = typeof enr.batchId === 'object' ? enr.batchId : null;
 
               return (
-                <div key={enr._id} className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-5">
+                <div key={enr._id} className="bg-white rounded-md border border-slate-200/60 shadow-sm p-5">
                   <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                     {/* Course */}
                     <div className="flex items-center gap-3 flex-1">
-                      <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100">
+                      <div className="w-12 h-12 rounded-md overflow-hidden flex-shrink-0 bg-slate-100">
                         {course.image && <img src={course.image} alt="" className="w-full h-full object-cover" />}
                       </div>
                       <div>
@@ -144,7 +144,7 @@ export default function StudentDetailPage() {
                     </div>
 
                     {/* Status */}
-                    <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold border ${getStatusColor(enr.status)}`}>
+                    <span className={`px-3 py-1.5 rounded-md text-xs font-semibold border ${getStatusColor(enr.status)}`}>
                       {enr.status}
                     </span>
 

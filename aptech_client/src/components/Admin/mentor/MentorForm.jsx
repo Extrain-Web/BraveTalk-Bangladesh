@@ -52,8 +52,8 @@ const mentorSchema = z.object({
 
 // ─── Small UI helpers (match CourseForm) ─────────────────────
 const inputClass =
-  'w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-800 ' +
-  'placeholder:text-gray-300 focus:outline-none focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15 transition-all';
+  'w-full px-3.5 py-2.5 rounded-md border border-gray-200 bg-white text-sm text-gray-800 ' +
+  'placeholder:text-gray-300 focus:outline-none focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15 transition-all';
 const labelClass = 'block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5';
 
 const FieldError = ({ msg }) => msg
@@ -62,8 +62,8 @@ const FieldError = ({ msg }) => msg
 
 const SectionTitle = ({ icon: Icon, title, hint }) => (
   <div className="flex items-center gap-3 pb-4 mb-5 border-b border-gray-100">
-    <div className="w-9 h-9 rounded-lg bg-[#FEF6E7] flex items-center justify-center shrink-0">
-      <Icon className="text-[#c9871a]" size={16} />
+    <div className="w-9 h-9 rounded-md bg-[#eef3fc] flex items-center justify-center shrink-0">
+      <Icon className="text-[#0142b2]" size={16} />
     </div>
     <div>
       <h2 className="text-sm font-bold text-gray-800 outfit leading-tight">{title}</h2>
@@ -73,7 +73,7 @@ const SectionTitle = ({ icon: Icon, title, hint }) => (
 );
 
 const Card = ({ children, className = '' }) => (
-  <div className={`bg-white rounded-2xl border border-gray-100 shadow-sm p-6 ${className}`}>{children}</div>
+  <div className={`bg-white rounded-md border border-gray-100 shadow-sm p-6 ${className}`}>{children}</div>
 );
 
 // Tag-style input for string arrays (type + Enter to add)
@@ -87,17 +87,17 @@ const ChipsInput = ({ value = [], onChange, placeholder, invalid }) => {
   };
   return (
     <div
-      className={`flex flex-wrap items-center gap-2 px-3 py-2 rounded-lg border bg-white min-h-[46px] transition-all
-        focus-within:border-[#F3A522] focus-within:ring-2 focus-within:ring-[#F3A522]/15
+      className={`flex flex-wrap items-center gap-2 px-3 py-2 rounded-md border bg-white min-h-[46px] transition-all
+        focus-within:border-[#0142b2] focus-within:ring-2 focus-within:ring-[#0142b2]/15
         ${invalid ? 'border-red-300' : 'border-gray-200'}`}
     >
       {value.map(chip => (
-        <span key={chip} className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 bg-[#FEF6E7] border border-[#F0DFB4] rounded-md text-xs font-semibold text-[#a5680f]">
+        <span key={chip} className="inline-flex items-center gap-1.5 pl-2.5 pr-1.5 py-1 bg-[#eef3fc] border border-[#c9d8f5] rounded-md text-xs font-semibold text-[#01368f]">
           {chip}
           <button
             type="button"
             onClick={() => onChange(value.filter(c => c !== chip))}
-            className="w-4 h-4 flex items-center justify-center rounded hover:bg-[#F3A522]/20 text-[#c9871a]"
+            className="w-4 h-4 flex items-center justify-center rounded hover:bg-[#0142b2]/20 text-[#0142b2]"
           >
             <FiX size={11} />
           </button>
@@ -277,7 +277,7 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
   if (fetching) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#faf9f6] gap-3">
-        <FiLoader className="animate-spin text-[#F3A522]" size={34} />
+        <FiLoader className="animate-spin text-[#0142b2]" size={34} />
         <p className="text-sm text-gray-400 work">Loading mentor...</p>
       </div>
     );
@@ -289,12 +289,12 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
     <div className="min-h-screen bg-[#faf9f6] pb-24">
       {/* ─── Sticky Top Bar ──────────────────────────────────── */}
       <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-gray-100">
-        <div className="h-[3px] w-full bg-gradient-to-r from-[#F3A522] via-[#e2941c] to-[#9AA0A8]"></div>
+        <div className="h-[3px] w-full bg-gradient-to-r from-[#0142b2] via-[#01368f] to-[#9AA0A8]"></div>
         <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between gap-4">
           <div className="min-w-0">
             <Link
               href="/dashboard/admin/mentor"
-              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider hover:text-[#c9871a] transition-colors"
+              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider hover:text-[#0142b2] transition-colors"
             >
               <FiArrowLeft size={12} /> Mentors
             </Link>
@@ -305,7 +305,7 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
           <button
             onClick={handleSubmit(onSubmit)}
             disabled={saving || uploading}
-            className="flex items-center gap-2 px-5 md:px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/25 hover:shadow-xl hover:shadow-[#F3A522]/30 disabled:opacity-50 transition-all"
+            className="flex items-center gap-2 px-5 md:px-6 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/25 hover:shadow-xl hover:shadow-[#0142b2]/30 disabled:opacity-50 transition-all"
           >
             {saving ? <FiLoader className="animate-spin" /> : <FiSave />}
             <span className="hidden sm:inline">{saveLabel}</span>
@@ -319,7 +319,7 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
 
           {/* Validation summary */}
           {errorList.length > 0 && (
-            <div className="p-4 bg-red-50 border border-red-100 rounded-xl">
+            <div className="p-4 bg-red-50 border border-red-100 rounded-md">
               <p className="flex items-center gap-2 text-xs font-bold text-red-600 mb-1.5">
                 <FiAlertCircle /> Please fix the following:
               </p>
@@ -452,8 +452,8 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
                   onClick={() => !uploading && imageMode === 'upload' && fileInputRef.current?.click()}
                   onDragOver={e => e.preventDefault()}
                   onDrop={e => { e.preventDefault(); handleImageFile(e.dataTransfer.files?.[0]); }}
-                  className={`relative w-full aspect-square rounded-xl overflow-hidden border-2 border-dashed transition-all
-                    ${errors.image ? 'border-red-300' : 'border-gray-200 hover:border-[#F3A522]/60'}
+                  className={`relative w-full aspect-square rounded-md overflow-hidden border-2 border-dashed transition-all
+                    ${errors.image ? 'border-red-300' : 'border-gray-200 hover:border-[#0142b2]/60'}
                     ${imageMode === 'upload' ? 'cursor-pointer' : ''} bg-gray-50 group`}
                 >
                   {imageUrl ? (
@@ -471,7 +471,7 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
                   ) : (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gray-300">
                       {uploading
-                        ? <FiLoader className="animate-spin text-[#F3A522]" size={26} />
+                        ? <FiLoader className="animate-spin text-[#0142b2]" size={26} />
                         : <FiUploadCloud size={26} />}
                       <p className="text-[11px] font-bold work text-gray-400">
                         {uploading ? 'Uploading...' : 'Click or drop a photo here'}
@@ -480,7 +480,7 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
                   )}
                   {uploading && imageUrl && (
                     <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
-                      <FiLoader className="animate-spin text-[#F3A522]" size={26} />
+                      <FiLoader className="animate-spin text-[#0142b2]" size={26} />
                     </div>
                   )}
                 </div>
@@ -497,16 +497,16 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
                   <button
                     type="button"
                     onClick={() => setImageMode('upload')}
-                    className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-bold transition-all
-                      ${imageMode === 'upload' ? 'bg-[#FEF6E7] text-[#a5680f] border border-[#F0DFB4]' : 'bg-gray-50 text-gray-400 border border-transparent hover:bg-gray-100'}`}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-[11px] font-bold transition-all
+                      ${imageMode === 'upload' ? 'bg-[#eef3fc] text-[#01368f] border border-[#c9d8f5]' : 'bg-gray-50 text-gray-400 border border-transparent hover:bg-gray-100'}`}
                   >
                     <FiUploadCloud size={13} /> Upload
                   </button>
                   <button
                     type="button"
                     onClick={() => setImageMode('url')}
-                    className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[11px] font-bold transition-all
-                      ${imageMode === 'url' ? 'bg-[#FEF6E7] text-[#a5680f] border border-[#F0DFB4]' : 'bg-gray-50 text-gray-400 border border-transparent hover:bg-gray-100'}`}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-[11px] font-bold transition-all
+                      ${imageMode === 'url' ? 'bg-[#eef3fc] text-[#01368f] border border-[#c9d8f5]' : 'bg-gray-50 text-gray-400 border border-transparent hover:bg-gray-100'}`}
                   >
                     <FiLink size={13} /> Use URL
                   </button>
@@ -541,13 +541,13 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
                   <button
                     type="button"
                     onClick={() => setValue('isPublished', !isPublished)}
-                    className={`w-full flex items-center justify-between gap-3 p-3 rounded-xl border transition-all ${isPublished ? 'border-[#F0DFB4] bg-[#FEF6E7]/50' : 'border-gray-200 bg-gray-50'}`}
+                    className={`w-full flex items-center justify-between gap-3 p-3 rounded-md border transition-all ${isPublished ? 'border-[#c9d8f5] bg-[#eef3fc]/50' : 'border-gray-200 bg-gray-50'}`}
                   >
                     <div className="text-left">
                       <p className="text-sm font-bold text-gray-800">{isPublished ? 'Shown on website' : 'Hidden from website'}</p>
                       <p className="text-[11px] text-gray-400">{isPublished ? 'Appears on the public Mentors page' : 'Created but not shown publicly'}</p>
                     </div>
-                    <span className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${isPublished ? 'bg-[#F3A522]' : 'bg-gray-300'}`}>
+                    <span className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${isPublished ? 'bg-[#0142b2]' : 'bg-gray-300'}`}>
                       <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all ${isPublished ? 'left-[22px]' : 'left-0.5'}`} />
                     </span>
                   </button>
@@ -557,7 +557,7 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
                       <label className={labelClass}>Login Password</label>
                       <input {...register('password')} className={inputClass} placeholder="Leave blank → Mentor@123456" />
                       <p className="text-[11px] text-gray-400 mt-1 flex items-center gap-1">
-                        <LuKeyRound size={11} /> A <b className="text-[#c9871a] mx-0.5">mentor</b>-role login is auto-created with this email.
+                        <LuKeyRound size={11} /> A <b className="text-[#0142b2] mx-0.5">mentor</b>-role login is auto-created with this email.
                       </p>
                     </div>
                   )}
@@ -571,7 +571,7 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
             <button
               type="submit"
               disabled={saving || uploading}
-              className="flex items-center gap-2 px-8 py-3 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/25 hover:shadow-xl disabled:opacity-50 transition-all"
+              className="flex items-center gap-2 px-8 py-3 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/25 hover:shadow-xl disabled:opacity-50 transition-all"
             >
               {saving ? <FiLoader className="animate-spin" /> : <FiSave />} {saveLabel}
             </button>
@@ -581,11 +581,11 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
 
       {/* ─── Toast ───────────────────────────────────────────── */}
       {toast && (
-        <div className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 pl-4 pr-5 py-3.5 rounded-xl shadow-2xl text-sm font-semibold work
+        <div className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 pl-4 pr-5 py-3.5 rounded-md shadow-2xl text-sm font-semibold work
           ${toast.type === 'success' ? 'bg-[#14100c] text-white' : 'bg-red-600 text-white'}`}
         >
           {toast.type === 'success'
-            ? <FiCheckCircle className="text-[#F3A522]" size={18} />
+            ? <FiCheckCircle className="text-[#0142b2]" size={18} />
             : <FiAlertCircle size={18} />}
           {toast.msg}
         </div>
@@ -594,13 +594,13 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
       {/* ─── Login credentials (shown once after create) ───────── */}
       {createdCreds && (
         <div className="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
-            <div className="px-6 py-4 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white">
+          <div className="bg-white rounded-md w-full max-w-sm overflow-hidden shadow-2xl">
+            <div className="px-6 py-4 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white">
               <h3 className="font-bold outfit flex items-center gap-2"><FiCheckCircle /> Mentor account created</h3>
               <p className="text-white/80 text-xs mt-0.5">Share these login details with the mentor</p>
             </div>
             <div className="p-6 space-y-3">
-              <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 space-y-2.5">
+              <div className="rounded-md border border-gray-100 bg-gray-50 p-3 space-y-2.5">
                 <div>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Email</p>
                   <p className="font-mono text-sm text-gray-800 break-all">{createdCreds.email}</p>
@@ -611,24 +611,24 @@ const MentorForm = ({ mode = 'create', mentorId = null }) => {
                 </div>
                 <div className="border-t border-gray-100 pt-2">
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Role</p>
-                  <p className="text-sm font-semibold text-[#c9871a] capitalize">mentor · dashboard access</p>
+                  <p className="text-sm font-semibold text-[#0142b2] capitalize">mentor · dashboard access</p>
                 </div>
               </div>
-              <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg p-2.5">
+              <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-md p-2.5">
                 ⚠ The password won&apos;t be shown again — copy it now.
               </p>
               <div className="flex gap-2">
                 <button
                   type="button"
                   onClick={() => { try { navigator.clipboard?.writeText(`Email: ${createdCreds.email}\nPassword: ${createdCreds.password}`); showToast('success', 'Copied to clipboard'); } catch { } }}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-md border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition"
                 >
                   <LuCopy size={14} /> Copy
                 </button>
                 <button
                   type="button"
                   onClick={() => router.push('/dashboard/admin/mentor')}
-                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold hover:shadow-lg transition"
+                  className="flex-1 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold hover:shadow-lg transition"
                 >
                   Done
                 </button>

@@ -197,11 +197,11 @@ export default function AdminBookOrdersPage() {
     return (
       <div className="flex items-center gap-1.5 justify-end">
         <button onClick={() => handleApprove(o)} disabled={processing === o._id}
-          className="inline-flex items-center gap-1 px-3.5 py-2 bg-emerald-500 text-white text-xs font-bold rounded-lg hover:bg-emerald-600 disabled:opacity-50 transition whitespace-nowrap">
+          className="inline-flex items-center gap-1 px-3.5 py-2 bg-emerald-500 text-white text-xs font-bold rounded-md hover:bg-emerald-600 disabled:opacity-50 transition whitespace-nowrap">
           <FiCheck size={13} /> Approve
         </button>
         <button onClick={() => handleCancel(o)} disabled={processing === o._id} title="Cancel order"
-          className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 transition disabled:opacity-50">
+          className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 border border-slate-200 hover:border-rose-200 transition disabled:opacity-50">
           <FiX size={15} />
         </button>
       </div>
@@ -219,14 +219,14 @@ export default function AdminBookOrdersPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
         <div>
-          <Link href="/dashboard/admin/books" className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider hover:text-[#c9871a] transition">
+          <Link href="/dashboard/admin/books" className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider hover:text-[#0142b2] transition">
             <FiArrowLeft size={12} /> Books
           </Link>
           <h1 className="text-2xl font-bold text-slate-900 outfit">Book Orders</h1>
           <p className="text-sm text-slate-500 mt-1">Verify payments, unlock books and track printed deliveries</p>
         </div>
         {counts.pending > 0 && (
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-700">
+          <div className="flex items-center gap-2 px-4 py-2.5 rounded-md bg-amber-50 border border-amber-200 text-sm text-amber-700">
             <FiClock size={15} /> <span><b>{counts.pending}</b> waiting · {formatTaka(pendingAmount)}</span>
           </div>
         )}
@@ -234,27 +234,27 @@ export default function AdminBookOrdersPage() {
 
       {/* Tabs + search */}
       <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-        <div className="flex gap-1 bg-slate-100 rounded-xl p-1 overflow-x-auto">
+        <div className="flex gap-1 bg-slate-100 rounded-md p-1 overflow-x-auto">
           {TABS.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-sm whitespace-nowrap transition ${tab === t.id ? 'bg-white text-[#c9871a] shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-700'}`}>
+              className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-md text-sm whitespace-nowrap transition ${tab === t.id ? 'bg-white text-[#0142b2] shadow-sm font-semibold' : 'text-slate-500 hover:text-slate-700'}`}>
               <t.icon size={14} /> {t.label}
-              <span className={`min-w-[20px] px-1.5 py-0.5 rounded-md text-[10px] font-bold ${tab === t.id ? 'bg-[#FEF6E7] text-[#a5680f]' : 'bg-white/70 text-slate-500'}`}>{counts[t.id]}</span>
+              <span className={`min-w-[20px] px-1.5 py-0.5 rounded-md text-[10px] font-bold ${tab === t.id ? 'bg-[#eef3fc] text-[#01368f]' : 'bg-white/70 text-slate-500'}`}>{counts[t.id]}</span>
             </button>
           ))}
         </div>
         <div className="relative flex-1">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search order no, student, phone, TrxID…"
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200/60 text-sm outline-none bg-white shadow-sm focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15" />
+            className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200/60 text-sm outline-none bg-white shadow-sm focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15" />
         </div>
-        <button onClick={load} className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:border-[#F0DFB4] hover:text-[#c9871a] transition shadow-sm">
+        <button onClick={load} className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-md hover:border-[#c9d8f5] hover:text-[#0142b2] transition shadow-sm">
           <FiRefreshCw size={13} className={loading ? 'animate-spin' : ''} /> Reload
         </button>
       </div>
 
       {/* Desktop table */}
-      <div className="hidden xl:block bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+      <div className="hidden xl:block bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -304,16 +304,16 @@ export default function AdminBookOrdersPage() {
       {/* Mobile / tablet cards */}
       <div className="xl:hidden space-y-3">
         {loading && orders.length === 0 ? (
-          [1, 2, 3].map(i => <div key={i} className="h-40 bg-white rounded-xl border border-slate-200/60 animate-pulse" />)
+          [1, 2, 3].map(i => <div key={i} className="h-40 bg-white rounded-md border border-slate-200/60 animate-pulse" />)
         ) : filtered.length === 0 ? (
-          <div className="p-12 text-center bg-white rounded-xl border border-slate-200/60">
+          <div className="p-12 text-center bg-white rounded-md border border-slate-200/60">
             <FiShoppingBag className="mx-auto text-slate-300 mb-3" size={34} />
             <p className="font-medium text-slate-600">No {tab === 'all' ? '' : tab} orders</p>
           </div>
         ) : filtered.map(o => {
           const s = o.studentId || {};
           return (
-            <div key={o._id} className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+            <div key={o._id} className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
               <div className="flex items-center justify-between gap-2 px-4 py-2.5 bg-slate-50/70 border-b border-slate-100">
                 <div className="min-w-0">
                   <p className="font-mono text-xs font-semibold text-slate-700 truncate">{o.orderNo || `#${String(o._id).slice(-6).toUpperCase()}`}</p>

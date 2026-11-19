@@ -173,12 +173,12 @@ export default function ReportsPage() {
       {/* Quick Download Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Enrollments', desc: `${activeEnrollments.length} active students`, icon: FiUsers, color: 'from-teal-500 to-emerald-500', type: 'enrollments' },
-          { label: 'Orders', desc: `${orders.length} total orders`, icon: FiDollarSign, color: 'from-amber-500 to-orange-500', type: 'orders' },
-          { label: 'Courses', desc: `${courses.length} courses`, icon: FiBook, color: 'from-blue-500 to-indigo-500', type: 'courses' },
-          { label: 'Batches', desc: `${batches.length} batches`, icon: FiBarChart2, color: 'from-purple-500 to-pink-500', type: 'batches' },
+          { label: 'Enrollments', desc: `${activeEnrollments.length} active students`, icon: FiUsers, color: 'from-[#027a1e] to-[#027a1e]', type: 'enrollments' },
+          { label: 'Orders', desc: `${orders.length} total orders`, icon: FiDollarSign, color: 'from-[#e5251f] to-[#e5251f]', type: 'orders' },
+          { label: 'Courses', desc: `${courses.length} courses`, icon: FiBook, color: 'from-[#0142b2] to-[#0142b2]', type: 'courses' },
+          { label: 'Batches', desc: `${batches.length} batches`, icon: FiBarChart2, color: 'from-[#0b1b4a] to-[#0b1b4a]', type: 'batches' },
         ].map(card => (
-          <div key={card.type} className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden group hover:shadow-md transition">
+          <div key={card.type} className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden group hover:shadow-md transition">
             <div className={`h-1.5 bg-gradient-to-r ${card.color}`} />
             <div className="p-5">
               <div className="flex items-start justify-between">
@@ -186,13 +186,13 @@ export default function ReportsPage() {
                   <p className="text-sm font-medium text-slate-700">{card.label}</p>
                   <p className="text-xs text-slate-400 mt-0.5">{card.desc}</p>
                 </div>
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center`}>
+                <div className={`w-10 h-10 rounded-md bg-gradient-to-br ${card.color} flex items-center justify-center`}>
                   <card.icon size={18} className="text-white" />
                 </div>
               </div>
               <button
                 onClick={() => downloadCSV(card.type)}
-                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-sm text-slate-600 font-medium transition border border-slate-200"
+                className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-slate-50 hover:bg-slate-100 text-sm text-slate-600 font-medium transition border border-slate-200"
               >
                 <FiDownload size={14} /> Download CSV
               </button>
@@ -211,9 +211,9 @@ export default function ReportsPage() {
           { label: 'Active Students', value: activeEnrollments.length, icon: FiUsers, color: 'text-teal-600', bg: 'bg-teal-50' },
           { label: 'Pending Orders', value: pendingOrders.length, icon: FiFileText, color: 'text-blue-600', bg: 'bg-blue-50' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm">
+          <div key={s.label} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}>
+              <div className={`w-10 h-10 rounded-md ${s.bg} flex items-center justify-center`}>
                 <s.icon size={18} className={s.color} />
               </div>
               <div>
@@ -227,7 +227,7 @@ export default function ReportsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Monthly Enrollment Trend */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200/60 shadow-sm p-6">
+        <div className="lg:col-span-2 bg-white rounded-md border border-slate-200/60 shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-base font-semibold text-slate-700 outfit-semibold">Monthly Enrollments</h3>
@@ -240,7 +240,7 @@ export default function ReportsPage() {
               <div key={i} className="flex-1 flex flex-col items-center gap-2">
                 <span className="text-xs font-medium text-slate-600">{d.count}</span>
                 <div
-                  className="w-full rounded-lg bg-gradient-to-t from-teal-500 to-teal-300 hover:from-teal-600 hover:to-teal-400 transition-all cursor-default"
+                  className="w-full rounded-md bg-gradient-to-t from-teal-500 to-teal-300 hover:from-teal-600 hover:to-teal-400 transition-all cursor-default"
                   style={{ height: `${Math.max((d.count / maxMonthly) * 100, 8)}%` }}
                 />
                 <span className="text-xs text-slate-400">{d.month}</span>
@@ -253,7 +253,7 @@ export default function ReportsPage() {
         </div>
 
         {/* Status Breakdown */}
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-6">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-base font-semibold text-slate-700 outfit-semibold">Status Breakdown</h3>
@@ -300,7 +300,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Popular Courses */}
-      <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-6">
+      <div className="bg-white rounded-md border border-slate-200/60 shadow-sm p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-base font-semibold text-slate-700 outfit-semibold">Top Courses by Enrollment</h3>
@@ -311,14 +311,14 @@ export default function ReportsPage() {
         <div className="space-y-4">
           {topCourses.map(([title, count], i) => (
             <div key={title} className="flex items-center gap-4">
-              <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${
+              <span className={`w-7 h-7 rounded-md flex items-center justify-center text-xs font-bold ${
                 i === 0 ? 'bg-amber-100 text-amber-600' : i === 1 ? 'bg-slate-200 text-slate-600' : 'bg-orange-50 text-orange-500'
               }`}>{i + 1}</span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-slate-700 truncate">{title}</p>
                 <div className="w-full bg-slate-100 rounded-full h-2 mt-1">
                   <div
-                    className="h-2 rounded-full bg-gradient-to-r from-teal-500 to-emerald-400 transition-all"
+                    className="h-2 rounded-full bg-[#027a1e] transition-all"
                     style={{ width: `${(count / maxPop) * 100}%` }}
                   />
                 </div>

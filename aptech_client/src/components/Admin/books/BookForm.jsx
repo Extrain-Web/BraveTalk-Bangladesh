@@ -15,8 +15,8 @@ import { useToast } from '@/components/Shared/Toast';
 
 // ─── Small UI helpers (same look as CourseForm) ───────────────
 const inputClass =
-  'w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-800 ' +
-  'placeholder:text-gray-300 focus:outline-none focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15 transition-all';
+  'w-full px-3.5 py-2.5 rounded-md border border-gray-200 bg-white text-sm text-gray-800 ' +
+  'placeholder:text-gray-300 focus:outline-none focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15 transition-all';
 const invalidClass = ' !border-red-300';
 const labelClass = 'block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1.5';
 
@@ -27,8 +27,8 @@ const FieldError = ({ msg }) => msg
 const SectionTitle = ({ icon: Icon, title, hint, right }) => (
   <div className="flex items-center justify-between gap-3 pb-4 mb-5 border-b border-gray-100">
     <div className="flex items-center gap-3 min-w-0">
-      <div className="w-9 h-9 rounded-lg bg-[#FEF6E7] flex items-center justify-center shrink-0">
-        <Icon className="text-[#c9871a]" size={16} />
+      <div className="w-9 h-9 rounded-md bg-[#eef3fc] flex items-center justify-center shrink-0">
+        <Icon className="text-[#0142b2]" size={16} />
       </div>
       <div className="min-w-0">
         <h2 className="text-sm font-bold text-gray-800 outfit leading-tight">{title}</h2>
@@ -40,19 +40,19 @@ const SectionTitle = ({ icon: Icon, title, hint, right }) => (
 );
 
 const Card = ({ children, className = '' }) => (
-  <div className={`bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6 ${className}`}>{children}</div>
+  <div className={`bg-white rounded-md border border-gray-100 shadow-sm p-4 sm:p-6 ${className}`}>{children}</div>
 );
 
 // Two/three option segmented control
 const Segmented = ({ value, onChange, options }) => (
-  <div className="flex flex-wrap gap-1 p-1 bg-gray-100 rounded-lg w-full sm:w-auto">
+  <div className="flex flex-wrap gap-1 p-1 bg-gray-100 rounded-md w-full sm:w-auto">
     {options.map(o => (
       <button
         key={o.value}
         type="button"
         onClick={() => onChange(o.value)}
         className={`flex-1 sm:flex-none px-4 py-2 rounded-md text-xs font-bold transition-all whitespace-nowrap
-          ${value === o.value ? 'bg-white text-[#a5680f] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+          ${value === o.value ? 'bg-white text-[#01368f] shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
       >
         {o.label}
       </button>
@@ -94,7 +94,7 @@ const FileField = ({ label, value, onChange, kind = 'pdf', required, error, hint
         <div className="flex gap-0.5 p-0.5 bg-gray-100 rounded-md">
           {[{ k: 'upload', I: FiUpload, t: 'Upload' }, { k: 'url', I: FiLink, t: 'URL' }].map(({ k, I, t }) => (
             <button key={k} type="button" onClick={() => setMode(k)}
-              className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition ${mode === k ? 'bg-white text-[#a5680f] shadow-sm' : 'text-gray-400'}`}>
+              className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition ${mode === k ? 'bg-white text-[#01368f] shadow-sm' : 'text-gray-400'}`}>
               <I size={10} /> {t}
             </button>
           ))}
@@ -106,8 +106,8 @@ const FileField = ({ label, value, onChange, kind = 'pdf', required, error, hint
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className={`w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg border-2 border-dashed text-xs font-semibold transition
-            ${error ? 'border-red-300 text-red-400' : 'border-gray-200 text-gray-500 hover:border-[#F3A522] hover:text-[#c9871a] hover:bg-[#FEF6E7]/40'} disabled:opacity-60`}
+          className={`w-full flex items-center justify-center gap-2 px-3 py-3 rounded-md border-2 border-dashed text-xs font-semibold transition
+            ${error ? 'border-red-300 text-red-400' : 'border-gray-200 text-gray-500 hover:border-[#0142b2] hover:text-[#0142b2] hover:bg-[#eef3fc]/40'} disabled:opacity-60`}
         >
           {uploading ? <FiLoader className="animate-spin" size={14} /> : <FiUpload size={14} />}
           {uploading ? 'Uploading…' : value ? `Replace ${kind === 'image' ? 'image' : 'PDF'}` : `Choose ${kind === 'image' ? 'image' : 'PDF'} file`}
@@ -124,9 +124,9 @@ const FileField = ({ label, value, onChange, kind = 'pdf', required, error, hint
       <input ref={inputRef} type="file" hidden accept={kind === 'image' ? 'image/*' : 'application/pdf'} onChange={handleFile} />
 
       {value && kind === 'pdf' && (
-        <div className="mt-2 flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-50 border border-slate-100 text-xs">
-          <FiFileText className="text-[#c9871a] shrink-0" size={14} />
-          <a href={value} target="_blank" rel="noreferrer" className="text-slate-600 hover:text-[#c9871a] truncate flex-1">{value}</a>
+        <div className="mt-2 flex items-center gap-2 px-3 py-2 rounded-md bg-slate-50 border border-slate-100 text-xs">
+          <FiFileText className="text-[#0142b2] shrink-0" size={14} />
+          <a href={value} target="_blank" rel="noreferrer" className="text-slate-600 hover:text-[#0142b2] truncate flex-1">{value}</a>
           <button type="button" onClick={() => onChange('')} className="text-slate-400 hover:text-rose-500" title="Remove"><FiX size={13} /></button>
         </div>
       )}
@@ -342,18 +342,18 @@ export default function BookForm({ mode = 'create', bookId = null }) {
   if (fetching) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <FiLoader className="animate-spin text-[#F3A522]" size={34} />
+        <FiLoader className="animate-spin text-[#0142b2]" size={34} />
         <p className="text-sm text-gray-400 work">Loading book…</p>
       </div>
     );
   }
   if (loadError) {
     return (
-      <div className="max-w-md mx-auto mt-16 text-center bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+      <div className="max-w-md mx-auto mt-16 text-center bg-white rounded-md border border-gray-100 shadow-sm p-8">
         <FiAlertCircle className="mx-auto text-rose-400 mb-3" size={34} />
         <p className="font-bold text-slate-800 outfit">Could not load this book</p>
         <p className="text-sm text-slate-500 mt-1">{loadError}</p>
-        <Link href="/dashboard/admin/books" className="inline-flex items-center gap-1.5 mt-5 text-sm font-bold text-[#c9871a] hover:underline">
+        <Link href="/dashboard/admin/books" className="inline-flex items-center gap-1.5 mt-5 text-sm font-bold text-[#0142b2] hover:underline">
           <FiArrowLeft size={14} /> Back to books
         </Link>
       </div>
@@ -373,25 +373,25 @@ export default function BookForm({ mode = 'create', bookId = null }) {
     <div className="-m-4 lg:-m-6 xl:-m-7 min-h-screen bg-[#faf9f6] pb-24">
       {/* ─── Sticky top bar ─────────────────────────────────── */}
       <div className="sticky top-[64px] z-20 bg-white/90 backdrop-blur-xl border-b border-gray-100">
-        <div className="h-[3px] w-full bg-gradient-to-r from-[#F3A522] via-[#e2941c] to-[#9AA0A8]" />
+        <div className="h-[3px] w-full bg-gradient-to-r from-[#0142b2] via-[#01368f] to-[#9AA0A8]" />
         <div className="w-full px-4 md:px-8 py-3.5 flex items-center justify-between gap-3">
           <div className="min-w-0">
             <Link href="/dashboard/admin/books"
-              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider hover:text-[#c9871a] transition-colors">
+              className="inline-flex items-center gap-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider hover:text-[#0142b2] transition-colors">
               <FiArrowLeft size={12} /> Books
             </Link>
             <h1 className="text-base md:text-xl font-bold text-gray-900 outfit truncate">
-              {isEdit ? (<>Edit Book{bookDoc?.title ? <span className="text-[#c9871a]">: {bookDoc.title}</span> : ''}</>) : 'Add New Book'}
+              {isEdit ? (<>Edit Book{bookDoc?.title ? <span className="text-[#0142b2]">: {bookDoc.title}</span> : ''}</>) : 'Add New Book'}
             </h1>
           </div>
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <select value={form.status} onChange={e => set('status', e.target.value)}
-              className="hidden sm:block px-3 py-2.5 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-600 focus:outline-none focus:border-[#F3A522] cursor-pointer">
+              className="hidden sm:block px-3 py-2.5 rounded-md border border-gray-200 bg-white text-xs font-bold text-gray-600 focus:outline-none focus:border-[#0142b2] cursor-pointer">
               <option value="published">✓ Published</option>
               <option value="draft">◌ Draft</option>
             </select>
             <button onClick={onSave} disabled={saving || coverUploading}
-              className="flex items-center gap-2 px-4 md:px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/25 hover:shadow-xl hover:shadow-[#F3A522]/30 disabled:opacity-50 transition-all">
+              className="flex items-center gap-2 px-4 md:px-6 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/25 hover:shadow-xl hover:shadow-[#0142b2]/30 disabled:opacity-50 transition-all">
               {saving ? <FiLoader className="animate-spin" /> : <FiSave />}
               <span className="hidden sm:inline">{saving ? 'Saving…' : isEdit ? 'Save Changes' : 'Save Book'}</span>
               <span className="sm:hidden">Save</span>
@@ -474,8 +474,8 @@ export default function BookForm({ mode = 'create', bookId = null }) {
                       className={inputClass + (err('offerPrice') || (offerNum !== null && priceNum > 0 && offerNum >= priceNum) ? invalidClass : '')} />
                     <FieldError msg={err('offerPrice') || (offerNum !== null && priceNum > 0 && offerNum >= priceNum ? 'Must be less than the price' : '')} />
                   </div>
-                  <div className="rounded-lg bg-[#FEF6E7]/60 border border-[#F0DFB4]/70 px-4 py-2.5 flex flex-col justify-center">
-                    <p className="text-[10px] font-bold text-[#a5680f] uppercase tracking-wider">Student pays</p>
+                  <div className="rounded-md bg-[#eef3fc]/60 border border-[#c9d8f5]/70 px-4 py-2.5 flex flex-col justify-center">
+                    <p className="text-[10px] font-bold text-[#01368f] uppercase tracking-wider">Student pays</p>
                     <p className="text-lg font-bold text-slate-800 outfit">
                       {formatTaka(finalPrice)}
                       {hasOffer && <span className="ml-2 text-xs text-slate-400 line-through font-medium">{formatTaka(priceNum)}</span>}
@@ -523,14 +523,14 @@ export default function BookForm({ mode = 'create', bookId = null }) {
               hint={`YouTube links · ${previewCount} free preview${previewCount === 1 ? '' : 's'} · the rest unlock after purchase`}
               right={(
                 <button type="button" onClick={addVideo}
-                  className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#FEF6E7] border border-[#F0DFB4] text-[#a5680f] text-xs font-bold hover:bg-[#F3A522] hover:text-white hover:border-[#F3A522] transition shrink-0">
+                  className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-[#eef3fc] border border-[#c9d8f5] text-[#01368f] text-xs font-bold hover:bg-[#0142b2] hover:text-white hover:border-[#0142b2] transition shrink-0">
                   <FiPlus size={13} /> Add lesson
                 </button>
               )}
             />
 
             {form.videos.length === 0 ? (
-              <div className="text-center py-10 border-2 border-dashed border-gray-100 rounded-xl">
+              <div className="text-center py-10 border-2 border-dashed border-gray-100 rounded-md">
                 <FiYoutube className="mx-auto text-gray-300 mb-2" size={32} />
                 <p className="text-sm font-semibold text-gray-500">No video lessons yet</p>
                 <p className="text-[11px] text-gray-400 mt-0.5">Add YouTube lessons that come with this book</p>
@@ -543,17 +543,17 @@ export default function BookForm({ mode = 'create', bookId = null }) {
                   const urlErr = err(`video_${v.key}_youtubeUrl`) || (v.youtubeUrl.trim() && !isValidYouTubeUrl(v.youtubeUrl) ? 'Not a valid YouTube link' : '');
                   return (
                     <div key={v.key}
-                      className={`rounded-xl border transition-all ${isSel ? 'border-[#F3A522] ring-2 ring-[#F3A522]/10 bg-[#FEF6E7]/20' : 'border-gray-100 bg-white hover:border-[#F0DFB4]'}`}>
+                      className={`rounded-md border transition-all ${isSel ? 'border-[#0142b2] ring-2 ring-[#0142b2]/10 bg-[#eef3fc]/20' : 'border-gray-100 bg-white hover:border-[#c9d8f5]'}`}>
                       {/* Row header */}
                       <div className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-100/80">
-                        <span className="w-6 h-6 rounded-md bg-[#F3A522] text-white text-[11px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                        <span className="w-6 h-6 rounded-md bg-[#0142b2] text-white text-[11px] font-bold flex items-center justify-center shrink-0">{i + 1}</span>
                         <button type="button" onClick={() => setSelectedKey(v.key)} className="flex-1 min-w-0 text-left">
                           <p className="text-sm font-semibold text-gray-700 truncate">{v.title || <span className="text-gray-300">Untitled lesson</span>}</p>
                         </button>
                         {v.isPreview && <span className="hidden sm:inline px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200">FREE PREVIEW</span>}
                         <div className="flex items-center gap-0.5 shrink-0">
                           <button type="button" onClick={() => setSelectedKey(v.key)} title="Preview"
-                            className={`w-7 h-7 rounded-md flex items-center justify-center transition ${isSel ? 'text-[#c9871a] bg-[#FEF6E7]' : 'text-gray-400 hover:text-[#c9871a] hover:bg-[#FEF6E7]'}`}>
+                            className={`w-7 h-7 rounded-md flex items-center justify-center transition ${isSel ? 'text-[#0142b2] bg-[#eef3fc]' : 'text-gray-400 hover:text-[#0142b2] hover:bg-[#eef3fc]'}`}>
                             <FiEye size={13} />
                           </button>
                           <button type="button" onClick={() => moveVideo(v.key, -1)} disabled={i === 0} title="Move up"
@@ -574,7 +574,7 @@ export default function BookForm({ mode = 'create', bookId = null }) {
                       {/* Fields */}
                       <div className="p-3 sm:p-4 grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-4" onFocus={() => setSelectedKey(v.key)}>
                         <button type="button" onClick={() => setSelectedKey(v.key)}
-                          className="relative w-full sm:w-[120px] aspect-video rounded-lg overflow-hidden bg-slate-100 border border-slate-100 flex items-center justify-center">
+                          className="relative w-full sm:w-[120px] aspect-video rounded-md overflow-hidden bg-slate-100 border border-slate-100 flex items-center justify-center">
                           {thumb ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={thumb} alt="" className="w-full h-full object-cover" />
@@ -615,7 +615,7 @@ export default function BookForm({ mode = 'create', bookId = null }) {
                             <FileField label="Lesson PDF (optional)" value={v.pdfUrl} onChange={val => setVideo(v.key, 'pdfUrl', val)} kind="pdf" onToast={showToast} />
                           </div>
                           <div className="flex items-end">
-                            <label className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg border cursor-pointer transition select-none
+                            <label className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-md border cursor-pointer transition select-none
                               ${v.isPreview ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white border-gray-200 text-gray-500 hover:border-emerald-200'}`}>
                               <input type="checkbox" checked={v.isPreview} onChange={e => setVideo(v.key, 'isPreview', e.target.checked)}
                                 className="w-4 h-4 accent-emerald-600" />
@@ -631,7 +631,7 @@ export default function BookForm({ mode = 'create', bookId = null }) {
             )}
 
             <button type="button" onClick={addVideo}
-              className="mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-dashed border-[#F0DFB4] text-[#a5680f] text-sm font-bold hover:bg-[#FEF6E7]/60 hover:border-[#F3A522] transition">
+              className="mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-md border-2 border-dashed border-[#c9d8f5] text-[#01368f] text-sm font-bold hover:bg-[#eef3fc]/60 hover:border-[#0142b2] transition">
               <FiPlus size={15} /> Add lesson
             </button>
           </Card>
@@ -644,7 +644,7 @@ export default function BookForm({ mode = 'create', bookId = null }) {
             <Card>
               <SectionTitle icon={FiImage} title="Cover Image" hint="Portrait (3:4) works best" />
               <div className="flex gap-4 xl:flex-col">
-                <div className={`relative w-28 xl:w-full shrink-0 aspect-[3/4] rounded-xl overflow-hidden border bg-slate-50 flex items-center justify-center
+                <div className={`relative w-28 xl:w-full shrink-0 aspect-[3/4] rounded-md overflow-hidden border bg-slate-50 flex items-center justify-center
                   ${err('coverImage') ? 'border-red-300' : 'border-gray-100'}`}>
                   {form.coverImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -656,21 +656,21 @@ export default function BookForm({ mode = 'create', bookId = null }) {
                     </div>
                   )}
                   {coverUploading && (
-                    <div className="absolute inset-0 bg-white/70 flex items-center justify-center"><FiLoader className="animate-spin text-[#F3A522]" size={22} /></div>
+                    <div className="absolute inset-0 bg-white/70 flex items-center justify-center"><FiLoader className="animate-spin text-[#0142b2]" size={22} /></div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0 space-y-2.5">
                   <div className="flex gap-0.5 p-0.5 bg-gray-100 rounded-md w-fit">
                     {[{ k: 'upload', I: FiUpload, t: 'Upload' }, { k: 'url', I: FiLink, t: 'Paste URL' }].map(({ k, I, t }) => (
                       <button key={k} type="button" onClick={() => setCoverMode(k)}
-                        className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-bold transition ${coverMode === k ? 'bg-white text-[#a5680f] shadow-sm' : 'text-gray-400'}`}>
+                        className={`flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-bold transition ${coverMode === k ? 'bg-white text-[#01368f] shadow-sm' : 'text-gray-400'}`}>
                         <I size={11} /> {t}
                       </button>
                     ))}
                   </div>
                   {coverMode === 'upload' ? (
                     <button type="button" onClick={() => coverRef.current?.click()} disabled={coverUploading}
-                      className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg border-2 border-dashed border-gray-200 text-xs font-semibold text-gray-500 hover:border-[#F3A522] hover:text-[#c9871a] hover:bg-[#FEF6E7]/40 transition disabled:opacity-60">
+                      className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-md border-2 border-dashed border-gray-200 text-xs font-semibold text-gray-500 hover:border-[#0142b2] hover:text-[#0142b2] hover:bg-[#eef3fc]/40 transition disabled:opacity-60">
                       <FiUpload size={14} /> {coverUploading ? 'Uploading…' : form.coverImage ? 'Replace image' : 'Choose image'}
                     </button>
                   ) : (
@@ -693,7 +693,7 @@ export default function BookForm({ mode = 'create', bookId = null }) {
               {selected && isValidYouTubeUrl(selected.youtubeUrl) ? (
                 <YouTubePlayer url={selected.youtubeUrl} title={selected.title || 'Lesson preview'} />
               ) : (
-                <div className="aspect-video rounded-2xl bg-slate-50 border border-dashed border-slate-200 flex flex-col items-center justify-center text-center px-4">
+                <div className="aspect-video rounded-md bg-slate-50 border border-dashed border-slate-200 flex flex-col items-center justify-center text-center px-4">
                   <FiYoutube className="text-slate-300 mb-1.5" size={28} />
                   <p className="text-xs text-slate-400">{selected ? 'Paste a valid YouTube link to preview' : form.videos.length ? 'Click a lesson to preview' : 'Add a lesson first'}</p>
                 </div>
@@ -704,7 +704,7 @@ export default function BookForm({ mode = 'create', bookId = null }) {
                   <span className={`px-2 py-0.5 rounded-md font-bold border ${selected.isPreview ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
                     {selected.isPreview ? 'Free preview' : 'Locked until purchase'}
                   </span>
-                  {selected.pdfUrl && <span className="px-2 py-0.5 rounded-md bg-[#FEF6E7] text-[#a5680f] font-semibold border border-[#F0DFB4]">PDF attached</span>}
+                  {selected.pdfUrl && <span className="px-2 py-0.5 rounded-md bg-[#eef3fc] text-[#01368f] font-semibold border border-[#c9d8f5]">PDF attached</span>}
                 </div>
               )}
             </Card>
@@ -715,7 +715,7 @@ export default function BookForm({ mode = 'create', bookId = null }) {
               <Segmented value={form.status} onChange={v => set('status', v)}
                 options={[{ value: 'draft', label: '◌ Draft' }, { value: 'published', label: '✓ Published' }]} />
               <button onClick={onSave} disabled={saving || coverUploading}
-                className="mt-4 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/25 hover:shadow-xl disabled:opacity-50 transition-all">
+                className="mt-4 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/25 hover:shadow-xl disabled:opacity-50 transition-all">
                 {saving ? <FiLoader className="animate-spin" /> : <FiSave />}
                 {saving ? 'Saving…' : isEdit ? 'Save Changes' : 'Save Book'}
               </button>

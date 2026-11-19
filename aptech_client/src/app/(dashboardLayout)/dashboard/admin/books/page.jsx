@@ -105,27 +105,27 @@ export default function AdminBooksPage() {
     { label: 'Total Books', value: stats?.totalBooks ?? books.length, icon: FiBook, color: 'text-slate-700', bg: 'bg-slate-100' },
     { label: 'Pending Orders', value: stats?.pendingOrders ?? 0, icon: FiClock, color: 'text-amber-600', bg: 'bg-amber-50', href: '/dashboard/admin/books/orders' },
     { label: 'Approved Orders', value: stats?.approvedOrders ?? 0, icon: FiCheckCircle, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { label: 'Book Revenue', value: formatTaka(stats?.revenue), icon: FiDollarSign, color: 'text-[#c9871a]', bg: 'bg-[#FEF6E7]' },
+    { label: 'Book Revenue', value: formatTaka(stats?.revenue), icon: FiDollarSign, color: 'text-[#0142b2]', bg: 'bg-[#eef3fc]' },
   ];
 
   const renderActions = (b, compact = false) => (
     <div className={`flex items-center gap-1 ${compact ? '' : 'justify-end'}`}>
       <Link href={`/dashboard/admin/books/${b._id}/edit`} title="Edit"
-        className="w-8 h-8 rounded-lg flex items-center justify-center text-amber-600 hover:bg-amber-50 transition">
+        className="w-8 h-8 rounded-md flex items-center justify-center text-amber-600 hover:bg-amber-50 transition">
         <FiEdit2 size={15} />
       </Link>
       {b.status === 'draft' ? (
-        <span title="Drafts are not visible on the site" className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-200 cursor-not-allowed">
+        <span title="Drafts are not visible on the site" className="w-8 h-8 rounded-md flex items-center justify-center text-slate-200 cursor-not-allowed">
           <FiExternalLink size={15} />
         </span>
       ) : (
         <a href={`/books/${b.slug}`} target="_blank" rel="noreferrer" title="View on site"
-          className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#c9871a] hover:bg-[#FEF6E7] transition">
+          className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-[#0142b2] hover:bg-[#eef3fc] transition">
           <FiExternalLink size={15} />
         </a>
       )}
       <button onClick={() => handleDelete(b)} disabled={deleting === b._id} title="Delete"
-        className="w-8 h-8 rounded-lg flex items-center justify-center text-rose-500 hover:bg-rose-50 transition disabled:opacity-40">
+        className="w-8 h-8 rounded-md flex items-center justify-center text-rose-500 hover:bg-rose-50 transition disabled:opacity-40">
         <FiTrash2 size={15} />
       </button>
     </div>
@@ -141,12 +141,12 @@ export default function AdminBooksPage() {
         </div>
         <div className="flex items-center gap-2">
           <Link href="/dashboard/admin/books/orders"
-            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-600 text-sm font-semibold rounded-xl hover:border-[#F0DFB4] hover:text-[#c9871a] transition">
+            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-600 text-sm font-semibold rounded-md hover:border-[#c9d8f5] hover:text-[#0142b2] transition">
             <FiShoppingBag size={15} /> Orders
             {stats?.pendingOrders > 0 && <span className="px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-700 text-[10px] font-bold">{stats.pendingOrders}</span>}
           </Link>
           <Link href="/dashboard/admin/books/create"
-            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold rounded-xl shadow-lg shadow-[#F3A522]/25 hover:shadow-xl transition">
+            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold rounded-md shadow-lg shadow-[#0142b2]/25 hover:shadow-xl transition">
             <FiPlus size={16} /> Add Book
           </Link>
         </div>
@@ -157,7 +157,7 @@ export default function AdminBooksPage() {
         {loading && !stats ? [1, 2, 3, 4].map(i => <SkeletonCard key={i} />) : statCards.map(s => {
           const inner = (
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center shrink-0`}>
+              <div className={`w-10 h-10 rounded-md ${s.bg} flex items-center justify-center shrink-0`}>
                 <s.icon size={18} className={s.color} />
               </div>
               <div className="min-w-0">
@@ -167,22 +167,22 @@ export default function AdminBooksPage() {
             </div>
           );
           return s.href ? (
-            <Link key={s.label} href={s.href} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm hover:border-[#F0DFB4] transition">{inner}</Link>
+            <Link key={s.label} href={s.href} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm hover:border-[#c9d8f5] transition">{inner}</Link>
           ) : (
-            <div key={s.label} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm">{inner}</div>
+            <div key={s.label} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm">{inner}</div>
           );
         })}
       </div>
 
       {/* Low stock warning */}
       {lowStock.length > 0 && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-4">
+        <div className="rounded-md border border-amber-200 bg-amber-50/70 p-4">
           <p className="flex items-center gap-2 text-sm font-bold text-amber-700">
             <FiAlertTriangle size={15} /> Low stock ({lowStock.length})
           </p>
           <div className="mt-2.5 flex flex-wrap gap-2">
             {lowStock.map((b, i) => (
-              <span key={b._id || i} className="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-white border border-amber-200 text-xs text-slate-700">
+              <span key={b._id || i} className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-white border border-amber-200 text-xs text-slate-700">
                 <span className="truncate max-w-[220px]">{b.title}</span>
                 <span className={`font-bold ${Number(b.stock) === 0 ? 'text-rose-500' : 'text-amber-600'}`}>{Number(b.stock) === 0 ? 'Out of stock' : `${b.stock} left`}</span>
               </span>
@@ -192,23 +192,23 @@ export default function AdminBooksPage() {
       )}
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row md:items-center gap-3 bg-white p-3 sm:p-4 rounded-xl border border-slate-200/60 shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center gap-3 bg-white p-3 sm:p-4 rounded-md border border-slate-200/60 shadow-sm">
         <div className="relative flex-1">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by title, author or category…"
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 text-sm outline-none focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15 transition" />
+            className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200 text-sm outline-none focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15 transition" />
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg">
+          <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-md">
             {STATUS_TABS.map(t => (
               <button key={t.id} onClick={() => setStatusFilter(t.id)}
-                className={`px-3 py-1.5 rounded-md text-xs font-bold transition ${statusFilter === t.id ? 'bg-white shadow-sm text-[#c9871a]' : 'text-slate-500 hover:text-slate-700'}`}>
+                className={`px-3 py-1.5 rounded-md text-xs font-bold transition ${statusFilter === t.id ? 'bg-white shadow-sm text-[#0142b2]' : 'text-slate-500 hover:text-slate-700'}`}>
                 {t.label}
               </button>
             ))}
           </div>
           <button onClick={load} title="Reload"
-            className="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#c9871a] hover:border-[#F0DFB4] transition">
+            className="w-9 h-9 rounded-md border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#0142b2] hover:border-[#c9d8f5] transition">
             <FiRefreshCw size={14} className={loading ? 'animate-spin' : ''} />
           </button>
           <span className="hidden sm:inline text-sm text-slate-400 whitespace-nowrap">{filtered.length}/{books.length}</span>
@@ -217,7 +217,7 @@ export default function AdminBooksPage() {
 
       {/* List */}
       {loading && books.length === 0 ? (
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm divide-y divide-slate-100">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm divide-y divide-slate-100">
           {[1, 2, 3, 4].map(i => (
             <div key={i} className="flex items-center gap-4 p-4">
               <div className="w-12 h-16 rounded-md bg-slate-200 animate-pulse" />
@@ -226,12 +226,12 @@ export default function AdminBooksPage() {
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl border border-slate-200/60">
+        <div className="text-center py-16 bg-white rounded-md border border-slate-200/60">
           <FiBook className="mx-auto text-4xl text-slate-300 mb-4" />
           <h3 className="text-lg font-bold text-slate-800 outfit">{books.length ? 'No books match' : 'No books yet'}</h3>
           <p className="text-slate-500 text-sm mt-1">{books.length ? 'Try a different search or filter' : 'Add your first book to start selling'}</p>
           {!books.length && (
-            <Link href="/dashboard/admin/books/create" className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold rounded-xl">
+            <Link href="/dashboard/admin/books/create" className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold rounded-md">
               <FiPlus size={15} /> Add Book
             </Link>
           )}
@@ -239,7 +239,7 @@ export default function AdminBooksPage() {
       ) : (
         <>
           {/* Desktop table */}
-          <div className="hidden lg:block bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+          <div className="hidden lg:block bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -293,7 +293,7 @@ export default function AdminBooksPage() {
           {/* Mobile / tablet cards */}
           <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-3">
             {filtered.map(b => (
-              <div key={b._id} className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+              <div key={b._id} className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
                 <div className="flex gap-3 p-3.5">
                   <div className="w-16 h-[86px] rounded-md overflow-hidden bg-slate-100 shrink-0 border border-slate-100">
                     {b.coverImage && (
@@ -327,7 +327,7 @@ export default function AdminBooksPage() {
                   ))}
                 </div>
                 <div className="flex items-center justify-between border-t border-slate-100 px-2 py-1.5">
-                  <Link href={`/dashboard/admin/books/${b._id}/edit`} className="px-3 py-1.5 text-xs font-bold text-amber-600 hover:bg-amber-50 rounded-lg">Edit book</Link>
+                  <Link href={`/dashboard/admin/books/${b._id}/edit`} className="px-3 py-1.5 text-xs font-bold text-amber-600 hover:bg-amber-50 rounded-md">Edit book</Link>
                   {renderActions(b, true)}
                 </div>
               </div>

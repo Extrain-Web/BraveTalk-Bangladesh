@@ -120,17 +120,17 @@ export default function AdminNoticeBoardPage() {
     return mf && ms;
   }), [list, filter, search]);
 
-  const inp = 'w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F3A522]/15 focus:border-[#F3A522]';
+  const inp = 'w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0142b2]/15 focus:border-[#0142b2]';
   const lbl = 'text-[10px] font-bold text-slate-500 uppercase block mb-1';
 
   const AudBadge = ({ a }) => a === 'enrolled'
-    ? <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-[#FEF6E7] text-[#a5680f]"><FiUsers size={10} /> Enrolled</span>
+    ? <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-[#eef3fc] text-[#01368f]"><FiUsers size={10} /> Enrolled</span>
     : <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-50 text-emerald-600"><FiGlobe size={10} /> Public</span>;
 
   const STAT_CARDS = [
     { label: 'Total Notices', value: stats.total, icon: FiClipboard, color: 'text-slate-700', bg: 'bg-slate-100' },
     { label: 'Active', value: stats.active, icon: FiEye, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { label: 'Public', value: stats.public, icon: FiGlobe, color: 'text-[#c9871a]', bg: 'bg-[#FEF6E7]' },
+    { label: 'Public', value: stats.public, icon: FiGlobe, color: 'text-[#0142b2]', bg: 'bg-[#eef3fc]' },
     { label: 'Enrolled only', value: stats.enrolled, icon: FiUsers, color: 'text-slate-500', bg: 'bg-slate-50' },
   ];
 
@@ -142,7 +142,7 @@ export default function AdminNoticeBoardPage() {
           <h1 className="text-2xl font-bold text-slate-900 outfit">Notice Board</h1>
           <p className="text-sm text-slate-500 mt-1">নোটিশ প্রকাশ করুন — সবার জন্য (Public) অথবা শুধু ভর্তিকৃত স্টুডেন্টদের জন্য।</p>
         </div>
-        <button onClick={openNew} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/20 hover:shadow-xl transition">
+        <button onClick={openNew} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/20 hover:shadow-xl transition">
           <FiPlus size={16} /> New Notice
         </button>
       </div>
@@ -150,8 +150,8 @@ export default function AdminNoticeBoardPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {STAT_CARDS.map((s) => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center`}><s.icon className={s.color} size={18} /></div>
+          <div key={s.label} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-md ${s.bg} flex items-center justify-center`}><s.icon className={s.color} size={18} /></div>
             <div><p className="text-xl font-bold text-slate-900">{loading ? '—' : s.value}</p><p className="text-[11px] text-slate-400">{s.label}</p></div>
           </div>
         ))}
@@ -162,12 +162,12 @@ export default function AdminNoticeBoardPage() {
         <div className="relative flex-1">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={15} />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by title..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-sm bg-white shadow-sm focus:outline-none focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15" />
+            className="w-full pl-9 pr-4 py-2 rounded-md border border-slate-200 text-sm bg-white shadow-sm focus:outline-none focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15" />
         </div>
-        <div className="flex gap-1 bg-slate-100 rounded-xl p-1">
+        <div className="flex gap-1 bg-slate-100 rounded-md p-1">
           {[['all', 'All'], ['public', 'Public'], ['enrolled', 'Enrolled']].map(([id, label]) => (
             <button key={id} onClick={() => setFilter(id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${filter === id ? 'bg-white text-[#c9871a] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold transition ${filter === id ? 'bg-white text-[#0142b2] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
               {label}
             </button>
           ))}
@@ -176,22 +176,22 @@ export default function AdminNoticeBoardPage() {
 
       {/* List */}
       {loading ? (
-        <div className="flex justify-center py-16"><FiLoader className="animate-spin text-[#F3A522]" size={28} /></div>
+        <div className="flex justify-center py-16"><FiLoader className="animate-spin text-[#0142b2]" size={28} /></div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-16 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[#FEF6E7] flex items-center justify-center mx-auto mb-4"><FiClipboard className="text-[#F3A522]" size={26} /></div>
+        <div className="bg-white rounded-md border border-dashed border-slate-200 p-16 text-center">
+          <div className="w-16 h-16 rounded-md bg-[#eef3fc] flex items-center justify-center mx-auto mb-4"><FiClipboard className="text-[#0142b2]" size={26} /></div>
           <h3 className="text-base font-bold text-slate-700">{list.length === 0 ? 'No notices yet' : 'No notices match'}</h3>
           <p className="text-sm text-slate-400 mt-1">{list.length === 0 ? 'প্রথম নোটিশটি প্রকাশ করুন।' : 'অন্য search/filter দিন।'}</p>
           {list.length === 0 && (
-            <button onClick={openNew} className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#F3A522] text-white text-sm font-bold"><FiPlus size={14} /> New Notice</button>
+            <button onClick={openNew} className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[#0142b2] text-white text-sm font-bold"><FiPlus size={14} /> New Notice</button>
           )}
         </div>
       ) : (
         <div className="space-y-3">
           {filtered.map((n) => (
-            <div key={n._id} className={`bg-white rounded-xl border shadow-sm p-4 flex items-start gap-4 ${n.isActive === false ? 'border-slate-200 opacity-70' : 'border-slate-200'}`}>
-              <div className="w-11 h-11 rounded-xl bg-[#FEF6E7] flex items-center justify-center shrink-0">
-                {n.attachmentType === 'image' ? <FiImage className="text-[#c9871a]" size={18} /> : n.attachmentType === 'pdf' ? <FiFileText className="text-[#c9871a]" size={18} /> : <FiClipboard className="text-[#c9871a]" size={18} />}
+            <div key={n._id} className={`bg-white rounded-md border shadow-sm p-4 flex items-start gap-4 ${n.isActive === false ? 'border-slate-200 opacity-70' : 'border-slate-200'}`}>
+              <div className="w-11 h-11 rounded-md bg-[#eef3fc] flex items-center justify-center shrink-0">
+                {n.attachmentType === 'image' ? <FiImage className="text-[#0142b2]" size={18} /> : n.attachmentType === 'pdf' ? <FiFileText className="text-[#0142b2]" size={18} /> : <FiClipboard className="text-[#0142b2]" size={18} />}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -203,18 +203,18 @@ export default function AdminNoticeBoardPage() {
                 <div className="flex items-center gap-3 mt-2 text-[11px] text-slate-400">
                   <span>{fmtDate(n.createdAt)}</span>
                   {n.attachmentUrl && (
-                    <a href={n.attachmentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[#c9871a] hover:underline">
+                    <a href={n.attachmentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[#0142b2] hover:underline">
                       <FiPaperclip size={11} /> {n.attachmentName || 'attachment'}
                     </a>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-1 shrink-0">
-                <button onClick={() => toggleActive(n)} title={n.isActive === false ? 'Show' : 'Hide'} className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#c9871a] hover:bg-[#FEF6E7] transition">
+                <button onClick={() => toggleActive(n)} title={n.isActive === false ? 'Show' : 'Hide'} className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-[#0142b2] hover:bg-[#eef3fc] transition">
                   {n.isActive === false ? <FiEyeOff size={15} /> : <FiEye size={15} />}
                 </button>
-                <button onClick={() => openEdit(n)} title="Edit" className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#c9871a] hover:bg-[#FEF6E7] transition"><FiEdit3 size={15} /></button>
-                <button onClick={() => del(n)} title="Delete" className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition"><FiTrash2 size={15} /></button>
+                <button onClick={() => openEdit(n)} title="Edit" className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-[#0142b2] hover:bg-[#eef3fc] transition"><FiEdit3 size={15} /></button>
+                <button onClick={() => del(n)} title="Delete" className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition"><FiTrash2 size={15} /></button>
               </div>
             </div>
           ))}
@@ -224,8 +224,8 @@ export default function AdminNoticeBoardPage() {
       {/* Form Modal */}
       {form && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => !saving && setForm(null)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[92vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white shrink-0">
+          <div className="bg-white rounded-md shadow-2xl w-full max-w-lg max-h-[92vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white shrink-0">
               <h3 className="font-bold text-lg outfit">{editId ? 'Edit Notice' : 'New Notice'}</h3>
               <button onClick={() => setForm(null)}><FiX size={20} /></button>
             </div>
@@ -242,8 +242,8 @@ export default function AdminNoticeBoardPage() {
                     { v: 'enrolled', icon: FiUsers, t: 'Enrolled', d: 'শুধু ভর্তিকৃত student' },
                   ].map((o) => (
                     <button key={o.v} type="button" onClick={() => F('audience', o.v)}
-                      className={`flex items-start gap-2 p-3 rounded-lg border-2 text-left transition ${form.audience === o.v ? 'border-[#F3A522] bg-[#FEF6E7]/50' : 'border-slate-200 hover:border-slate-300'}`}>
-                      <o.icon size={16} className={form.audience === o.v ? 'text-[#c9871a] mt-0.5' : 'text-slate-400 mt-0.5'} />
+                      className={`flex items-start gap-2 p-3 rounded-md border-2 text-left transition ${form.audience === o.v ? 'border-[#0142b2] bg-[#eef3fc]/50' : 'border-slate-200 hover:border-slate-300'}`}>
+                      <o.icon size={16} className={form.audience === o.v ? 'text-[#0142b2] mt-0.5' : 'text-slate-400 mt-0.5'} />
                       <div><p className="text-sm font-bold text-slate-800">{o.t}</p><p className="text-[10px] text-slate-400">{o.d}</p></div>
                     </button>
                   ))}
@@ -254,15 +254,15 @@ export default function AdminNoticeBoardPage() {
               <div>
                 <label className={lbl}>Attachment (PDF / ছবি)</label>
                 {form.attachmentUrl ? (
-                  <div className="flex items-center justify-between rounded-lg border border-[#F0DFB4] bg-[#FEF6E7]/50 px-3 py-2.5">
-                    <a href={form.attachmentUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 min-w-0 text-sm text-[#a5680f] hover:underline">
+                  <div className="flex items-center justify-between rounded-md border border-[#c9d8f5] bg-[#eef3fc]/50 px-3 py-2.5">
+                    <a href={form.attachmentUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 min-w-0 text-sm text-[#01368f] hover:underline">
                       {form.attachmentType === 'image' ? <FiImage size={15} className="shrink-0" /> : <FiFileText size={15} className="shrink-0" />}
                       <span className="truncate">{form.attachmentName || 'attachment'}</span>
                     </a>
                     <button onClick={removeAttachment} className="text-slate-400 hover:text-rose-500 shrink-0"><FiX size={16} /></button>
                   </div>
                 ) : (
-                  <label className={`flex items-center justify-center gap-2 px-3 py-3 rounded-lg border-2 border-dashed border-slate-200 text-sm text-slate-500 cursor-pointer hover:border-[#F3A522] hover:text-[#c9871a] transition ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
+                  <label className={`flex items-center justify-center gap-2 px-3 py-3 rounded-md border-2 border-dashed border-slate-200 text-sm text-slate-500 cursor-pointer hover:border-[#0142b2] hover:text-[#0142b2] transition ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
                     {uploading ? <FiLoader className="animate-spin" size={16} /> : <FiUploadCloud size={16} />}
                     {uploading ? 'Uploading...' : 'PDF বা ছবি আপলোড করুন'}
                     <input type="file" accept=".pdf,image/*" onChange={onFile} className="hidden" disabled={uploading} />
@@ -271,12 +271,12 @@ export default function AdminNoticeBoardPage() {
               </div>
 
               <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
-                <input type="checkbox" checked={form.isActive} onChange={(e) => F('isActive', e.target.checked)} className="accent-[#F3A522]" /> Active (এখনই দেখাবে)
+                <input type="checkbox" checked={form.isActive} onChange={(e) => F('isActive', e.target.checked)} className="accent-[#0142b2]" /> Active (এখনই দেখাবে)
               </label>
             </div>
             <div className="flex justify-end gap-2 px-6 py-4 border-t border-slate-100 shrink-0">
-              <button onClick={() => setForm(null)} className="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
-              <button onClick={save} disabled={saving || uploading} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#F3A522] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
+              <button onClick={() => setForm(null)} className="px-4 py-2.5 rounded-md border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
+              <button onClick={save} disabled={saving || uploading} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#0142b2] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
                 {saving ? <FiLoader className="animate-spin" size={15} /> : <FiSave size={15} />} {editId ? 'Update' : 'Publish'}
               </button>
             </div>

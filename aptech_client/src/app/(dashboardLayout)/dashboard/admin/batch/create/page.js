@@ -14,13 +14,13 @@ const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api
 const hdrs = () => ({ Authorization: `Bearer ${localStorage.getItem('token') || ''}` });
 
 const inputClass =
-  'w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 ' +
-  'placeholder:text-gray-300 focus:outline-none focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15 transition-all';
+  'w-full px-3.5 py-2.5 rounded-md border border-gray-200 bg-white text-sm text-gray-700 ' +
+  'placeholder:text-gray-300 focus:outline-none focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15 transition-all';
 const labelClass = 'block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5';
 
 const SectionHead = ({ icon: Icon, title, hint }) => (
-  <div className="px-5 py-3.5 border-b border-gray-100 bg-[#FEF6E7]/40 flex items-center gap-2.5">
-    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center text-white shrink-0">
+  <div className="px-5 py-3.5 border-b border-gray-100 bg-[#eef3fc]/40 flex items-center gap-2.5">
+    <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#0142b2] to-[#01368f] flex items-center justify-center text-white shrink-0">
       <Icon size={14} />
     </div>
     <div>
@@ -31,7 +31,7 @@ const SectionHead = ({ icon: Icon, title, hint }) => (
 );
 
 const Card = ({ children }) => (
-  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">{children}</div>
+  <div className="bg-white rounded-md border border-gray-100 shadow-sm overflow-hidden">{children}</div>
 );
 
 export default function CreateBatchPage() {
@@ -126,11 +126,11 @@ export default function CreateBatchPage() {
   return (
     <div className="min-h-screen bg-[#faf9f6] p-4 md:p-6">
       {/* Gold hairline */}
-      <div className="h-[3px] w-full bg-gradient-to-r from-[#F3A522] via-[#e2941c] to-[#9AA0A8] rounded-full mb-5"></div>
+      <div className="h-[3px] w-full bg-gradient-to-r from-[#0142b2] via-[#01368f] to-[#9AA0A8] rounded-full mb-5"></div>
 
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
-        <Link href="/dashboard/admin/batch" className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-500 hover:text-[#c9871a] hover:border-[#F3A522]/40 transition">
+        <Link href="/dashboard/admin/batch" className="w-10 h-10 rounded-md bg-white border border-gray-100 shadow-sm flex items-center justify-center text-gray-500 hover:text-[#0142b2] hover:border-[#0142b2]/40 transition">
           <FiArrowLeft size={16} />
         </Link>
         <div>
@@ -169,22 +169,22 @@ export default function CreateBatchPage() {
                     const active = form.courseId === course._id;
                     return (
                       <button key={course._id} type="button" onClick={() => handleCourseChange(course._id)}
-                        className={`w-full flex items-center gap-3 p-2.5 rounded-lg border text-left transition-all ${
+                        className={`w-full flex items-center gap-3 p-2.5 rounded-md border text-left transition-all ${
                           active
-                            ? 'border-[#F3A522] bg-[#FEF6E7]/60 ring-2 ring-[#F3A522]/20'
-                            : 'border-gray-100 hover:border-[#F3A522]/40 hover:bg-[#FEF6E7]/30'
+                            ? 'border-[#0142b2] bg-[#eef3fc]/60 ring-2 ring-[#0142b2]/20'
+                            : 'border-gray-100 hover:border-[#0142b2]/40 hover:bg-[#eef3fc]/30'
                         }`}>
-                        <div className="w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br from-[#F3A522] to-[#d88f13]">
+                        <div className="w-9 h-9 rounded-md overflow-hidden flex-shrink-0 bg-gradient-to-br from-[#0142b2] to-[#01368f]">
                           {course.image && <img src={course.image} alt="" className="w-full h-full object-cover" />}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className={`text-xs font-semibold truncate ${active ? 'text-[#a5680f]' : 'text-gray-700'}`}>
+                          <p className={`text-xs font-semibold truncate ${active ? 'text-[#01368f]' : 'text-gray-700'}`}>
                             {course.title}
                           </p>
                           {course.type && <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 mt-0.5 inline-block">{course.type}</span>}
                         </div>
                         {active && (
-                          <div className="w-5 h-5 rounded-full bg-[#F3A522] flex items-center justify-center flex-shrink-0">
+                          <div className="w-5 h-5 rounded-full bg-[#0142b2] flex items-center justify-center flex-shrink-0">
                             <FiCheck size={10} className="text-white" />
                           </div>
                         )}
@@ -267,7 +267,7 @@ export default function CreateBatchPage() {
                 <label className={labelClass}>Class Time</label>
                 <TimeRangePicker value={form.classTime} onChange={(v) => setForm({ ...form, classTime: v })} />
                 {form.classTime && form.classTime.trim() !== '-' && (
-                  <p className="text-[11px] text-[#c9871a] mt-1.5 font-medium">{form.classTime}</p>
+                  <p className="text-[11px] text-[#0142b2] mt-1.5 font-medium">{form.classTime}</p>
                 )}
               </div>
               <div>
@@ -277,10 +277,10 @@ export default function CreateBatchPage() {
                     const isSelected = form.classDays.includes(day);
                     return (
                       <button key={day} type="button" onClick={() => toggleDay(day)}
-                        className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all border ${
+                        className={`px-3.5 py-2 rounded-md text-xs font-semibold transition-all border ${
                           isSelected
-                            ? 'bg-[#F3A522] text-white border-[#F3A522] shadow-sm shadow-[#F3A522]/20'
-                            : 'bg-white text-gray-500 border-gray-200 hover:border-[#F3A522]/40 hover:text-[#c9871a]'
+                            ? 'bg-[#0142b2] text-white border-[#0142b2] shadow-sm shadow-[#0142b2]/20'
+                            : 'bg-white text-gray-500 border-gray-200 hover:border-[#0142b2]/40 hover:text-[#0142b2]'
                         }`}>
                         {isSelected && <FiCheck size={11} className="inline mr-1" />}
                         {day.slice(0, 3)}
@@ -289,7 +289,7 @@ export default function CreateBatchPage() {
                   })}
                 </div>
                 {form.classDays.length > 0 && (
-                  <p className="text-[10px] text-[#c9871a] mt-2 font-medium">Selected: {form.classDays.join(', ')}</p>
+                  <p className="text-[10px] text-[#0142b2] mt-2 font-medium">Selected: {form.classDays.join(', ')}</p>
                 )}
               </div>
             </div>
@@ -298,11 +298,11 @@ export default function CreateBatchPage() {
           {/* ── Actions ── */}
           <div className="flex items-center gap-3">
             <Link href="/dashboard/admin/batch"
-              className="px-5 py-2.5 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">
+              className="px-5 py-2.5 rounded-md border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition">
               Cancel
             </Link>
             <button type="submit" disabled={loading || !form.courseId || !form.id.trim()}
-              className="flex items-center gap-2 px-7 py-2.5 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold hover:shadow-lg hover:shadow-[#F3A522]/25 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm">
+              className="flex items-center gap-2 px-7 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold hover:shadow-lg hover:shadow-[#0142b2]/25 disabled:opacity-40 disabled:cursor-not-allowed transition shadow-sm">
               {loading ? <FiLoader className="animate-spin" size={14} /> : <FiSave size={14} />}
               {loading ? 'Creating...' : 'Create Batch'}
             </button>
@@ -311,45 +311,45 @@ export default function CreateBatchPage() {
 
         {/* ═══ Preview — Right col ═══ */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden sticky top-6">
-            <div className="px-5 py-3.5 border-b border-gray-100 bg-[#FEF6E7]/40">
+          <div className="bg-white rounded-md border border-gray-100 shadow-sm overflow-hidden sticky top-6">
+            <div className="px-5 py-3.5 border-b border-gray-100 bg-[#eef3fc]/40">
               <h3 className="text-sm font-bold text-gray-800 outfit">Preview</h3>
             </div>
             <div className="p-5">
               {selectedCourse ? (
                 <div className="space-y-4">
-                  <div className="h-24 rounded-lg overflow-hidden bg-gradient-to-br from-[#F3A522] to-[#d88f13]">
+                  <div className="h-24 rounded-md overflow-hidden bg-gradient-to-br from-[#0142b2] to-[#01368f]">
                     {selectedCourse.image && <img src={selectedCourse.image} alt="" className="w-full h-full object-cover" />}
                   </div>
                   <div>
                     <p className="font-bold text-gray-800 text-sm outfit">{selectedCourse.title}</p>
                     {selectedCourse.type && (
-                      <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-[#FEF6E7] text-[#c9871a] mt-1 inline-block">{selectedCourse.type}</span>
+                      <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded bg-[#eef3fc] text-[#0142b2] mt-1 inline-block">{selectedCourse.type}</span>
                     )}
                   </div>
 
                   {selectedMentor && (
-                    <div className="flex items-center gap-2 p-2.5 bg-[#FEF6E7]/50 rounded-lg border border-[#F0DFB4]">
-                      <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex-shrink-0">
+                    <div className="flex items-center gap-2 p-2.5 bg-[#eef3fc]/50 rounded-md border border-[#c9d8f5]">
+                      <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-[#0142b2] to-[#01368f] flex-shrink-0">
                         {selectedMentor.image
                           ? <img src={selectedMentor.image} alt="" className="w-full h-full object-cover" />
                           : <div className="w-full h-full flex items-center justify-center text-white font-bold text-xs">{selectedMentor.name?.charAt(0)}</div>}
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-[#a5680f]">{selectedMentor.name}</p>
-                        <p className="text-[10px] text-[#c9871a]">{selectedMentor.designation}</p>
+                        <p className="text-xs font-semibold text-[#01368f]">{selectedMentor.name}</p>
+                        <p className="text-[10px] text-[#0142b2]">{selectedMentor.designation}</p>
                       </div>
                     </div>
                   )}
 
                   <div className="border-t border-gray-100 pt-3 space-y-2">
                     {[
-                      ['Batch ID', form.id.trim() || '—', 'font-mono text-[#c9871a] font-bold'],
+                      ['Batch ID', form.id.trim() || '—', 'font-mono text-[#0142b2] font-bold'],
                       ['Branch', form.branch || '—'],
                       ['Start', form.startDate || '—'],
                       ['End', form.endDate || '—'],
                       ['Capacity', `${form.maxStudents} students`],
-                      ...(form.classTime && form.classTime.trim() !== '-' ? [['Time', form.classTime, 'text-[#c9871a] font-semibold']] : []),
+                      ...(form.classTime && form.classTime.trim() !== '-' ? [['Time', form.classTime, 'text-[#0142b2] font-semibold']] : []),
                     ].map(([k, v, cls]) => (
                       <div key={k} className="flex justify-between text-xs">
                         <span className="text-gray-400">{k}</span>
@@ -361,7 +361,7 @@ export default function CreateBatchPage() {
                         <span className="text-[10px] text-gray-400">Class Days</span>
                         <div className="flex flex-wrap gap-1 mt-1">
                           {form.classDays.map(d => (
-                            <span key={d} className="text-[9px] font-bold bg-[#FEF6E7] text-[#c9871a] px-1.5 py-0.5 rounded">{d.slice(0, 3)}</span>
+                            <span key={d} className="text-[9px] font-bold bg-[#eef3fc] text-[#0142b2] px-1.5 py-0.5 rounded">{d.slice(0, 3)}</span>
                           ))}
                         </div>
                       </div>
@@ -370,8 +370,8 @@ export default function CreateBatchPage() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <div className="w-12 h-12 rounded-full bg-[#FEF6E7] flex items-center justify-center mx-auto mb-3">
-                    <FiBook className="text-[#F3A522]" size={18} />
+                  <div className="w-12 h-12 rounded-full bg-[#eef3fc] flex items-center justify-center mx-auto mb-3">
+                    <FiBook className="text-[#0142b2]" size={18} />
                   </div>
                   <p className="text-xs text-gray-400 font-medium">Select a course</p>
                   <p className="text-[10px] text-gray-300 mt-0.5">Preview will appear here</p>
@@ -385,8 +385,8 @@ export default function CreateBatchPage() {
       <style jsx global>{`
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #F0DFB4; border-radius: 10px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #F3A522; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #c9d8f5; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #0142b2; }
       `}</style>
       {toastNode}
     </div>

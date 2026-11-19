@@ -8,7 +8,7 @@ import ProtectedRoute from '@/app/providers/protectedRoutes';
 import NotificationBell from '@/components/Shared/NotificationBell';
 import {
   FiUser, FiSettings, FiLogOut, FiChevronDown,
-  FiSearch, FiBell, FiCreditCard,
+  FiBell, FiExternalLink,
 } from 'react-icons/fi';
 
 const AdminLayout = ({ children }) => {
@@ -42,12 +42,17 @@ const AdminLayout = ({ children }) => {
     window.location.href = '/login';
   };
 
-  const getPageTitle = () => {
-    const segments = pathname.split('/').filter(Boolean);
-    const last = segments[segments.length - 1];
-    if (last === 'admin') return 'Dashboard';
-    return last?.charAt(0).toUpperCase() + last?.slice(1).replace(/-/g, ' ') || 'Dashboard';
+  // Readable page title + breadcrumb from the URL
+  const TITLES = {
+    admin: 'Dashboard', payments: 'Payment History', analytics: 'Income Analytics', course: 'Courses',
+    category: 'Categories', batch: 'Batches', mentor: 'Mentors', blog: 'Blog', books: 'Books',
+    certification: 'Certifications', 'notice-board': 'Notice Board', 'site-content': 'Site Content',
+    images: 'Site Photos', contact: 'Contact Page', user: 'Users', create: 'Create', orders: 'Orders',
   };
+  const nice = (seg) => TITLES[seg] || (/^[a-f0-9]{24}$/i.test(seg) ? 'Details' : seg.charAt(0).toUpperCase() + seg.slice(1).replace(/-/g, ' '));
+  const segs = pathname.split('/').filter(Boolean).slice(2); // after /dashboard/admin
+  const pageTitle = segs.length ? nice(segs[segs.length - 1]) : 'Dashboard';
+  const crumbs = segs.map((seg, i) => ({ label: nice(seg), href: '/dashboard/admin/' + segs.slice(0, i + 1).join('/') }));
 
   const userName = user?.firstName
     ? `${user.firstName} ${user.lastName || ''}`.trim()
@@ -57,32 +62,32 @@ const AdminLayout = ({ children }) => {
 
   return (
     <ProtectedRoute allowedRoles={["superAdmin", "admin", "trainingManager"]}>
-      <div className="min-h-screen bg-[#f8fafb] poppins">
+      <div className="min-h-screen bg-[#f5f7fa] work">
         <AdminSidebar />
 
         {/* Main Content */}
-        <main className="min-h-screen transition-all duration-300 lg:ml-[260px]">
-          {/* ═══════ Top Header Bar ═══════ */}
-          <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-slate-200/60">
-            <div className="flex items-center justify-between h-[64px] pl-16 pr-4 lg:px-7">
-              {/* Left Side — Page Title */}
-              <div className="flex items-center gap-3">
-                <div>
-                  <h2 className="text-lg font-bold text-slate-800 leading-tight outfit-semibold">
-                    {getPageTitle()}
-                  </h2>
-                  <p className="text-[11px] text-slate-400 font-medium -mt-0.5">
-                    {userRole} Dashboard
-                  </p>
-                </div>
+        <main className="min-h-screen transition-all duration-300 lg:ml-[240px]">
+          {/* Top bar */}
+          <header className="sticky top-0 z-30 border-b border-slate-200 bg-white">
+            <div className="flex h-14 items-center justify-between pl-14 pr-4 lg:px-6">
+              <div className="min-w-0">
+                <nav className="flex items-center gap-1 text-[11px] text-slate-400">
+                  <Link href="/dashboard/admin" className="hover:text-[#0142b2]">Admin</Link>
+                  {crumbs.map((c) => (
+                    <React.Fragment key={c.href}>
+                      <span>/</span>
+                      <Link href={c.href} className="truncate hover:text-[#0142b2]">{c.label}</Link>
+                    </React.Fragment>
+                  ))}
+                </nav>
+                <h2 className="truncate text-[15px] font-bold leading-tight text-[#0b1b4a] outfit">{pageTitle}</h2>
               </div>
 
               {/* Right Side — Search, Notification, Profile */}
               <div className="flex items-center gap-2">
-                {/* Search Button */}
-                <button className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all">
-                  <FiSearch size={17} />
-                </button>
+                <Link href="/" target="_blank" className="hidden sm:inline-flex items-center gap-1.5 rounded-md border border-slate-200 px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:border-[#0142b2] hover:text-[#0142b2]">
+                  <FiExternalLink size={13} /> View site
+                </Link>
 
                 {/* Notification Bell */}
                 <div className="relative">
@@ -96,16 +101,16 @@ const AdminLayout = ({ children }) => {
                 <div ref={dropdownRef} className="relative">
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center gap-2.5 pl-2 pr-3 py-1.5 rounded-xl hover:bg-slate-50 transition-all group"
+                    className="flex items-center gap-2 rounded-md py-1 pl-1 pr-2 hover:bg-slate-50 transition-colors group"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center text-white text-xs font-bold shadow-sm shadow-[#F3A522]/25">
+                    <div className="w-8 h-8 rounded-full bg-[#0142b2] flex items-center justify-center text-white text-xs font-bold">
                       {userInitial}
                     </div>
                     <div className="hidden sm:block text-left">
                       <p className="text-sm font-semibold text-slate-700 leading-tight max-w-[120px] truncate">
                         {userName}
                       </p>
-                      <p className="text-[10px] text-[#c9871a] font-medium leading-tight">
+                      <p className="text-[10px] text-slate-400 font-medium leading-tight">
                         {userRole}
                       </p>
                     </div>
@@ -117,7 +122,7 @@ const AdminLayout = ({ children }) => {
 
                   {/* Dropdown Menu */}
                   {dropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/50 py-1.5">
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-md border border-slate-200 shadow-lg py-1">
                       <div className="px-4 py-3 border-b border-slate-100">
                         <p className="text-sm font-semibold text-slate-800 truncate">{userName}</p>
                         <p className="text-xs text-slate-400 truncate">{user?.email || ''}</p>
@@ -134,7 +139,7 @@ const AdminLayout = ({ children }) => {
                             <Link
                               key={item.label}
                               href={item.href}
-                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-[#FEF6E7]/60 hover:text-[#c9871a] transition-colors"
+                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-[#eef3fc] hover:text-[#0142b2] transition-colors"
                             >
                               <Icon size={15} className="text-slate-400" />
                               {item.label}
@@ -160,7 +165,7 @@ const AdminLayout = ({ children }) => {
           </header>
 
           {/* Page Content */}
-          <div className="p-4 lg:p-6 xl:p-7">
+          <div className="mx-auto max-w-[1440px] p-4 lg:p-6">
             {children}
           </div>
         </main>

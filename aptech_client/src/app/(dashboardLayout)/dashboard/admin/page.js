@@ -156,7 +156,7 @@ export default function AdminDashboard() {
   const totalMonthSales = dailySales.reduce((s, d) => s + d.count, 0);
 
   // Donut chart - Course type distribution
-  const DONUT_COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#3b82f6'];
+  const DONUT_COLORS = ['#0142b2', '#027a1e', '#e5251f', '#0b1b4a', '#64748b'];
   const donutDist = typeDistribution;
   const donutTotal = donutDist.reduce((s, d) => s + d.count, 0);
   const donutColor = (item, i) => DONUT_COLORS[i % DONUT_COLORS.length];
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
       subtitle: 'Course income · this month',
       change: combinedRevChange,
       icon: FiDollarSign,
-      iconBg: 'bg-gradient-to-br from-emerald-400 to-emerald-600',
+      iconBg: 'bg-[#027a1e]',
     },
     {
       title: 'NEW ENROLLMENTS',
@@ -179,7 +179,7 @@ export default function AdminDashboard() {
       subtitle: `${totals.totalEnrollments ?? 0} active now`,
       change: changes.enrollments ?? 0,
       icon: FiTrendingUp,
-      iconBg: 'bg-gradient-to-br from-indigo-400 to-indigo-600',
+      iconBg: 'bg-[#0142b2]',
     },
     {
       title: 'NEW STUDENTS',
@@ -187,7 +187,7 @@ export default function AdminDashboard() {
       subtitle: `${totals.totalStudents ?? 0} total students`,
       change: changes.students ?? 0,
       icon: FiUsers,
-      iconBg: 'bg-gradient-to-br from-blue-400 to-blue-600',
+      iconBg: 'bg-[#0142b2]',
     },
     {
       title: 'PENDING ORDERS',
@@ -195,16 +195,16 @@ export default function AdminDashboard() {
       subtitle: `${current.paidOrders ?? 0} paid this month`,
       change: changes.pendingOrders ?? 0,
       icon: FiShoppingCart,
-      iconBg: 'bg-gradient-to-br from-rose-400 to-rose-600',
+      iconBg: 'bg-[#e5251f]',
     },
   ];
 
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white rounded-xl border border-slate-200/60 px-4 py-3 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white rounded-md border border-slate-200/60 px-4 py-3 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center text-white shadow-md shadow-[#F3A522]/20">
+          <div className="w-10 h-10 rounded-md bg-gradient-to-br from-[#0142b2] to-[#01368f] flex items-center justify-center text-white shadow-md shadow-[#0142b2]/20">
             <FiGrid size={18} />
           </div>
           <div>
@@ -214,7 +214,7 @@ export default function AdminDashboard() {
         </div>
         <div className="flex items-center gap-2">
           {/* Month Picker */}
-          <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5">
+          <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-md px-2 py-1.5">
             <button onClick={goToPrevMonth} className="p-0.5 hover:bg-slate-200 rounded transition">
               <FiChevronLeft size={14} className="text-slate-500" />
             </button>
@@ -227,10 +227,10 @@ export default function AdminDashboard() {
               <FiChevronRight size={14} className="text-slate-500" />
             </button>
           </div>
-          <button onClick={fetchData} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition">
+          <button onClick={fetchData} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 transition">
             <FiRefreshCw size={12} /> Reload
           </button>
-          <Link href="/dashboard/admin/analytics" className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-[#F3A522] to-[#d88f13] rounded-lg hover:shadow-md hover:shadow-[#F3A522]/30 transition shadow-sm">
+          <Link href="/dashboard/admin/analytics" className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-[#0142b2] to-[#01368f] rounded-md hover:shadow-md hover:shadow-[#0142b2]/30 transition shadow-sm">
             <FiTrendingUp size={12} /> Analytics
           </Link>
         </div>
@@ -243,7 +243,7 @@ export default function AdminDashboard() {
           const isPositive = stat.change >= 0;
           const hasChange = !loading && stat.change !== null && stat.change !== undefined;
           return (
-            <div key={stat.title} className="bg-white rounded-xl border border-slate-200/60 px-4 py-3 shadow-sm hover:shadow-md transition-all group">
+            <div key={stat.title} className="bg-white rounded-md border border-slate-200/60 px-4 py-3 shadow-sm hover:shadow-md transition-all group">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <p className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase truncate">{stat.title}</p>
@@ -262,7 +262,7 @@ export default function AdminDashboard() {
                   </div>
                   <p className="text-[11px] text-slate-400 mt-1 truncate">{stat.subtitle}</p>
                 </div>
-                <div className={`w-9 h-9 rounded-lg ${stat.iconBg} flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform shrink-0`}>
+                <div className={`w-9 h-9 rounded-md ${stat.iconBg} flex items-center justify-center text-white shadow-md shrink-0`}>
                   <Icon size={17} />
                 </div>
               </div>
@@ -274,7 +274,7 @@ export default function AdminDashboard() {
       {/* Chart Area */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Daily Sales Overview - Left (2/3) */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200/60 shadow-sm">
+        <div className="lg:col-span-2 bg-white rounded-md border border-slate-200/60 shadow-sm">
           <div className="flex items-center justify-between px-5 pt-5 pb-2">
             <div>
               <h2 className="text-base font-semibold text-slate-800 outfit-semibold">Sales Overview</h2>
@@ -290,13 +290,13 @@ export default function AdminDashboard() {
           {/* SVG Smooth Line Chart — Daily */}
           <div className="px-2 pb-1">
             {loading ? (
-              <div className="h-[230px] bg-slate-50 rounded-lg animate-pulse mx-3 my-2" />
+              <div className="h-[230px] bg-slate-50 rounded-md animate-pulse mx-3 my-2" />
             ) : (
               <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
                 <defs>
                   <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#6366f1" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="#6366f1" stopOpacity="0.01" />
+                    <stop offset="0%" stopColor="#0142b2" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#0142b2" stopOpacity="0.01" />
                   </linearGradient>
                 </defs>
                 {/* Grid */}
@@ -314,12 +314,12 @@ export default function AdminDashboard() {
                 {/* Area fill (Course) */}
                 {areaPath && <path d={areaPath} fill="url(#salesGrad)" />}
                 {/* Course line */}
-                {linePath && <path d={linePath} fill="none" stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />}
+                {linePath && <path d={linePath} fill="none" stroke="#0142b2" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />}
                 {/* Course dots on hover */}
                 {chartPts.map(([x, y], i) => (
                   <g key={`c${i}`} className="group/dot">
                     <circle cx={x} cy={y} r="12" fill="transparent" className="cursor-pointer" />
-                    <circle cx={x} cy={y} r="3.5" fill="#6366f1" stroke="white" strokeWidth="2" className="opacity-0 group-hover/dot:opacity-100 transition-opacity" />
+                    <circle cx={x} cy={y} r="3.5" fill="#0142b2" stroke="white" strokeWidth="2" className="opacity-0 group-hover/dot:opacity-100 transition-opacity" />
                     {dailySales[i]?.count > 0 && (
                       <>
                         <rect x={x - 20} y={y - 26} width="40" height="18" rx="4" fill="#1e293b" className="opacity-0 group-hover/dot:opacity-100 transition-opacity" />
@@ -335,7 +335,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Bottom Stats */}
-          <div className="flex items-center justify-between px-5 py-3 border-t border-slate-100 bg-slate-50/30 rounded-b-xl">
+          <div className="flex items-center justify-between px-5 py-3 border-t border-slate-100 bg-slate-50/30 rounded-b-md">
             <div className="flex items-center gap-8">
               <div>
                 <p className="text-[10px] font-semibold text-slate-400 tracking-wider">THIS MONTH REVENUE</p>
@@ -354,7 +354,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Platform Distribution - Right (1/3) */}
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-5 flex flex-col">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm p-5 flex flex-col">
           <div className="mb-3">
             <h2 className="text-base font-semibold text-slate-800 outfit-semibold">Course Types</h2>
             <p className="text-xs text-slate-400 mt-0.5">This month by type</p>
@@ -393,7 +393,7 @@ export default function AdminDashboard() {
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <span className="text-3xl font-bold text-slate-800 outfit">{donutTotal}</span>
-                  <span className="text-[11px] text-[#c9871a] font-medium">Total</span>
+                  <span className="text-[11px] text-[#0142b2] font-medium">Total</span>
                 </div>
               </div>
             )}
@@ -426,16 +426,16 @@ export default function AdminDashboard() {
       {/* ═══ Quick Actions ═══ */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { title: 'Create Course', desc: 'Add new course', href: '/dashboard/admin/course/create', icon: FiBook, color: '#9AA0A8', bg: 'from-orange-400 to-orange-600' },
-          { title: 'Add Mentor', desc: 'Invite mentor', href: '/dashboard/admin/mentor/create', icon: FiUsers, color: '#41bfb8', bg: 'from-teal-400 to-teal-600' },
-          { title: 'New Category', desc: 'Add category', href: '/dashboard/admin/category/create', icon: FiGrid, color: '#8B5CF6', bg: 'from-purple-400 to-purple-600' },
-          { title: 'Create Batch', desc: 'New student batch', href: '/dashboard/admin/batch/create', icon: FiCalendar, color: '#3B82F6', bg: 'from-blue-400 to-blue-600' },
+          { title: 'Create Course', desc: 'Add new course', href: '/dashboard/admin/course/create', icon: FiBook, color: '#9AA0A8', bg: 'from-[#e5251f] to-[#e5251f]' },
+          { title: 'Add Mentor', desc: 'Invite mentor', href: '/dashboard/admin/mentor/create', icon: FiUsers, color: '#0142b2', bg: 'from-[#027a1e] to-[#027a1e]' },
+          { title: 'New Category', desc: 'Add category', href: '/dashboard/admin/category/create', icon: FiGrid, color: '#8B5CF6', bg: 'from-[#0b1b4a] to-[#0b1b4a]' },
+          { title: 'Create Batch', desc: 'New student batch', href: '/dashboard/admin/batch/create', icon: FiCalendar, color: '#3B82F6', bg: 'from-[#0142b2] to-[#0142b2]' },
         ].map((action) => {
           const Icon = action.icon;
           return (
             <Link key={action.title} href={action.href}
-              className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm hover:shadow-md transition-all group flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${action.bg} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform shrink-0`}>
+              className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm hover:shadow-md transition-all group flex items-center gap-3">
+              <div className={`w-10 h-10 rounded-md bg-gradient-to-br ${action.bg} flex items-center justify-center text-white shadow-lg shrink-0`}>
                 <Icon size={18} />
               </div>
               <div className="flex-1 min-w-0">
@@ -452,15 +452,15 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
 
         {/* Recent Courses */}
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm">
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white">
+              <div className="w-8 h-8 rounded-md bg-[#0142b2] flex items-center justify-center text-white">
                 <FiBook size={14} />
               </div>
               <h2 className="text-sm font-semibold text-slate-800">Recent Courses</h2>
             </div>
-            <Link href="/dashboard/admin/course" className="flex items-center gap-1 text-xs text-[#c9871a] hover:text-[#a5680f] font-medium transition">
+            <Link href="/dashboard/admin/course" className="flex items-center gap-1 text-xs text-[#0142b2] hover:text-[#01368f] font-medium transition">
               View All <FiArrowRight size={12} />
             </Link>
           </div>
@@ -470,11 +470,11 @@ export default function AdminDashboard() {
             ) : (
               recentCourses.map((course, idx) => (
                 <div key={course._id || idx} className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50/50 transition">
-                  <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 shrink-0">
+                  <div className="w-10 h-10 rounded-md overflow-hidden bg-slate-100 shrink-0">
                     {course.image ? (
                       <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-teal-400 to-orange-400 flex items-center justify-center text-white font-bold text-xs">
+                      <div className="w-full h-full bg-[#027a1e] flex items-center justify-center text-white font-bold text-xs">
                         {course.title?.charAt(0) || 'C'}
                       </div>
                     )}
@@ -491,15 +491,15 @@ export default function AdminDashboard() {
         </div>
 
         {/* Pending Orders */}
-        <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm">
+        <div className="bg-white rounded-md border border-slate-200/60 shadow-sm">
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white">
+              <div className="w-8 h-8 rounded-md bg-[#0142b2] flex items-center justify-center text-white">
                 <FiClock size={14} />
               </div>
               <h2 className="text-sm font-semibold text-slate-800">Pending Orders</h2>
             </div>
-            <Link href="/dashboard/admin/orders" className="flex items-center gap-1 text-xs text-[#c9871a] hover:text-[#a5680f] font-medium transition">
+            <Link href="/dashboard/admin/orders" className="flex items-center gap-1 text-xs text-[#0142b2] hover:text-[#01368f] font-medium transition">
               View All <FiArrowRight size={12} />
             </Link>
           </div>
@@ -512,7 +512,7 @@ export default function AdminDashboard() {
             ) : (
               pendingOrders.map((order, idx) => (
                 <div key={order._id || idx} className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50/50 transition">
-                  <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-md bg-amber-50 flex items-center justify-center shrink-0">
                     <FiAlertCircle size={14} className="text-amber-500" />
                   </div>
                   <div className="flex-1 min-w-0">

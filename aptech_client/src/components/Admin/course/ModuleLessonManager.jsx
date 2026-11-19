@@ -25,8 +25,8 @@ const authHeaders = () => ({
 });
 
 const inputClass =
-  'w-full px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-800 ' +
-  'placeholder:text-gray-300 focus:outline-none focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15 transition-all';
+  'w-full px-4 py-2.5 rounded-md border border-gray-200 bg-white text-sm text-gray-800 ' +
+  'placeholder:text-gray-300 focus:outline-none focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15 transition-all';
 
 // ═══════════════════════════════════════════════════════════════
 // MODULE & LESSON MANAGER
@@ -103,14 +103,14 @@ const ModuleLessonManager = ({ courseId }) => {
       case 'video': return <FiVideo className="text-blue-500" />;
       case 'text': return <FiFileText className="text-green-500" />;
       case 'quiz': return <FiCheck className="text-purple-500" />;
-      case 'assignment': return <FiEdit2 className="text-[#c9871a]" />;
+      case 'assignment': return <FiEdit2 className="text-[#0142b2]" />;
       default: return <FiVideo className="text-gray-400" />;
     }
   };
 
   if (loading) return (
     <div className="flex items-center justify-center py-16">
-      <FiLoader className="animate-spin text-[#F3A522]" size={28} />
+      <FiLoader className="animate-spin text-[#0142b2]" size={28} />
       <p className="ml-3 text-sm text-gray-400 work">Loading modules...</p>
     </div>
   );
@@ -121,14 +121,14 @@ const ModuleLessonManager = ({ courseId }) => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-base font-bold text-gray-800 outfit flex items-center gap-2">
-            <LuLayers className="text-[#F3A522]" />
+            <LuLayers className="text-[#0142b2]" />
             Course Modules ({modules.length})
           </h2>
           <p className="text-[11px] text-gray-400 work mt-0.5">Build the recorded curriculum — modules contain video, text, quiz and assignment lessons</p>
         </div>
         <button
           onClick={() => { setEditingModule(null); setShowModuleModal(true); }}
-          className="flex items-center gap-2 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white px-5 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-[#F3A522]/25 hover:shadow-xl transition-all"
+          className="flex items-center gap-2 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white px-5 py-2.5 rounded-md font-bold text-sm shadow-lg shadow-[#0142b2]/25 hover:shadow-xl transition-all"
         >
           <FiPlus /> Add Module
         </button>
@@ -136,9 +136,9 @@ const ModuleLessonManager = ({ courseId }) => {
 
       {/* Empty state */}
       {modules.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-gray-200 p-14 text-center bg-[#faf9f6]">
-          <div className="w-16 h-16 bg-[#FEF6E7] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <LuLayers className="text-2xl text-[#F3A522]" />
+        <div className="rounded-md border border-dashed border-gray-200 p-14 text-center bg-[#faf9f6]">
+          <div className="w-16 h-16 bg-[#eef3fc] rounded-md flex items-center justify-center mx-auto mb-4">
+            <LuLayers className="text-2xl text-[#0142b2]" />
           </div>
           <h3 className="text-base font-bold text-gray-700 outfit mb-1.5">No modules yet</h3>
           <p className="text-xs text-gray-400 work mb-5 max-w-sm mx-auto">
@@ -146,7 +146,7 @@ const ModuleLessonManager = ({ courseId }) => {
           </p>
           <button
             onClick={() => { setEditingModule(null); setShowModuleModal(true); }}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white px-6 py-3 rounded-lg font-bold text-sm shadow-lg shadow-[#F3A522]/25 hover:shadow-xl transition-all"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white px-6 py-3 rounded-md font-bold text-sm shadow-lg shadow-[#0142b2]/25 hover:shadow-xl transition-all"
           >
             <FiPlus /> Create First Module
           </button>
@@ -156,13 +156,13 @@ const ModuleLessonManager = ({ courseId }) => {
       {/* Modules list */}
       <div className="space-y-3">
         {modules.map((mod, idx) => (
-          <div key={mod._id} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
+          <div key={mod._id} className="bg-white rounded-md border border-gray-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
             {/* Module header */}
             <div
               className="flex items-center gap-3 px-5 py-4 cursor-pointer hover:bg-[#faf9f6] transition-colors"
               onClick={() => toggleModule(mod._id)}
             >
-              <div className="w-9 h-9 bg-gradient-to-br from-[#F3A522] to-[#d88f13] text-white rounded-lg flex items-center justify-center font-bold text-sm outfit shrink-0">
+              <div className="w-9 h-9 bg-gradient-to-br from-[#0142b2] to-[#01368f] text-white rounded-md flex items-center justify-center font-bold text-sm outfit shrink-0">
                 {idx + 1}
               </div>
 
@@ -182,21 +182,21 @@ const ModuleLessonManager = ({ courseId }) => {
               <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
                 <button
                   onClick={() => { setEditingModule(mod); setShowModuleModal(true); }}
-                  className="p-2 text-[#c9871a] hover:bg-[#FEF6E7] rounded-lg transition"
+                  className="p-2 text-[#0142b2] hover:bg-[#eef3fc] rounded-md transition"
                   title="Edit Module"
                 >
                   <FiEdit2 size={15} />
                 </button>
                 <button
                   onClick={() => handleDeleteModule(mod._id)}
-                  className="p-2 text-red-400 hover:bg-red-50 rounded-lg transition"
+                  className="p-2 text-red-400 hover:bg-red-50 rounded-md transition"
                   title="Delete Module"
                 >
                   <FiTrash2 size={15} />
                 </button>
                 <button
                   onClick={() => { setActiveModuleForLesson(mod._id); setEditingLesson(null); setShowLessonModal(true); }}
-                  className="p-2 text-[#F3A522] hover:bg-[#FEF6E7] rounded-lg transition"
+                  className="p-2 text-[#0142b2] hover:bg-[#eef3fc] rounded-md transition"
                   title="Add Lesson"
                 >
                   <FiPlus size={15} />
@@ -219,7 +219,7 @@ const ModuleLessonManager = ({ courseId }) => {
                     <p className="text-xs text-gray-400 work mb-2.5">No lessons yet</p>
                     <button
                       onClick={() => { setActiveModuleForLesson(mod._id); setEditingLesson(null); setShowLessonModal(true); }}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-[#c9871a] hover:underline"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#0142b2] hover:underline"
                     >
                       <FiPlus size={13} /> Add first lesson
                     </button>
@@ -228,7 +228,7 @@ const ModuleLessonManager = ({ courseId }) => {
                   <div className="divide-y divide-gray-100">
                     {moduleLessons[mod._id].map((lesson, lesIdx) => (
                       <div key={lesson._id} className="flex items-center gap-3 px-5 py-3 hover:bg-white transition-colors group">
-                        <span className="w-7 h-7 bg-white border border-gray-200 rounded-lg flex items-center justify-center text-[11px] font-bold text-gray-500 shrink-0">
+                        <span className="w-7 h-7 bg-white border border-gray-200 rounded-md flex items-center justify-center text-[11px] font-bold text-gray-500 shrink-0">
                           {lesIdx + 1}
                         </span>
                         {getLessonIcon(lesson.type)}
@@ -249,13 +249,13 @@ const ModuleLessonManager = ({ courseId }) => {
                             ? <span className="text-green-500" title="Published"><FiEye size={14} /></span>
                             : <span className="text-gray-300" title="Draft"><FiEyeOff size={14} /></span>}
                           {lesson.isLocked
-                            ? <span className="text-[#c9871a]" title="Locked"><FiLock size={14} /></span>
+                            ? <span className="text-[#0142b2]" title="Locked"><FiLock size={14} /></span>
                             : <span className="text-gray-300" title="Unlocked"><FiUnlock size={14} /></span>}
                         </div>
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => { setActiveModuleForLesson(mod._id); setEditingLesson(lesson); setShowLessonModal(true); }}
-                            className="p-1.5 text-[#c9871a] hover:bg-[#FEF6E7] rounded transition"
+                            className="p-1.5 text-[#0142b2] hover:bg-[#eef3fc] rounded transition"
                           >
                             <FiEdit2 size={13} />
                           </button>
@@ -275,7 +275,7 @@ const ModuleLessonManager = ({ courseId }) => {
                   <div className="px-5 py-3 border-t border-gray-100">
                     <button
                       onClick={() => { setActiveModuleForLesson(mod._id); setEditingLesson(null); setShowLessonModal(true); }}
-                      className="flex items-center gap-1.5 text-xs font-bold text-[#c9871a] hover:text-[#a5680f] transition"
+                      className="flex items-center gap-1.5 text-xs font-bold text-[#0142b2] hover:text-[#01368f] transition"
                     >
                       <FiPlus size={13} /> Add Lesson
                     </button>
@@ -343,8 +343,8 @@ const ModuleModal = ({ courseId, module, onClose, onSave }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b bg-gradient-to-r from-[#F3A522] to-[#d88f13]">
+      <div className="bg-white rounded-md shadow-2xl w-full max-w-lg overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b bg-gradient-to-r from-[#0142b2] to-[#01368f]">
           <h3 className="text-white font-bold text-base outfit">{module ? 'Edit Module' : 'Add New Module'}</h3>
           <button onClick={onClose} className="text-white/70 hover:text-white transition"><FiX size={20} /></button>
         </div>
@@ -386,7 +386,7 @@ const ModuleModal = ({ courseId, module, onClose, onSave }) => {
                 checked={formData.isPublished}
                 onChange={e => setFormData(prev => ({ ...prev, isPublished: e.target.checked }))}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-[#F3A522]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-[#F3A522] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-[#0142b2]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:bg-[#0142b2] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
             </label>
             <span className="text-sm text-gray-600 work">Published</span>
           </div>
@@ -395,14 +395,14 @@ const ModuleModal = ({ courseId, module, onClose, onSave }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-lg border border-gray-200 text-gray-600 font-medium text-sm hover:bg-gray-50 transition"
+              className="flex-1 py-2.5 rounded-md border border-gray-200 text-gray-600 font-medium text-sm hover:bg-gray-50 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white font-bold text-sm shadow-lg shadow-[#F3A522]/25 hover:shadow-xl disabled:opacity-50 transition-all"
+              className="flex-1 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white font-bold text-sm shadow-lg shadow-[#0142b2]/25 hover:shadow-xl disabled:opacity-50 transition-all"
             >
               {saving ? 'Saving...' : module ? 'Update Module' : 'Create Module'}
             </button>
@@ -459,8 +459,8 @@ const LessonModal = ({ moduleId, lesson, onClose, onSave }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col">
-        <div className="flex items-center justify-between px-6 py-4 border-b bg-gradient-to-r from-[#F3A522] to-[#d88f13] shrink-0">
+      <div className="bg-white rounded-md shadow-2xl w-full max-w-xl overflow-hidden max-h-[90vh] flex flex-col">
+        <div className="flex items-center justify-between px-6 py-4 border-b bg-gradient-to-r from-[#0142b2] to-[#01368f] shrink-0">
           <h3 className="text-white font-bold text-base outfit">{lesson ? 'Edit Lesson' : 'Add New Lesson'}</h3>
           <button onClick={onClose} className="text-white/70 hover:text-white transition"><FiX size={20} /></button>
         </div>
@@ -495,8 +495,8 @@ const LessonModal = ({ moduleId, lesson, onClose, onSave }) => {
                   key={type}
                   type="button"
                   onClick={() => setFormData(prev => ({ ...prev, type }))}
-                  className={`py-2 rounded-lg text-xs font-bold uppercase transition-all ${formData.type === type
-                    ? 'bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white shadow'
+                  className={`py-2 rounded-md text-xs font-bold uppercase transition-all ${formData.type === type
+                    ? 'bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white shadow'
                     : 'bg-gray-50 text-gray-500 hover:bg-gray-100'}`}
                 >
                   {type}
@@ -506,9 +506,9 @@ const LessonModal = ({ moduleId, lesson, onClose, onSave }) => {
           </div>
 
           {formData.type === 'video' && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-[#FEF6E7]/50 rounded-xl border border-[#F0DFB4]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-[#eef3fc]/50 rounded-md border border-[#c9d8f5]">
               <div className="md:col-span-2">
-                <label className="text-[11px] font-bold text-[#a5680f] uppercase tracking-wider mb-1.5 block">Video URL</label>
+                <label className="text-[11px] font-bold text-[#01368f] uppercase tracking-wider mb-1.5 block">Video URL</label>
                 <input
                   value={formData.videoUrl}
                   onChange={e => setFormData(prev => ({ ...prev, videoUrl: e.target.value }))}
@@ -517,7 +517,7 @@ const LessonModal = ({ moduleId, lesson, onClose, onSave }) => {
                 />
               </div>
               <div>
-                <label className="text-[11px] font-bold text-[#a5680f] uppercase tracking-wider mb-1.5 block">Duration (seconds)</label>
+                <label className="text-[11px] font-bold text-[#01368f] uppercase tracking-wider mb-1.5 block">Duration (seconds)</label>
                 <input
                   type="number"
                   value={formData.videoDuration}
@@ -530,7 +530,7 @@ const LessonModal = ({ moduleId, lesson, onClose, onSave }) => {
           )}
 
           {formData.type === 'text' && (
-            <div className="p-4 bg-green-50/50 rounded-xl border border-green-100">
+            <div className="p-4 bg-green-50/50 rounded-md border border-green-100">
               <label className="text-[11px] font-bold text-green-700 uppercase tracking-wider mb-1.5 block">Text Content</label>
               <textarea
                 value={formData.textContent}
@@ -553,13 +553,13 @@ const LessonModal = ({ moduleId, lesson, onClose, onSave }) => {
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-4 p-4 bg-[#faf9f6] rounded-xl border border-gray-100">
+          <div className="grid grid-cols-3 gap-4 p-4 bg-[#faf9f6] rounded-md border border-gray-100">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={formData.isFree}
                 onChange={e => setFormData(prev => ({ ...prev, isFree: e.target.checked }))}
-                className="w-4 h-4 accent-[#F3A522] rounded"
+                className="w-4 h-4 accent-[#0142b2] rounded"
               />
               <span className="text-xs font-medium text-gray-600">Free Preview</span>
             </label>
@@ -568,7 +568,7 @@ const LessonModal = ({ moduleId, lesson, onClose, onSave }) => {
                 type="checkbox"
                 checked={formData.isLocked}
                 onChange={e => setFormData(prev => ({ ...prev, isLocked: e.target.checked }))}
-                className="w-4 h-4 accent-[#F3A522] rounded"
+                className="w-4 h-4 accent-[#0142b2] rounded"
               />
               <span className="text-xs font-medium text-gray-600">Locked</span>
             </label>
@@ -587,14 +587,14 @@ const LessonModal = ({ moduleId, lesson, onClose, onSave }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 rounded-lg border border-gray-200 text-gray-600 font-medium text-sm hover:bg-gray-50 transition"
+              className="flex-1 py-2.5 rounded-md border border-gray-200 text-gray-600 font-medium text-sm hover:bg-gray-50 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-2.5 rounded-lg bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white font-bold text-sm shadow-lg shadow-[#F3A522]/25 hover:shadow-xl disabled:opacity-50 transition-all"
+              className="flex-1 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white font-bold text-sm shadow-lg shadow-[#0142b2]/25 hover:shadow-xl disabled:opacity-50 transition-all"
             >
               {saving ? 'Saving...' : lesson ? 'Update Lesson' : 'Create Lesson'}
             </button>

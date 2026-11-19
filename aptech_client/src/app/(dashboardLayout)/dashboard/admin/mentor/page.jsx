@@ -89,7 +89,7 @@ export default function MentorsPage() {
 
   // Loading Skeleton
   const MentorSkeleton = () => (
-    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <div className="bg-white rounded-md border border-slate-200 overflow-hidden">
       <div className="h-48 bg-slate-200 animate-pulse"></div>
       <div className="p-4 space-y-3">
         <div className="h-4 bg-slate-200 rounded animate-pulse w-3/4"></div>
@@ -111,7 +111,7 @@ export default function MentorsPage() {
           <p className="text-slate-500 text-sm work">Manage all instructors & trainers</p>
         </div>
         <Link href="/dashboard/admin/mentor/create">
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#41bfb8] hover:bg-[#38a89d] text-white font-medium text-sm rounded-xl shadow-lg shadow-teal-200 transition-all hover:scale-105">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-[#0142b2] hover:bg-[#38a89d] text-white font-medium text-sm rounded-md shadow-lg shadow-teal-200 transition-all hover:scale-105">
             <FiPlus size={16} />
             Add Mentor
           </button>
@@ -119,7 +119,7 @@ export default function MentorsPage() {
       </div>
 
       {/* Filters Bar */}
-      <div className="flex flex-col md:flex-row md:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
+      <div className="flex flex-col md:flex-row md:items-center gap-4 bg-white p-4 rounded-md border border-slate-200">
         {/* Search */}
         <div className="relative flex-1">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -127,29 +127,29 @@ export default function MentorsPage() {
             placeholder="Search mentors..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none text-sm transition-all"
+            className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200 focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2] outline-none text-sm transition-all"
           />
         </div>
 
         {/* View Toggle */}
-        <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg">
+        <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-md">
           <button
             onClick={() => setViewMode('grid')}
-            className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-[#41bfb8]' : 'text-slate-500'}`}
+            className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-[#0142b2]' : 'text-slate-500'}`}
           >
             <FiGrid size={18} />
           </button>
           <button
             onClick={() => setViewMode('list')}
-            className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-[#41bfb8]' : 'text-slate-500'}`}
+            className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-[#0142b2]' : 'text-slate-500'}`}
           >
             <FiList size={18} />
           </button>
         </div>
 
         {/* Stats */}
-        <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-lg">
-          <FiUsers className="text-[#41bfb8]" />
+        <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-md">
+          <FiUsers className="text-[#0142b2]" />
           <span className="text-sm font-medium text-slate-700">{mentors.length} Mentors</span>
         </div>
       </div>
@@ -160,7 +160,7 @@ export default function MentorsPage() {
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => <MentorSkeleton key={i} />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl border border-slate-200">
+        <div className="text-center py-16 bg-white rounded-md border border-slate-200">
           <FiUsers className="mx-auto text-4xl text-slate-300 mb-4" />
           <h3 className="text-lg font-bold text-slate-800">No Mentors Found</h3>
           <p className="text-slate-500 text-sm mt-1">Try adjusting your search</p>
@@ -168,7 +168,7 @@ export default function MentorsPage() {
       ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((mentor) => (
-            <div key={mentor._id} className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300">
+            <div key={mentor._id} className="group bg-white rounded-md border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300">
               {/* Image */}
               <div className="relative h-48 overflow-hidden">
                 <img
@@ -180,7 +180,7 @@ export default function MentorsPage() {
                 <button
                   onClick={() => handleToggleVisibility(mentor)}
                   title={mentor.isPublished === false ? 'Hidden from website — click to show' : 'Shown on website — click to hide'}
-                  className="absolute top-2 right-2 w-8 h-8 rounded-lg bg-black/40 backdrop-blur text-white flex items-center justify-center hover:bg-black/60 transition"
+                  className="absolute top-2 right-2 w-8 h-8 rounded-md bg-black/40 backdrop-blur text-white flex items-center justify-center hover:bg-black/60 transition"
                 >
                   {mentor.isPublished === false ? <FiEyeOff size={14} /> : <FiEye size={14} />}
                 </button>
@@ -199,7 +199,7 @@ export default function MentorsPage() {
                 <div className="space-y-2 mb-3">
                   {mentor.email && (
                     <div className="flex items-center gap-2 text-xs text-slate-600">
-                      <FiMail className="text-[#41bfb8] shrink-0" size={12} />
+                      <FiMail className="text-[#0142b2] shrink-0" size={12} />
                       <span className="truncate">{mentor.email}</span>
                     </div>
                   )}
@@ -262,10 +262,10 @@ export default function MentorsPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 divide-y divide-slate-100">
+        <div className="bg-white rounded-md border border-slate-200 divide-y divide-slate-100">
           {filtered.map((mentor) => (
             <div key={mentor._id} className="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors">
-              <img src={mentor.image} alt={mentor.name} className="w-14 h-14 object-cover rounded-xl" />
+              <img src={mentor.image} alt={mentor.name} className="w-14 h-14 object-cover rounded-md" />
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
                   {mentor.name}
@@ -283,19 +283,19 @@ export default function MentorsPage() {
                 <button
                   onClick={() => handleToggleVisibility(mentor)}
                   title={mentor.isPublished === false ? 'Hidden — click to show' : 'Shown — click to hide'}
-                  className={`p-2 rounded-lg transition-colors ${mentor.isPublished === false ? 'text-gray-400 hover:bg-gray-100' : 'text-[#41bfb8] hover:bg-teal-50'}`}
+                  className={`p-2 rounded-md transition-colors ${mentor.isPublished === false ? 'text-gray-400 hover:bg-gray-100' : 'text-[#0142b2] hover:bg-teal-50'}`}
                 >
                   {mentor.isPublished === false ? <FiEyeOff size={16} /> : <FiEye size={16} />}
                 </button>
                 <Link
                   href={`/dashboard/admin/mentor/edit/${mentor._id}`}
-                  className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                  className="p-2 text-amber-600 hover:bg-amber-50 rounded-md transition-colors"
                 >
                   <FiEdit2 size={16} />
                 </Link>
                 <button
                   onClick={() => handleDelete(mentor._id)}
-                  className="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                  className="p-2 text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
                 >
                   <FiTrash2 size={16} />
                 </button>

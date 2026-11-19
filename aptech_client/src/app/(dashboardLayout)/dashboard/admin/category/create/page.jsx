@@ -42,7 +42,7 @@ const CreateCategory = () => {
     }
   };
 
-  const inputClass = "w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#f79952]/20 focus:border-[#f79952] outline-none text-sm transition-all bg-white font-medium";
+  const inputClass = "w-full px-4 py-3 rounded-md border border-slate-200 focus:ring-2 focus:ring-[#f79952]/20 focus:border-[#f79952] outline-none text-sm transition-all bg-white font-medium";
   const labelClass = "block text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-widest";
 
   return (
@@ -60,7 +60,7 @@ const CreateCategory = () => {
 
           <div className="p-8 md:p-10">
             <div className="mb-8">
-              <h1 className="text-2xl font-black text-slate-800 tracking-tight">Create <span className="text-[#41bfb8]">Category</span></h1>
+              <h1 className="text-2xl font-black text-slate-800 tracking-tight">Create <span className="text-[#0142b2]">Category</span></h1>
               <p className="text-slate-400 text-xs mt-1">Just type a name — the ID is assigned automatically.</p>
             </div>
 
@@ -84,7 +84,7 @@ const CreateCategory = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-4 rounded-2xl text-white font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-lg ${loading ? 'bg-slate-300' : 'bg-[#41bfb8] hover:bg-[#36a39d] shadow-teal-100 active:scale-95'}`}
+                className={`w-full py-4 rounded-md text-white font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-lg ${loading ? 'bg-slate-300' : 'bg-[#0142b2] hover:bg-[#36a39d] shadow-teal-100 active:scale-95'}`}
               >
                 {loading ? (
                   <FiLoader className="animate-spin" />
@@ -97,7 +97,7 @@ const CreateCategory = () => {
         </div>
 
         {/* Summary Info */}
-        <div className="mt-8 p-4 bg-[#f79952]/5 rounded-2xl border border-[#f79952]/10">
+        <div className="mt-8 p-4 bg-[#f79952]/5 rounded-md border border-[#f79952]/10">
           <p className="text-[11px] text-[#f79952] font-bold text-center uppercase tracking-tighter">
             Note: Categories are used as references in the Course Creation process.
           </p>

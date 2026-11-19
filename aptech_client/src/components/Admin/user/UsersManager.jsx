@@ -20,12 +20,12 @@ const GROUPS = {
 };
 
 const roleStyle = (role) => ({
-  superAdmin: { bg: 'bg-gradient-to-r from-yellow-500 to-amber-600', icon: <FiShield size={12} /> },
-  admin: { bg: 'bg-gradient-to-r from-red-500 to-rose-600', icon: <FiShield size={12} /> },
-  trainingManager: { bg: 'bg-gradient-to-r from-blue-500 to-indigo-600', icon: <FiUsers size={12} /> },
-  mentor: { bg: 'bg-gradient-to-r from-purple-500 to-violet-600', icon: <FiUsers size={12} /> },
-  student: { bg: 'bg-gradient-to-r from-emerald-500 to-teal-600', icon: <FiUser size={12} /> },
-  user: { bg: 'bg-gradient-to-r from-emerald-500 to-teal-600', icon: <FiUser size={12} /> },
+  superAdmin: { bg: 'bg-[#0142b2]', icon: <FiShield size={12} /> },
+  admin: { bg: 'bg-[#e5251f]', icon: <FiShield size={12} /> },
+  trainingManager: { bg: 'bg-[#0142b2]', icon: <FiUsers size={12} /> },
+  mentor: { bg: 'bg-[#0142b2]', icon: <FiUsers size={12} /> },
+  student: { bg: 'bg-[#027a1e]', icon: <FiUser size={12} /> },
+  user: { bg: 'bg-[#027a1e]', icon: <FiUser size={12} /> },
 }[role] || { bg: 'bg-slate-300', icon: <FiUser size={12} /> });
 
 const statusColor = (s) => ({
@@ -213,12 +213,12 @@ export default function UsersManager({ group = 'students' }) {
           <p className="text-slate-500 text-sm mt-1">{cfg.subtitle}</p>
         </div>
         {group === 'staff' && (
-          <button onClick={openAdd} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/20 hover:shadow-xl transition">
+          <button onClick={openAdd} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/20 hover:shadow-xl transition">
             <FiUserPlus size={16} /> Add Staff
           </button>
         )}
         {group === 'students' && (
-          <button onClick={openAddStudent} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold shadow-lg shadow-[#F3A522]/20 hover:shadow-xl transition">
+          <button onClick={openAddStudent} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold shadow-lg shadow-[#0142b2]/20 hover:shadow-xl transition">
             <FiUserPlus size={16} /> Add Student
           </button>
         )}
@@ -227,8 +227,8 @@ export default function UsersManager({ group = 'students' }) {
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map(s => (
-          <div key={s.label} className="bg-white rounded-xl border border-slate-200/60 p-4 shadow-sm flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl ${s.b} flex items-center justify-center`}><s.icon className={s.c} size={18} /></div>
+          <div key={s.label} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-md ${s.b} flex items-center justify-center`}><s.icon className={s.c} size={18} /></div>
             <div><p className="text-2xl font-bold text-slate-900">{loading ? '—' : s.value}</p><p className="text-[11px] text-slate-400">{s.label}</p></div>
           </div>
         ))}
@@ -239,9 +239,9 @@ export default function UsersManager({ group = 'students' }) {
         <div className="relative flex-1">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={15} />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name, email or ID..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm bg-white shadow-sm focus:outline-none focus:border-[#F3A522] focus:ring-2 focus:ring-[#F3A522]/15" />
+            className="w-full pl-9 pr-4 py-2.5 rounded-md border border-slate-200 text-sm bg-white shadow-sm focus:outline-none focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15" />
         </div>
-        <select value={filterRole} onChange={e => setFilterRole(e.target.value)} className="px-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-600 bg-white shadow-sm focus:outline-none focus:border-[#F3A522]">
+        <select value={filterRole} onChange={e => setFilterRole(e.target.value)} className="px-4 py-2.5 rounded-md border border-slate-200 text-sm text-slate-600 bg-white shadow-sm focus:outline-none focus:border-[#0142b2]">
           <option value="all">All roles</option>
           {cfg.roles.map(r => <option key={r} value={r}>{label(r)}</option>)}
         </select>
@@ -249,9 +249,9 @@ export default function UsersManager({ group = 'students' }) {
 
       {/* Table */}
       {loading ? (
-        <div className="flex justify-center py-20"><FiLoader className="animate-spin text-[#F3A522]" size={30} /></div>
+        <div className="flex justify-center py-20"><FiLoader className="animate-spin text-[#0142b2]" size={30} /></div>
       ) : (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+        <div className="bg-white rounded-md border border-slate-200 overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -268,7 +268,7 @@ export default function UsersManager({ group = 'students' }) {
                     <tr key={u._id} className="hover:bg-slate-50/50 transition">
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center text-white font-bold text-sm shrink-0">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0142b2] to-[#01368f] flex items-center justify-center text-white font-bold text-sm shrink-0">
                             {(u.firstName?.[0] || 'U')}{u.lastName?.[0] || ''}
                           </div>
                           <div className="min-w-0">
@@ -278,7 +278,7 @@ export default function UsersManager({ group = 'students' }) {
                         </div>
                       </td>
                       <td className="px-5 py-3">
-                        <p className="flex items-center gap-1.5 text-xs text-slate-600"><FiMail size={12} className="text-[#c9871a]" /><span className="truncate max-w-[180px]">{u.email}</span></p>
+                        <p className="flex items-center gap-1.5 text-xs text-slate-600"><FiMail size={12} className="text-[#0142b2]" /><span className="truncate max-w-[180px]">{u.email}</span></p>
                         <p className="flex items-center gap-1.5 text-xs text-slate-400 mt-0.5"><FiPhone size={12} />{u.phoneNumber || '—'}</p>
                       </td>
                       <td className="px-5 py-3">
@@ -291,11 +291,11 @@ export default function UsersManager({ group = 'students' }) {
                       <td className="px-5 py-3 text-center">
                         <div className="relative inline-block">
                           <button onClick={() => setRoleDropdown(roleDropdown === u._id ? null : u._id)} disabled={busyRole === u._id || u.role === 'superAdmin'}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed border-slate-200 text-slate-500 hover:border-[#F3A522] hover:text-[#c9871a] text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed">
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-dashed border-slate-200 text-slate-500 hover:border-[#0142b2] hover:text-[#0142b2] text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed">
                             {busyRole === u._id ? <FiLoader className="animate-spin" size={13} /> : <>Role <FiChevronDown size={12} /></>}
                           </button>
                           {roleDropdown === u._id && (
-                            <div className="absolute right-0 top-full mt-1 z-30 w-44 bg-white rounded-xl shadow-2xl border border-slate-100 py-1.5">
+                            <div className="absolute right-0 top-full mt-1 z-30 w-44 bg-white rounded-md shadow-2xl border border-slate-100 py-1.5">
                               {roleOpts.map(r => {
                                 const disabledAdmin = (r === 'admin') && !isSuperAdmin;
                                 return (
@@ -315,11 +315,11 @@ export default function UsersManager({ group = 'students' }) {
                       <td className="px-5 py-3 text-center">
                         <div className="relative inline-block">
                           <button onClick={() => setStatusDropdown(statusDropdown === u._id ? null : u._id)} disabled={busyStatus === u._id || u.role === 'superAdmin'}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed border-slate-200 text-slate-500 hover:border-amber-500 hover:text-amber-600 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed">
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-dashed border-slate-200 text-slate-500 hover:border-amber-500 hover:text-amber-600 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed">
                             {busyStatus === u._id ? <FiLoader className="animate-spin" size={13} /> : <>Status <FiChevronDown size={12} /></>}
                           </button>
                           {statusDropdown === u._id && (
-                            <div className="absolute right-0 top-full mt-1 z-30 w-40 bg-white rounded-xl shadow-2xl border border-slate-100 py-1.5">
+                            <div className="absolute right-0 top-full mt-1 z-30 w-40 bg-white rounded-md shadow-2xl border border-slate-100 py-1.5">
                               {statusOpts.map(st => (
                                 <button key={st} disabled={u.status === st} onClick={() => patch(u, { status: st }, 'status')}
                                   className={`w-full px-3 py-2 text-left text-sm capitalize ${u.status === st ? 'text-slate-300 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-50'}`}>{st}</button>
@@ -332,9 +332,9 @@ export default function UsersManager({ group = 'students' }) {
                         <div className="inline-flex items-center gap-1">
                           <button onClick={() => openEdit(u)} disabled={u.role === 'superAdmin' && !isSuperAdmin}
                             title={u.role === 'superAdmin' && !isSuperAdmin ? 'Super Admin protected' : 'Edit details / reset password'}
-                            className="p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-[#c9871a] transition disabled:opacity-30 disabled:cursor-not-allowed"><FiEdit2 size={15} /></button>
+                            className="p-2 rounded-md text-slate-500 hover:bg-slate-100 hover:text-[#0142b2] transition disabled:opacity-30 disabled:cursor-not-allowed"><FiEdit2 size={15} /></button>
                           <button onClick={() => del(u)} disabled={u.role === 'superAdmin'} title={u.role === 'superAdmin' ? 'Super Admin protected' : 'Delete'}
-                            className="p-2 rounded-lg text-rose-500 hover:bg-rose-50 transition disabled:opacity-30 disabled:cursor-not-allowed"><FiTrash2 size={15} /></button>
+                            className="p-2 rounded-md text-rose-500 hover:bg-rose-50 transition disabled:opacity-30 disabled:cursor-not-allowed"><FiTrash2 size={15} /></button>
                         </div>
                       </td>
                     </tr>
@@ -347,8 +347,8 @@ export default function UsersManager({ group = 'students' }) {
             <div className="text-center py-16">
               <div className="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3"><FiUsers className="text-xl text-slate-300" /></div>
               <p className="text-slate-600 font-semibold">No {group === 'staff' ? 'staff' : 'users'} found</p>
-              {group === 'staff' && <button onClick={openAdd} className="mt-3 text-sm font-bold text-[#c9871a] hover:underline">+ Add your first staff member</button>}
-              {group === 'students' && <button onClick={openAddStudent} className="mt-3 text-sm font-bold text-[#c9871a] hover:underline">+ Add your first student</button>}
+              {group === 'staff' && <button onClick={openAdd} className="mt-3 text-sm font-bold text-[#0142b2] hover:underline">+ Add your first staff member</button>}
+              {group === 'students' && <button onClick={openAddStudent} className="mt-3 text-sm font-bold text-[#0142b2] hover:underline">+ Add your first student</button>}
             </div>
           )}
           <div className="px-5 py-3 border-t border-slate-100 text-xs text-slate-500">Showing {list.length} of {users.filter(inGroup).length}</div>
@@ -360,8 +360,8 @@ export default function UsersManager({ group = 'students' }) {
       {/* ── Add Staff Modal ── */}
       {addOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => !saving && setAddOpen(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white">
+          <div className="bg-white rounded-md shadow-2xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white">
               <h3 className="font-bold text-lg outfit flex items-center gap-2"><FiUserPlus /> Add Staff</h3>
               <button onClick={() => setAddOpen(false)}><FiX size={20} /></button>
             </div>
@@ -376,7 +376,7 @@ export default function UsersManager({ group = 'students' }) {
                     { r: 'mentor', label: 'Mentor' },
                   ].map(o => (
                     <button key={o.r} type="button" disabled={o.only} onClick={() => setStaffRole(o.r)}
-                      className={`px-2 py-2.5 rounded-xl border-2 text-xs font-bold transition relative ${staffRole === o.r ? 'border-[#F3A522] bg-[#FEF6E7] text-[#a5680f]' : o.only ? 'border-slate-100 text-slate-300 cursor-not-allowed' : 'border-slate-200 text-slate-500 hover:border-slate-300'}`}>
+                      className={`px-2 py-2.5 rounded-md border-2 text-xs font-bold transition relative ${staffRole === o.r ? 'border-[#0142b2] bg-[#eef3fc] text-[#01368f]' : o.only ? 'border-slate-100 text-slate-300 cursor-not-allowed' : 'border-slate-200 text-slate-500 hover:border-slate-300'}`}>
                       {o.label}{o.only && <FiKey size={9} className="absolute top-1 right-1" />}
                     </button>
                   ))}
@@ -385,24 +385,24 @@ export default function UsersManager({ group = 'students' }) {
               </div>
 
               {staffRole === 'mentor' ? (
-                <div className="rounded-xl bg-[#FEF6E7]/60 border border-[#F0DFB4] p-4 text-sm text-[#7a5210]">
+                <div className="rounded-md bg-[#eef3fc]/60 border border-[#c9d8f5] p-4 text-sm text-[#7a5210]">
                   Mentors need a full public profile (photo, bio, expertise). Continue to the <b>Mentor form</b> — the mentor will be created <b>unpublished</b> (not shown on the website until you publish).
                 </div>
               ) : (
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
-                    <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">First Name *</label><input value={staffForm.firstName} onChange={e => setStaffForm({ ...staffForm, firstName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
-                    <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Last Name</label><input value={staffForm.lastName} onChange={e => setStaffForm({ ...staffForm, lastName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
+                    <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">First Name *</label><input value={staffForm.firstName} onChange={e => setStaffForm({ ...staffForm, firstName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
+                    <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Last Name</label><input value={staffForm.lastName} onChange={e => setStaffForm({ ...staffForm, lastName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
                   </div>
-                  <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Email *</label><input type="email" value={staffForm.email} onChange={e => setStaffForm({ ...staffForm, email: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" placeholder="staff@bravetalkbd.com" /></div>
-                  <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Phone</label><input value={staffForm.phoneNumber} onChange={e => setStaffForm({ ...staffForm, phoneNumber: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
-                  <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Login Password *</label><input value={staffForm.password} onChange={e => setStaffForm({ ...staffForm, password: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522] font-mono" placeholder="min 6 chars" /></div>
+                  <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Email *</label><input type="email" value={staffForm.email} onChange={e => setStaffForm({ ...staffForm, email: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" placeholder="staff@bravetalkbd.com" /></div>
+                  <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Phone</label><input value={staffForm.phoneNumber} onChange={e => setStaffForm({ ...staffForm, phoneNumber: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
+                  <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Login Password *</label><input value={staffForm.password} onChange={e => setStaffForm({ ...staffForm, password: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2] font-mono" placeholder="min 6 chars" /></div>
                 </div>
               )}
             </div>
             <div className="flex justify-end gap-2 px-6 py-4 border-t border-slate-100">
-              <button onClick={() => setAddOpen(false)} className="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
-              <button onClick={submitStaff} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#F3A522] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
+              <button onClick={() => setAddOpen(false)} className="px-4 py-2.5 rounded-md border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
+              <button onClick={submitStaff} disabled={saving} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#0142b2] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
                 {saving ? <FiLoader className="animate-spin" size={15} /> : staffRole === 'mentor' ? <>Continue <FiArrowRight size={14} /></> : <><FiPlus size={15} /> Create</>}
               </button>
             </div>
@@ -413,23 +413,23 @@ export default function UsersManager({ group = 'students' }) {
       {/* ── Add Student Modal ── */}
       {studentOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => !savingStudent && setStudentOpen(false)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white">
+          <div className="bg-white rounded-md shadow-2xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white">
               <h3 className="font-bold text-lg outfit flex items-center gap-2"><FiUserPlus /> Add Student</h3>
               <button onClick={() => setStudentOpen(false)}><FiX size={20} /></button>
             </div>
             <div className="p-6 space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">First Name *</label><input value={studentForm.firstName} onChange={e => setStudentForm({ ...studentForm, firstName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
-                <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Last Name</label><input value={studentForm.lastName} onChange={e => setStudentForm({ ...studentForm, lastName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
+                <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">First Name *</label><input value={studentForm.firstName} onChange={e => setStudentForm({ ...studentForm, firstName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
+                <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Last Name</label><input value={studentForm.lastName} onChange={e => setStudentForm({ ...studentForm, lastName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
               </div>
-              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Email *</label><input type="email" value={studentForm.email} onChange={e => setStudentForm({ ...studentForm, email: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" placeholder="student@email.com" /></div>
-              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Phone</label><input value={studentForm.phoneNumber} onChange={e => setStudentForm({ ...studentForm, phoneNumber: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
-              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Login Password *</label><input value={studentForm.password} onChange={e => setStudentForm({ ...studentForm, password: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522] font-mono" placeholder="min 6 chars" /></div>
+              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Email *</label><input type="email" value={studentForm.email} onChange={e => setStudentForm({ ...studentForm, email: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" placeholder="student@email.com" /></div>
+              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Phone</label><input value={studentForm.phoneNumber} onChange={e => setStudentForm({ ...studentForm, phoneNumber: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
+              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Login Password *</label><input value={studentForm.password} onChange={e => setStudentForm({ ...studentForm, password: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2] font-mono" placeholder="min 6 chars" /></div>
             </div>
             <div className="flex justify-end gap-2 px-6 py-4 border-t border-slate-100">
-              <button onClick={() => setStudentOpen(false)} className="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
-              <button onClick={submitStudent} disabled={savingStudent} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#F3A522] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
+              <button onClick={() => setStudentOpen(false)} className="px-4 py-2.5 rounded-md border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
+              <button onClick={submitStudent} disabled={savingStudent} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#0142b2] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
                 {savingStudent ? <FiLoader className="animate-spin" size={15} /> : <><FiPlus size={15} /> Create</>}
               </button>
             </div>
@@ -440,21 +440,21 @@ export default function UsersManager({ group = 'students' }) {
       {/* ── Credentials Modal ── */}
       {createdCreds && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
-            <div className="px-6 py-4 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white">
+          <div className="bg-white rounded-md w-full max-w-sm overflow-hidden shadow-2xl">
+            <div className="px-6 py-4 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white">
               <h3 className="font-bold outfit flex items-center gap-2"><FiCheck /> {label(createdCreds.role)} account created</h3>
               <p className="text-white/80 text-xs mt-0.5">Share these login details</p>
             </div>
             <div className="p-6 space-y-3">
-              <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 space-y-2.5">
+              <div className="rounded-md border border-slate-100 bg-slate-50 p-3 space-y-2.5">
                 <div><p className="text-[10px] font-bold text-slate-400 uppercase">Email</p><p className="font-mono text-sm text-slate-800 break-all">{createdCreds.email}</p></div>
                 <div className="border-t border-slate-100 pt-2"><p className="text-[10px] font-bold text-slate-400 uppercase">Password</p><p className="font-mono text-sm text-slate-800">{createdCreds.password}</p></div>
               </div>
-              <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-lg p-2.5">⚠ The password won&apos;t be shown again — copy it now.</p>
+              <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-md p-2.5">⚠ The password won&apos;t be shown again — copy it now.</p>
               <div className="flex gap-2">
                 <button onClick={() => { try { navigator.clipboard?.writeText(`Email: ${createdCreds.email}\nPassword: ${createdCreds.password}`); showToast('success', 'Copied'); } catch { } }}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50"><FiCopy size={14} /> Copy</button>
-                <button onClick={() => setCreatedCreds(null)} className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white text-sm font-bold">Done</button>
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-md border border-slate-200 text-sm font-semibold text-slate-600 hover:bg-slate-50"><FiCopy size={14} /> Copy</button>
+                <button onClick={() => setCreatedCreds(null)} className="flex-1 py-2.5 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-sm font-bold">Done</button>
               </div>
             </div>
           </div>
@@ -464,32 +464,32 @@ export default function UsersManager({ group = 'students' }) {
       {/* ── Edit User Modal (details + password reset) ── */}
       {editUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => !savingEdit && setEditUser(null)}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#F3A522] to-[#d88f13] text-white">
+          <div className="bg-white rounded-md shadow-2xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white">
               <h3 className="font-bold text-lg outfit flex items-center gap-2"><FiEdit2 /> Edit {label(editUser.role)}</h3>
               <button onClick={() => setEditUser(null)}><FiX size={20} /></button>
             </div>
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-3">
-                <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">First Name *</label><input value={editForm.firstName} onChange={e => setEditForm({ ...editForm, firstName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
-                <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Last Name</label><input value={editForm.lastName} onChange={e => setEditForm({ ...editForm, lastName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
+                <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">First Name *</label><input value={editForm.firstName} onChange={e => setEditForm({ ...editForm, firstName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
+                <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Last Name</label><input value={editForm.lastName} onChange={e => setEditForm({ ...editForm, lastName: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
               </div>
-              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Email *</label><input type="email" value={editForm.email} onChange={e => setEditForm({ ...editForm, email: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
-              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Phone</label><input value={editForm.phoneNumber} onChange={e => setEditForm({ ...editForm, phoneNumber: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522]" /></div>
+              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Email *</label><input type="email" value={editForm.email} onChange={e => setEditForm({ ...editForm, email: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
+              <div><label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Phone</label><input value={editForm.phoneNumber} onChange={e => setEditForm({ ...editForm, phoneNumber: e.target.value })} className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2]" /></div>
 
               {/* password reset */}
-              <div className="rounded-xl border border-[#F0DFB4] bg-[#FEF6E7]/50 p-3">
-                <label className="text-[10px] font-bold text-[#a5680f] uppercase flex items-center gap-1.5 mb-1.5"><FiLock size={11} /> Reset Password <span className="text-slate-400 font-medium normal-case">(ফাঁকা রাখলে অপরিবর্তিত)</span></label>
+              <div className="rounded-md border border-[#c9d8f5] bg-[#eef3fc]/50 p-3">
+                <label className="text-[10px] font-bold text-[#01368f] uppercase flex items-center gap-1.5 mb-1.5"><FiLock size={11} /> Reset Password <span className="text-slate-400 font-medium normal-case">(ফাঁকা রাখলে অপরিবর্তিত)</span></label>
                 <div className="relative">
                   <input type={showEditPw ? 'text' : 'password'} value={editForm.newPassword} onChange={e => setEditForm({ ...editForm, newPassword: e.target.value })} placeholder="নতুন পাসওয়ার্ড (min ৬)" autoComplete="new-password"
-                    className="w-full px-3 py-2 pr-10 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-[#F3A522] font-mono bg-white" />
+                    className="w-full px-3 py-2 pr-10 text-sm border border-slate-200 rounded-md focus:outline-none focus:border-[#0142b2] font-mono bg-white" />
                   <button type="button" onClick={() => setShowEditPw(v => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">{showEditPw ? <FiEyeOff size={15} /> : <FiEye size={15} />}</button>
                 </div>
               </div>
             </div>
             <div className="flex justify-end gap-2 px-6 py-4 border-t border-slate-100">
-              <button onClick={() => setEditUser(null)} className="px-4 py-2.5 rounded-lg border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
-              <button onClick={submitEdit} disabled={savingEdit} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#F3A522] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
+              <button onClick={() => setEditUser(null)} className="px-4 py-2.5 rounded-md border border-slate-200 text-slate-600 text-sm font-semibold hover:bg-slate-50">Cancel</button>
+              <button onClick={submitEdit} disabled={savingEdit} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#0142b2] text-white text-sm font-bold hover:bg-[#e0941c] disabled:opacity-50">
                 {savingEdit ? <FiLoader className="animate-spin" size={15} /> : <><FiCheck size={15} /> Save</>}
               </button>
             </div>

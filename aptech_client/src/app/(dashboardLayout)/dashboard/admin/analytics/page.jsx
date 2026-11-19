@@ -15,7 +15,7 @@ const hdrs = () => ({ Authorization: `Bearer ${getToken()}` });
 // Colors — match the admin dashboard convention (Course = indigo, Books = emerald)
 const COURSE_C = '#6366f1';
 const BOOKS_C = '#10b981';
-const METHOD_COLORS = ['#6366f1', '#10b981', '#F3A522', '#ec4899', '#3b82f6', '#8b5cf6', '#f97316', '#14b8a6'];
+const METHOD_COLORS = ['#6366f1', '#10b981', '#0142b2', '#ec4899', '#3b82f6', '#8b5cf6', '#f97316', '#14b8a6'];
 
 const TABS = [
   { key: 'overall', label: 'Overall', icon: FiGrid },
@@ -51,14 +51,14 @@ function getRangeDates(key) {
 
 const fmtBDT = (n) => '৳' + Number(n || 0).toLocaleString();
 const prettyMethod = (m) => (m || 'other').replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-const TYPE_COLORS = { Online: '#6366f1', Offline: '#F3A522', Recorded: '#10b981' };
+const TYPE_COLORS = { Online: '#6366f1', Offline: '#0142b2', Recorded: '#10b981' };
 
 // ─── Reusable presentational cards (used by Overall & Course tabs) ───
 function DonutCard({ title, subtitle, slices, loading }) {
   const total = slices.reduce((s, x) => s + x.amount, 0);
   const data = slices.filter((s) => s.amount > 0);
   return (
-    <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-5 flex flex-col">
+    <div className="bg-white rounded-md border border-slate-200/60 shadow-sm p-5 flex flex-col">
       <h2 className="text-base font-semibold text-slate-800 outfit-semibold">{title}</h2>
       {subtitle && <p className="text-xs text-slate-400 mb-2">{subtitle}</p>}
       <div className="flex-1 flex items-center justify-center py-1">
@@ -81,7 +81,7 @@ function DonutCard({ title, subtitle, slices, loading }) {
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <span className="text-lg font-bold text-slate-800 outfit">{fmtBDT(total)}</span>
-                  <span className="text-[11px] text-[#c9871a] font-medium">Total</span>
+                  <span className="text-[11px] text-[#0142b2] font-medium">Total</span>
                 </div>
               </div>
             )}
@@ -104,8 +104,8 @@ function DonutCard({ title, subtitle, slices, loading }) {
 function HBarCard({ title, icon: Icon, items, loading }) {
   const total = items.reduce((s, x) => s + x.amount, 0);
   return (
-    <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-5">
-      <h2 className="text-base font-semibold text-slate-800 outfit-semibold mb-3 flex items-center gap-2">{Icon && <Icon size={15} className="text-[#c9871a]" />} {title}</h2>
+    <div className="bg-white rounded-md border border-slate-200/60 shadow-sm p-5">
+      <h2 className="text-base font-semibold text-slate-800 outfit-semibold mb-3 flex items-center gap-2">{Icon && <Icon size={15} className="text-[#0142b2]" />} {title}</h2>
       {loading ? <div className="space-y-3">{[1, 2, 3].map((i) => <div key={i} className="h-6 bg-slate-100 rounded animate-pulse" />)}</div>
         : items.length === 0 ? <p className="text-sm text-slate-400 py-6 text-center">No data</p>
           : (
@@ -140,7 +140,7 @@ function MonthBarsCard({ title, subtitle, months, series, loading }) {
   const barW = Math.min(slot * 0.5, 44);
   const grid = Array.from({ length: 5 }, (_, i) => ({ y: TOP + (i / 4) * plotH, val: Math.round(max * ((4 - i) / 4)) }));
   return (
-    <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-5 h-full">
+    <div className="bg-white rounded-md border border-slate-200/60 shadow-sm p-5 h-full">
       <div className="flex items-center justify-between mb-2">
         <div>
           <h2 className="text-base font-semibold text-slate-800 outfit-semibold">{title}</h2>
@@ -150,7 +150,7 @@ function MonthBarsCard({ title, subtitle, months, series, loading }) {
           {series.map((s) => <span key={s.key} className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full" style={{ background: s.color }} /> {s.label}</span>)}
         </div>
       </div>
-      {loading ? <div className="h-[230px] bg-slate-50 rounded-lg animate-pulse" />
+      {loading ? <div className="h-[230px] bg-slate-50 rounded-md animate-pulse" />
         : months.length === 0 ? <div className="h-[230px] flex items-center justify-center text-sm text-slate-400">No income in this period</div>
           : (
             <svg viewBox={`0 0 ${BW} ${BH}`} className="w-full" preserveAspectRatio="xMidYMid meet">
@@ -275,11 +275,11 @@ export default function AdminAnalyticsPage() {
   });
 
   const kpis = [
-    { label: 'TOTAL INCOME', value: fmtBDT(totalCombined), icon: FiDollarSign, bg: 'from-[#F3A522] to-[#d88f13]', note: 'Course + books' },
-    { label: 'BOOK INCOME', value: fmtBDT(totalBooks), icon: FiBookOpen, bg: 'from-emerald-400 to-emerald-600', note: `${books?.transactionCount || 0} book orders` },
-    { label: 'COURSE INCOME', value: fmtBDT(totalCourse), icon: FiBook, bg: 'from-indigo-400 to-indigo-600', note: 'course purchases' },
-    { label: 'COURSE ORDERS', value: course?.transactionCount || 0, icon: FiLayers, bg: 'from-violet-400 to-violet-600', note: 'paid enrollments' },
-    { label: 'TRANSACTIONS', value: totalTx, icon: FiList, bg: 'from-sky-400 to-sky-600', note: 'course + books' },
+    { label: 'TOTAL INCOME', value: fmtBDT(totalCombined), icon: FiDollarSign, bg: 'from-[#0142b2] to-[#01368f]', note: 'Course + books' },
+    { label: 'BOOK INCOME', value: fmtBDT(totalBooks), icon: FiBookOpen, bg: 'from-[#027a1e] to-[#027a1e]', note: `${books?.transactionCount || 0} book orders` },
+    { label: 'COURSE INCOME', value: fmtBDT(totalCourse), icon: FiBook, bg: 'from-[#0142b2] to-[#0142b2]', note: 'course purchases' },
+    { label: 'COURSE ORDERS', value: course?.transactionCount || 0, icon: FiLayers, bg: 'from-[#0b1b4a] to-[#0b1b4a]', note: 'paid enrollments' },
+    { label: 'TRANSACTIONS', value: totalTx, icon: FiList, bg: 'from-[#0142b2] to-[#0142b2]', note: 'course + books' },
   ];
 
   return (
@@ -291,9 +291,9 @@ export default function AdminAnalyticsPage() {
       </div>
 
       {/* Header */}
-      <div className="no-print flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white rounded-xl border border-slate-200/60 px-4 py-3 shadow-sm">
+      <div className="no-print flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white rounded-md border border-slate-200/60 px-4 py-3 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F3A522] to-[#d88f13] flex items-center justify-center text-white shadow-md shadow-[#F3A522]/20">
+          <div className="w-10 h-10 rounded-md bg-gradient-to-br from-[#0142b2] to-[#01368f] flex items-center justify-center text-white shadow-md shadow-[#0142b2]/20">
             <FiBarChart2 size={18} />
           </div>
           <div>
@@ -302,24 +302,24 @@ export default function AdminAnalyticsPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={load} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition">
+          <button onClick={load} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 transition">
             <FiRefreshCw size={12} /> Reload
           </button>
-          <button onClick={downloadCSV} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition">
+          <button onClick={downloadCSV} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-md hover:bg-slate-100 transition">
             <FiDownload size={12} /> CSV
           </button>
-          <button onClick={downloadPDF} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-[#F3A522] to-[#d88f13] rounded-lg hover:shadow-md hover:shadow-[#F3A522]/30 transition shadow-sm">
+          <button onClick={downloadPDF} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-[#0142b2] to-[#01368f] rounded-md hover:shadow-md hover:shadow-[#0142b2]/30 transition shadow-sm">
             <FiPrinter size={12} /> PDF
           </button>
         </div>
       </div>
 
       {/* Filter bar */}
-      <div className="no-print bg-white rounded-xl border border-slate-200/60 p-3 shadow-sm flex flex-col lg:flex-row lg:items-center gap-3">
+      <div className="no-print bg-white rounded-md border border-slate-200/60 p-3 shadow-sm flex flex-col lg:flex-row lg:items-center gap-3">
         <div className="flex flex-wrap items-center gap-1.5">
           {PRESETS.map((p) => (
             <button key={p.key} onClick={() => applyPreset(p.key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${preset === p.key ? 'bg-[#F3A522] text-white border-[#F3A522]' : 'bg-white text-slate-500 border-slate-200 hover:border-[#F0DFB4] hover:text-[#c9871a]'}`}>
+              className={`px-3 py-1.5 rounded-md text-xs font-medium border transition ${preset === p.key ? 'bg-[#0142b2] text-white border-[#0142b2]' : 'bg-white text-slate-500 border-slate-200 hover:border-[#c9d8f5] hover:text-[#0142b2]'}`}>
               {p.label}
             </button>
           ))}
@@ -327,11 +327,11 @@ export default function AdminAnalyticsPage() {
         <div className="flex items-center gap-2 lg:ml-auto">
           <FiCalendar size={14} className="text-slate-400" />
           <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}
-            className="px-2 py-1.5 text-xs border border-slate-200 rounded-lg text-slate-600 focus:outline-none focus:ring-2 focus:ring-[#F3A522]/15" />
+            className="px-2 py-1.5 text-xs border border-slate-200 rounded-md text-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0142b2]/15" />
           <span className="text-slate-400 text-xs">to</span>
           <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}
-            className="px-2 py-1.5 text-xs border border-slate-200 rounded-lg text-slate-600 focus:outline-none focus:ring-2 focus:ring-[#F3A522]/15" />
-          <button onClick={applyCustom} className="px-3 py-1.5 text-xs font-medium text-white bg-slate-700 rounded-lg hover:bg-slate-800 transition">Apply</button>
+            className="px-2 py-1.5 text-xs border border-slate-200 rounded-md text-slate-600 focus:outline-none focus:ring-2 focus:ring-[#0142b2]/15" />
+          <button onClick={applyCustom} className="px-3 py-1.5 text-xs font-medium text-white bg-slate-700 rounded-md hover:bg-slate-800 transition">Apply</button>
         </div>
       </div>
 
@@ -342,7 +342,7 @@ export default function AdminAnalyticsPage() {
           const active = tab === t.key;
           return (
             <button key={t.key} onClick={() => setTab(t.key)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border transition ${active ? 'bg-[#F3A522] text-white border-[#F3A522] shadow-sm shadow-[#F3A522]/25' : 'bg-white text-slate-500 border-slate-200 hover:text-[#c9871a] hover:border-[#F0DFB4]'}`}>
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium border transition ${active ? 'bg-[#0142b2] text-white border-[#0142b2] shadow-sm shadow-[#0142b2]/25' : 'bg-white text-slate-500 border-slate-200 hover:text-[#0142b2] hover:border-[#c9d8f5]'}`}>
               <Icon size={15} /> {t.label}
             </button>
           );
@@ -357,7 +357,7 @@ export default function AdminAnalyticsPage() {
             {kpis.map((k, idx) => {
               const Icon = k.icon;
               return (
-                <div key={k.label} className={`bg-white rounded-xl border border-slate-200/60 px-4 py-3.5 shadow-sm ${idx === 0 ? 'col-span-2 sm:col-span-1' : ''}`}>
+                <div key={k.label} className={`bg-white rounded-md border border-slate-200/60 px-4 py-3.5 shadow-sm ${idx === 0 ? 'col-span-2 sm:col-span-1' : ''}`}>
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase truncate">{k.label}</p>
@@ -366,7 +366,7 @@ export default function AdminAnalyticsPage() {
                       </p>
                       <p className="text-[11px] text-slate-400 mt-1 truncate">{k.note}</p>
                     </div>
-                    <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${k.bg} flex items-center justify-center text-white shadow-md shrink-0`}>
+                    <div className={`w-9 h-9 rounded-md bg-gradient-to-br ${k.bg} flex items-center justify-center text-white shadow-md shrink-0`}>
                       <Icon size={17} />
                     </div>
                   </div>
@@ -378,7 +378,7 @@ export default function AdminAnalyticsPage() {
           {/* Monthly income chart + Course type donut */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Monthly income (bars) */}
-            <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200/60 shadow-sm p-5">
+            <div className="lg:col-span-2 bg-white rounded-md border border-slate-200/60 shadow-sm p-5">
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <h2 className="text-base font-semibold text-slate-800 outfit-semibold">Income by Month</h2>
@@ -390,7 +390,7 @@ export default function AdminAnalyticsPage() {
                 </div>
               </div>
               {loading ? (
-                <div className="h-[230px] bg-slate-50 rounded-lg animate-pulse" />
+                <div className="h-[230px] bg-slate-50 rounded-md animate-pulse" />
               ) : months.length === 0 ? (
                 <div className="h-[230px] flex items-center justify-center text-sm text-slate-400">No income in this period</div>
               ) : (
@@ -431,8 +431,8 @@ export default function AdminAnalyticsPage() {
           {/* Method breakdown + Month table */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Payment methods */}
-            <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm p-5">
-              <h2 className="text-base font-semibold text-slate-800 outfit-semibold mb-3 flex items-center gap-2"><FiPieChart size={15} className="text-[#c9871a]" /> Payment Methods</h2>
+            <div className="bg-white rounded-md border border-slate-200/60 shadow-sm p-5">
+              <h2 className="text-base font-semibold text-slate-800 outfit-semibold mb-3 flex items-center gap-2"><FiPieChart size={15} className="text-[#0142b2]" /> Payment Methods</h2>
               {loading ? (
                 <div className="space-y-3">{[1, 2, 3].map((i) => <div key={i} className="h-6 bg-slate-100 rounded animate-pulse" />)}</div>
               ) : methodBreakdown.arr.length === 0 ? (
@@ -458,9 +458,9 @@ export default function AdminAnalyticsPage() {
             </div>
 
             {/* Month table */}
-            <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+            <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-slate-100">
-                <h2 className="text-base font-semibold text-slate-800 outfit-semibold flex items-center gap-2"><FiCalendar size={15} className="text-[#c9871a]" /> Month-wise Income</h2>
+                <h2 className="text-base font-semibold text-slate-800 outfit-semibold flex items-center gap-2"><FiCalendar size={15} className="text-[#0142b2]" /> Month-wise Income</h2>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -494,9 +494,9 @@ export default function AdminAnalyticsPage() {
           </div>
 
           {/* Transactions table */}
-          <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
             <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-              <h2 className="text-base font-semibold text-slate-800 outfit-semibold flex items-center gap-2"><FiList size={15} className="text-[#c9871a]" /> Transactions</h2>
+              <h2 className="text-base font-semibold text-slate-800 outfit-semibold flex items-center gap-2"><FiList size={15} className="text-[#0142b2]" /> Transactions</h2>
               <span className="text-xs text-slate-400">{allTx.length} total{allTx.length > 40 ? ' · showing 40, download CSV for all' : ''}</span>
             </div>
             <div className="overflow-x-auto">
@@ -521,7 +521,7 @@ export default function AdminAnalyticsPage() {
                       <tr key={i} className="border-b border-slate-50 hover:bg-slate-50/50">
                         <td className="px-5 py-2.5 text-slate-500 whitespace-nowrap">{new Date(t.date).toLocaleDateString()}</td>
                         <td className="px-3 py-2.5">
-                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${t.source === 'Course' ? 'text-indigo-600 bg-indigo-50' : t.source === 'Books' ? 'text-emerald-600 bg-emerald-50' : 'text-[#a5680f] bg-[#FEF6E7]'}`}>
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${t.source === 'Course' ? 'text-indigo-600 bg-indigo-50' : t.source === 'Books' ? 'text-emerald-600 bg-emerald-50' : 'text-[#01368f] bg-[#eef3fc]'}`}>
                             {t.source}{t.kind ? ` · ${t.kind}` : ''}
                           </span>
                         </td>
@@ -545,21 +545,21 @@ export default function AdminAnalyticsPage() {
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { label: 'COURSE INCOME', value: fmtBDT(totalCourse), icon: FiBook, bg: 'from-indigo-400 to-indigo-600', note: `${course?.transactionCount || 0} payments` },
-              { label: 'AVG ORDER VALUE', value: fmtBDT(course?.transactionCount ? Math.round(totalCourse / course.transactionCount) : 0), icon: FiDollarSign, bg: 'from-emerald-400 to-emerald-600', note: 'per course purchase' },
-              { label: 'COURSES SOLD', value: new Set((course?.transactions || []).map((t) => t.course)).size, icon: FiLayers, bg: 'from-violet-400 to-violet-600', note: 'distinct courses' },
-              { label: 'PAYMENTS', value: course?.transactionCount || 0, icon: FiList, bg: 'from-[#F3A522] to-[#d88f13]', note: 'in this period' },
+              { label: 'COURSE INCOME', value: fmtBDT(totalCourse), icon: FiBook, bg: 'from-[#0142b2] to-[#0142b2]', note: `${course?.transactionCount || 0} payments` },
+              { label: 'AVG ORDER VALUE', value: fmtBDT(course?.transactionCount ? Math.round(totalCourse / course.transactionCount) : 0), icon: FiDollarSign, bg: 'from-[#027a1e] to-[#027a1e]', note: 'per course purchase' },
+              { label: 'COURSES SOLD', value: new Set((course?.transactions || []).map((t) => t.course)).size, icon: FiLayers, bg: 'from-[#0b1b4a] to-[#0b1b4a]', note: 'distinct courses' },
+              { label: 'PAYMENTS', value: course?.transactionCount || 0, icon: FiList, bg: 'from-[#0142b2] to-[#01368f]', note: 'in this period' },
             ].map((k) => {
               const Icon = k.icon;
               return (
-                <div key={k.label} className="bg-white rounded-xl border border-slate-200/60 px-4 py-3.5 shadow-sm">
+                <div key={k.label} className="bg-white rounded-md border border-slate-200/60 px-4 py-3.5 shadow-sm">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase truncate">{k.label}</p>
                       <p className="text-xl font-bold text-slate-900 mt-1 outfit leading-none">{loading ? <span className="inline-block w-16 h-6 bg-slate-100 animate-pulse rounded-md" /> : k.value}</p>
                       <p className="text-[11px] text-slate-400 mt-1 truncate">{k.note}</p>
                     </div>
-                    <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${k.bg} flex items-center justify-center text-white shadow-md shrink-0`}><Icon size={17} /></div>
+                    <div className={`w-9 h-9 rounded-md bg-gradient-to-br ${k.bg} flex items-center justify-center text-white shadow-md shrink-0`}><Icon size={17} /></div>
                   </div>
                 </div>
               );
@@ -585,9 +585,9 @@ export default function AdminAnalyticsPage() {
           <HBarCard title="Top Courses by Income" icon={FiTrendingUp} loading={loading} items={topCourses} />
 
           {/* Course transactions table */}
-          <div className="bg-white rounded-xl border border-slate-200/60 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
             <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-              <h2 className="text-base font-semibold text-slate-800 outfit-semibold flex items-center gap-2"><FiList size={15} className="text-[#c9871a]" /> Course Payments</h2>
+              <h2 className="text-base font-semibold text-slate-800 outfit-semibold flex items-center gap-2"><FiList size={15} className="text-[#0142b2]" /> Course Payments</h2>
               <span className="text-xs text-slate-400">{(course?.transactions || []).length} total{(course?.transactions || []).length > 40 ? ' · showing 40, CSV for all' : ''}</span>
             </div>
             <div className="overflow-x-auto">
