@@ -5,7 +5,8 @@ FROM node:20-bookworm-slim AS builder
 WORKDIR /app
 ENV PUPPETEER_SKIP_DOWNLOAD=true
 COPY package.json package-lock.json ./
-RUN npm ci
+# Build tools (TypeScript, Tailwind…) are devDependencies — install them even when NODE_ENV=production
+RUN npm ci --include=dev
 COPY . .
 RUN npm run build
 

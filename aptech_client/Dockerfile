@@ -8,7 +8,8 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json ./
-RUN npm ci
+# Build tools (TypeScript, Tailwind…) are devDependencies — install them even when NODE_ENV=production
+RUN npm ci --include=dev
 
 # Copy all source files
 COPY . .
