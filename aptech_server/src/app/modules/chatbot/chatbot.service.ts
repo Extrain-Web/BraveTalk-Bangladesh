@@ -1,0 +1,453 @@
+// ==========================================
+// BraveTalk Bangladesh AI Chatbot Service
+// Powered by Groq AI (Primary) + Gemini (Backup)
+// ==========================================
+
+import { GoogleGenAI } from '@google/genai';
+import Groq from 'groq-sdk';
+import { Course } from '../courses/course.model';
+import { Mentor } from '../mentor/mentor.model';
+import { AcademyKnowledge } from './chatbot.knowledge';
+
+interface ChatResponse {
+  message: string;
+  quickReplies?: string[];
+  links?: { text: string; url: string }[];
+}
+
+// ─── AI Providers Setup ─────────────────────────
+const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+
+let groqClient: Groq | null = null;
+let geminiClient: GoogleGenAI | null = null;
+
+function getGroq(): Groq | null {
+  if (!GROQ_API_KEY) return null;
+  if (!groqClient) {
+    groqClient = new Groq({ apiKey: GROQ_API_KEY });
+  }
+  return groqClient;
+}
+
+function getGemini(): GoogleGenAI | null {
+  if (!GEMINI_API_KEY) return null;
+  if (!geminiClient) {
+    geminiClient = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+  }
+  return geminiClient;
+}
+
+// ─── Gather Live Data from Database ─────────────
+async function gatherLiveContext(): Promise<string> {
+  try {
+    // Fetch ALL courses (many old courses don't have status field set)
+    const courses = await Course.find({ status: { $ne: 'archived' } })
+      .select('title fee offerPrice durationMonth type rating technology')
+      .populate('category', 'name')
+      .populate('mentor', 'name')
+      .limit(20)
+      .lean();
+
+    const courseList = courses.map((c: any) => {
+      const cat = c.category?.name || '';
+      const mentor = c.mentor?.name || '';
+      return `- ${c.title} | ৳${c.offerPrice || c.fee} | ${c.durationMonth}m | ${cat} | ${mentor}`;
+    }).join('\n');
+
+    // Fetch mentors
+    const mentors = await Mentor.find({})
+      .select('name designation subject training_experience specialized_area')
+      .limit(20)
+      .lean();
+
+    const mentorList = mentors.map((m: any) => {
+      return `- ${m.name} | ${m.designation} | Subject: ${m.subject} | Experience: ${m.training_experience?.years || 'N/A'} years | Students: ${m.training_experience?.students || 'N/A'}+ | Specialization: ${(m.specialized_area || []).join(', ')}`;
+    }).join('\n');
+
+    return `
+=== LIVE DATABASE: ALL COURSES (${courses.length} available) ===
+IMPORTANT: This is REAL data from our database. USE THIS for course questions!
+${courseList || 'No courses available currently.'}
+
+=== LIVE DATABASE: MENTORS (${mentors.length} available) ===
+${mentorList || 'No mentor data available currently.'}
+`;
+  } catch (error) {
+    console.error('Error fetching live context:', error);
+    return '\n[Note: Could not fetch live data. Use static knowledge only.]\n';
+  }
+}
+
+// ─── Build System Prompt ────────────────────────
+function buildSystemPrompt(liveData: string): string {
+  const kb = AcademyKnowledge;
+  
+  return `You are "BraveTalk Bangladesh AI" — the funniest, wittiest, most charming AI assistant ever! You work for BraveTalk Bangladesh (ব্রেভটক বাংলাদেশ), a top IT training institute in Bangladesh.
+
+## YOUR PERSONALITY (MOST IMPORTANT!)
+You are that ONE hilarious genius friend who makes every conversation fun. You are NOT a boring corporate bot.
+- Talk like a real Bengali bro/friend — casual, funny, relatable
+- Use humor, sarcasm, playful teasing — make people laugh!
+- Your SECRET WEAPON: You cleverly connect ANY random topic back to BraveTalk Bangladesh courses in a funny way
+
+## HUMOR + COURSE STEERING EXAMPLES (Follow this EXACT style!):
+- "বিয়ে করব" → "ভাই বিয়ে করতে হলে প্রচুর টাকা লাগে এখন 😂 আর টাকা কামাতে হলে স্কিল্ড হতে হবে! আমাদের Web Development কোর্স করে ফেলো, ৬ মাসে ক্যারিয়ার সেটআপ, তারপর বিয়ের proposal দিলে কেউ না বলতে পারবে না! 🤣"
+- "আমি বোরড" → "বোরড? ভাই এই সময়টাতে একটা স্কিল শিখে ফেলো! Graphic Design শিখলে এমন কাজ পাবে বোরড হওয়ার সময়ই পাবে না 😄 আমাদের কোর্স দেখো একবার!"
+- "তুমি কি খাও?" → "আমি বাগ খাই আর কোড পান করি ভাই! 😆 তবে তুমি বলো, কোন স্কিল শিখতে চাও? আমি হেল্প করি!"
+- "I'm sad" → "Bro, sadness is temporary but skills are permanent! 💪 Learn something new, earn money, buy happiness! Check our courses 🚀"
+- "girlfriend nai" → "ভাই girlfriend এর আগে career দরকার 😂 আমাদের কোর্স করো, job পাও, তারপর girlfriend লাইন দিবে! 🤣"
+- "topu vai k" / random name → "ভাই আমি তো topu vai না 😄 আমি BraveTalk Bangladesh এর AI Assistant! বলো কিভাবে হেল্প করতে পারি?"
+
+## RULES
+1. Bengali/Banglish input → reply in Bengali script. English → English
+2. ALWAYS be funny first, then smoothly connect to academy/courses
+3. For course/fee/mentor questions — USE LIVE DATABASE below, give REAL data
+4. Keep responses short (2-4 lines max for casual, 5-8 for course info)
+5. Don't be preachy or boring — be a FUN friend who happens to sell courses 😎
+
+## ⚠️ MOST CRITICAL RULE — NEVER MAKE UP COURSES!
+- ONLY mention courses that exist in the LIVE DATABASE below
+- If someone asks about a course we DON'T have (e.g., LinkedIn, SEO, Flutter, etc.), say:
+  "ভাই, আমাদের একাডেমিতে এই কোর্সটা এখন চলছে না। তবে রিলেটেড কোর্স আমাদের আছে! [suggest closest match from database]. আরও জানতে কল করুন: ${kb.contact.phone}"
+- NEVER invent course names, fees, mentors, or curriculum that don't exist in the database
+- If no related course exists, just give contact info politely
+
+## ACADEMY INFO
+${kb.name} | Phone: ${kb.contact.phone} | Address: ${kb.contact.address}
+${kb.stats.totalCourses} courses | ${kb.stats.totalStudents} students | ${kb.stats.placementRate} placement
+Installment/EMI available | ${kb.certification.en}
+
+${liveData}
+
+## BEHAVIORS
+- Greetings → warm + witty ("ভাই তোমাকে দেখে মনটা ভালো হয়ে গেলো! 😊")
+- Fun/random → joke FIRST, then cleverly steer to courses
+- Course query (EXISTS in DB) → real data from database (name, fee, duration, mentor)
+- Course query (NOT in DB) → "এই কোর্স এখন নেই, তবে এই রিলেটেড কোর্স আছে..." + contact
+- Tech question → answer it, casually mention "আমরাও এটা শেখাই!" (only if we do!)
+- Can't answer → "এটার জন্য কল করো ${kb.contact.phone}, ওরা ভালো বলতে পারবে!"`;
+}
+
+// ─── Detect Language ────────────────────────────
+function detectLanguage(message: string): 'bn' | 'en' {
+  const bengaliChars = (message.match(/[\u0980-\u09FF]/g) || []).length;
+  const totalChars = message.replace(/\s/g, '').length;
+  return bengaliChars > totalChars * 0.2 ? 'bn' : 'en';
+}
+
+// ─── Generate Quick Replies based on context ────
+function generateQuickReplies(userMessage: string, botResponse: string, lang: 'bn' | 'en'): string[] {
+  const lowerMsg = userMessage.toLowerCase();
+  const lowerResp = botResponse.toLowerCase();
+  const bnMsg = userMessage;
+  
+  if (lang === 'bn') {
+    if (bnMsg.includes('কোর্স') || lowerResp.includes('কোর্স')) {
+      return ['ভর্তি হতে চাই', 'কোর্সের ফি', 'ফ্রি সেমিনার'];
+    }
+    if (bnMsg.includes('ভর্তি') || lowerMsg.includes('enroll')) {
+      return ['কোর্স দেখুন', 'পেমেন্ট পদ্ধতি', 'কিস্তি সুবিধা'];
+    }
+    if (bnMsg.includes('ফি') || bnMsg.includes('দাম') || bnMsg.includes('টাকা')) {
+      return ['ভর্তি হতে চাই', 'কিস্তি সুবিধা', 'ছাড়/অফার'];
+    }
+    if (bnMsg.includes('সেমিনার') || bnMsg.includes('ইভেন্ট')) {
+      return ['কোর্স দেখুন', 'ভর্তি প্রক্রিয়া', 'যোগাযোগ'];
+    }
+    if (bnMsg.includes('প্রোগ্রামিং') || lowerMsg.includes('code') || lowerMsg.includes('programming')) {
+      return ['কোর্স দেখুন', 'ক্যারিয়ার গাইড', 'মেন্টরদের দেখুন'];
+    }
+    if (bnMsg.includes('ক্যারিয়ার') || bnMsg.includes('জব') || bnMsg.includes('চাকরি')) {
+      return ['জব প্লেসমেন্ট', 'কোর্স দেখুন', 'ফ্রিল্যান্সিং'];
+    }
+    return ['কোর্স দেখুন', 'ক্যারিয়ার গাইড', 'যোগাযোগ'];
+  }
+  
+  if (lowerMsg.includes('course') || lowerResp.includes('course')) {
+    return ['Enroll Now', 'Course Fees', 'Free Seminars'];
+  }
+  if (lowerMsg.includes('enroll') || lowerMsg.includes('admit') || lowerMsg.includes('join')) {
+    return ['View Courses', 'Payment Methods', 'Installment Options'];
+  }
+  if (lowerMsg.includes('fee') || lowerMsg.includes('price') || lowerMsg.includes('cost')) {
+    return ['Enroll Now', 'Installment Options', 'Discounts'];
+  }
+  if (lowerMsg.includes('seminar') || lowerMsg.includes('event')) {
+    return ['View Courses', 'Admission Process', 'Contact Us'];
+  }
+  if (lowerMsg.includes('program') || lowerMsg.includes('code') || lowerMsg.includes('develop') || lowerMsg.includes('learn')) {
+    return ['View Courses', 'Career Guide', 'Our Mentors'];
+  }
+  if (lowerMsg.includes('career') || lowerMsg.includes('job') || lowerMsg.includes('freelanc')) {
+    return ['Job Placement', 'View Courses', 'Freelancing Guide'];
+  }
+  return ['View Courses', 'Career Guide', 'Contact Us'];
+}
+
+// ─── Generate Links based on context ────────────
+function generateLinks(botResponse: string, lang: 'bn' | 'en'): { text: string; url: string }[] {
+  const links: { text: string; url: string }[] = [];
+  const lower = botResponse.toLowerCase();
+  
+  if (lower.includes('course') || lower.includes('কোর্স')) {
+    links.push({ text: lang === 'bn' ? 'কোর্স দেখুন' : 'View Courses', url: '/courses' });
+  }
+  if (lower.includes('certificate') || lower.includes('সার্টিফিকেট') || lower.includes('verify')) {
+    links.push({ text: lang === 'bn' ? 'সার্টিফিকেট ভেরিফাই' : 'Verify Certificate', url: '/verify-certificate' });
+  }
+  if (lower.includes('contact') || lower.includes('যোগাযোগ') || lower.includes('address') || lower.includes('ঠিকানা')) {
+    links.push({ text: lang === 'bn' ? 'যোগাযোগ' : 'Contact Us', url: '/contact' });
+  }
+  if (lower.includes('mentor') || lower.includes('মেন্টর') || lower.includes('instructor')) {
+    links.push({ text: lang === 'bn' ? 'মেন্টরস' : 'Our Mentors', url: '/mentors' });
+  }
+  
+  return links.slice(0, 3); // max 3 links
+}
+
+// ─── Fallback (No API Key or Rate Limited) ──────
+async function fallbackResponse(userMessage: string): Promise<ChatResponse> {
+  const { detectIntent } = await import('./chatbot.intents');
+  const detected = detectIntent(userMessage);
+  const lang = detected.language;
+  const kb = AcademyKnowledge;
+
+  // Provide proper intent-based responses
+  switch (detected.intent) {
+    case 'greeting': {
+      const msg = lang === 'bn'
+        ? `আসসালামু আলাইকুম! 👋 ব্রেভটক বাংলাদেশ-এ স্বাগতম!\n\nআমি আপনার AI সহকারী। কোর্স, ভর্তি, ফি, মেন্টর, সেমিনার সম্পর্কে জানতে চাইলে জিজ্ঞেস করুন!`
+        : `Hello! 👋 Welcome to BraveTalk Bangladesh!\n\nI'm your AI assistant. Ask me about courses, admission, fees, mentors, seminars, and more!`;
+      return { message: msg, quickReplies: lang === 'bn' ? ['কোর্স দেখুন', 'ভর্তি প্রক্রিয়া', 'যোগাযোগ'] : ['View Courses', 'Admission Process', 'Contact Us'] };
+    }
+    case 'course_list':
+    case 'course_fee':
+    case 'course_details': {
+      try {
+        const courses = await Course.find({ status: 'published' }).select('title fee offerPrice durationMonth rating').limit(8).lean();
+        if (courses.length > 0) {
+          const list = courses.map((c: any, i: number) => `${i + 1}. **${c.title}** — ৳${c.offerPrice || c.fee} (${c.durationMonth} months) ⭐${c.rating}`).join('\n');
+          const msg = lang === 'bn' ? `📚 **আমাদের কোর্সসমূহ:**\n\n${list}\n\n🔗 বিস্তারিত দেখুন /courses পেজে` : `📚 **Our Courses:**\n\n${list}\n\n🔗 See details at /courses`;
+          return { message: msg, quickReplies: lang === 'bn' ? ['ভর্তি হতে চাই', 'কোর্সের ফি', 'যোগাযোগ'] : ['Enroll Now', 'Course Fees', 'Contact Us'], links: [{ text: lang === 'bn' ? 'কোর্স পেজ' : 'Courses Page', url: '/courses' }] };
+        }
+      } catch {}
+      const msg = lang === 'bn' ? `আমাদের কোর্সগুলো দেখতে /courses পেজে যান বা কল করুন: ${kb.contact.phone}` : `Visit /courses to see our courses or call: ${kb.contact.phone}`;
+      return { message: msg, quickReplies: lang === 'bn' ? ['যোগাযোগ'] : ['Contact Us'] };
+    }
+    case 'mentors': {
+      try {
+        const mentors = await Mentor.find({}).select('name designation subject').limit(6).lean();
+        if (mentors.length > 0) {
+          const list = mentors.map((m: any, i: number) => `${i + 1}. **${m.name}** — ${m.designation} (${m.subject})`).join('\n');
+          const msg = lang === 'bn' ? `👨‍🏫 **আমাদের মেন্টরস:**\n\n${list}` : `👨‍🏫 **Our Mentors:**\n\n${list}`;
+          return { message: msg, quickReplies: lang === 'bn' ? ['কোর্স দেখুন', 'যোগাযোগ'] : ['View Courses', 'Contact Us'] };
+        }
+      } catch {}
+      return { message: lang === 'bn' ? 'মেন্টরদের দেখতে /mentors পেজে যান' : 'Visit /mentors to see our mentors', quickReplies: [] };
+    }
+    case 'admission':
+      return { message: lang === 'bn' ? kb.admission.bn : kb.admission.en, quickReplies: lang === 'bn' ? ['কোর্স দেখুন', 'পেমেন্ট পদ্ধতি'] : ['View Courses', 'Payment Methods'] };
+    case 'payment':
+    case 'installment':
+      return { message: lang === 'bn' ? kb.payment.bn : kb.payment.en, quickReplies: lang === 'bn' ? ['ভর্তি হতে চাই', 'যোগাযোগ'] : ['Enroll Now', 'Contact Us'] };
+    case 'contact':
+      return {
+        message: lang === 'bn'
+          ? `📍 **যোগাযোগ:**\n📞 ${kb.contact.phone}\n📧 ${kb.contact.email}\n🏢 ${kb.contact.addressBn}\n🕐 ${kb.contact.officeHoursBn}`
+          : `📍 **Contact:**\n📞 ${kb.contact.phone}\n📧 ${kb.contact.email}\n🏢 ${kb.contact.address}\n🕐 ${kb.contact.officeHours}`,
+        quickReplies: lang === 'bn' ? ['কোর্স দেখুন', 'ভর্তি প্রক্রিয়া'] : ['View Courses', 'Admission Process'],
+      };
+    case 'job_placement':
+      return { message: lang === 'bn' ? kb.jobPlacement.bn : kb.jobPlacement.en, quickReplies: lang === 'bn' ? ['কোর্স দেখুন'] : ['View Courses'] };
+    case 'certificate':
+      return { message: lang === 'bn' ? kb.certification.bn : kb.certification.en, quickReplies: lang === 'bn' ? ['কোর্স দেখুন'] : ['View Courses'] };
+    case 'about':
+      return { message: lang === 'bn' ? kb.about.bn : kb.about.en, quickReplies: lang === 'bn' ? ['কোর্স দেখুন', 'যোগাযোগ'] : ['View Courses', 'Contact Us'] };
+    case 'discount':
+      return { message: lang === 'bn' ? kb.discount.bn : kb.discount.en, quickReplies: lang === 'bn' ? ['কোর্স দেখুন'] : ['View Courses'] };
+    case 'freelancing':
+      return { message: lang === 'bn' ? kb.freelancing.bn : kb.freelancing.en, quickReplies: lang === 'bn' ? ['কোর্স দেখুন'] : ['View Courses'] };
+    case 'events':
+      return {
+        message: lang === 'bn'
+          ? `এখন কোনো ইভেন্ট নেই। আমাদের কোর্সগুলো দেখুন অথবা কল করুন: ${kb.contact.phone}`
+          : `No events right now. Check out our courses or call: ${kb.contact.phone}`,
+        quickReplies: lang === 'bn' ? ['কোর্স দেখুন', 'যোগাযোগ'] : ['View Courses', 'Contact Us'],
+      };
+    case 'thanks':
+      return { message: lang === 'bn' ? 'ধন্যবাদ! 😊 আর কিছু জানার থাকলে জিজ্ঞেস করুন।' : 'Thank you! 😊 Feel free to ask anything else.', quickReplies: lang === 'bn' ? ['কোর্স দেখুন'] : ['View Courses'] };
+    case 'goodbye':
+      return { message: lang === 'bn' ? 'আল্লাহ হাফেজ! 👋 আবার কথা হবে।' : 'Goodbye! 👋 See you again.', quickReplies: [] };
+    default: {
+      const msg = lang === 'bn'
+        ? `আমি আপনাকে নিচের বিষয়ে সাহায্য করতে পারি:\n\n• 📚 কোর্সসমূহ\n• 💰 কোর্সের ফি\n• 📋 ভর্তি প্রক্রিয়া\n• 👨‍🏫 মেন্টরস\n• 📅 সেমিনার\n• 💼 জব প্লেসমেন্ট\n• 📞 যোগাযোগ\n\nবা সরাসরি কল করুন: ${kb.contact.phone}`
+        : `I can help you with:\n\n• 📚 Our Courses\n• 💰 Course Fees\n• 📋 Admission\n• 👨‍🏫 Mentors\n• 📅 Seminars\n• 💼 Job Placement\n• 📞 Contact\n\nOr call: ${kb.contact.phone}`;
+      return { message: msg, quickReplies: lang === 'bn' ? ['কোর্স দেখুন', 'ভর্তি প্রক্রিয়া', 'যোগাযোগ'] : ['View Courses', 'Admission Process', 'Contact Us'] };
+    }
+  }
+}
+
+// ─── Main Service ───────────────────────────────
+// ─── Call Groq AI ───────────────────────────────
+async function callGroq(systemPrompt: string, userMessage: string, history: Array<{role: string; content: string}>): Promise<string | null> {
+  const groq = getGroq();
+  if (!groq) return null;
+
+  try {
+    const messages: any[] = [
+      { role: 'system', content: systemPrompt },
+    ];
+
+    // Add conversation history (reduced to save tokens)
+    const recentHistory = history.slice(-4);
+    for (const msg of recentHistory) {
+      messages.push({
+        role: msg.role === 'user' ? 'user' : 'assistant',
+        content: msg.content.substring(0, 300), // Truncate old messages
+      });
+    }
+
+    // Add current message
+    messages.push({ role: 'user', content: userMessage });
+
+    // Try primary model first, then fallback to smaller model
+    const models = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant'];
+    
+    for (const model of models) {
+      try {
+        const response = await groq.chat.completions.create({
+          model,
+          messages,
+          max_tokens: 500,
+          temperature: 0.8,
+          top_p: 0.92,
+        });
+
+        const text = response.choices?.[0]?.message?.content?.trim();
+        if (text) {
+          console.log(`✅ Groq (${model}) response generated (${text.length} chars)`);
+          return text;
+        }
+      } catch (modelError: any) {
+        const status = modelError?.status || modelError?.statusCode;
+        console.warn(`⚠️ Groq ${model} failed (${status}):`, modelError?.message?.substring(0, 100));
+        
+        // If rate limited, wait 2s before trying next model
+        if (status === 429) {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          continue;
+        }
+        // For other errors, try next model
+        continue;
+      }
+    }
+    
+    return null;
+  } catch (error: any) {
+    console.error('❌ Groq Error:', error?.message?.substring(0, 200) || String(error));
+    return null;
+  }
+}
+
+// ─── Call Gemini AI ──────────────────────────────
+async function callGemini(systemPrompt: string, userMessage: string, history: Array<{role: string; content: string}>): Promise<string | null> {
+  const gemini = getGemini();
+  if (!gemini) return null;
+
+  try {
+    const contents: any[] = [];
+    const recentHistory = history.slice(-6);
+    for (const msg of recentHistory) {
+      contents.push({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.content }],
+      });
+    }
+    contents.push({ role: 'user', parts: [{ text: userMessage }] });
+
+    const response = await gemini.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: contents,
+      config: {
+        systemInstruction: systemPrompt,
+        maxOutputTokens: 800,
+        temperature: 0.8,
+        topP: 0.92,
+      },
+    });
+
+    const text = response.text?.trim();
+    if (text) {
+      console.log(`✅ Gemini response generated (${text.length} chars)`);
+      return text;
+    }
+    return null;
+  } catch (error: any) {
+    console.error('❌ Gemini Error:', error?.message?.substring(0, 200) || String(error));
+    return null;
+  }
+}
+
+// ─── Main Service ───────────────────────────────
+export const ChatbotService = {
+  async processMessage(userMessage: string, conversationHistory: Array<{role: string; content: string}> = []): Promise<ChatResponse> {
+    const lang = detectLanguage(userMessage);
+    const hasGroq = !!GROQ_API_KEY;
+    const hasGemini = !!GEMINI_API_KEY;
+
+    // If no AI provider configured at all
+    if (!hasGroq && !hasGemini) {
+      console.warn('⚠️ No AI API keys configured. Set GROQ_API_KEY or GEMINI_API_KEY in .env');
+      return fallbackResponse(userMessage);
+    }
+
+    // Gather live data from database
+    const liveData = await gatherLiveContext();
+    const systemPrompt = buildSystemPrompt(liveData);
+
+    // Strategy: Try Groq first (faster, higher free quota), then Gemini as backup
+    let aiMessage: string | null = null;
+
+    // 1. Try Groq (Primary)
+    if (hasGroq) {
+      console.log('🔄 Trying Groq (Llama 3.3 70B)...');
+      aiMessage = await callGroq(systemPrompt, userMessage, conversationHistory);
+    }
+
+    // 2. If Groq failed, try Gemini (Backup)
+    if (!aiMessage && hasGemini) {
+      console.log('🔄 Trying Gemini (Backup)...');
+      aiMessage = await callGemini(systemPrompt, userMessage, conversationHistory);
+    }
+
+    // 3. If both failed, use fallback
+    if (!aiMessage) {
+      console.warn('⚠️ All AI providers failed. Using fallback.');
+      return fallbackResponse(userMessage);
+    }
+
+    // Generate context-aware quick replies and links
+    const quickReplies = generateQuickReplies(userMessage, aiMessage, lang);
+    const links = generateLinks(aiMessage, lang);
+
+    return {
+      message: aiMessage,
+      quickReplies,
+      links,
+    };
+  },
+
+  getWelcomeMessage(lang: 'bn' | 'en' = 'bn'): ChatResponse {
+    if (lang === 'bn') {
+      return {
+        message: `আসসালামু আলাইকুম! 👋\n\nব্রেভটক বাংলাদেশ-এ আপনাকে স্বাগতম! আমি আপনার AI সহকারী — আপনার পাশে আছি ২৪/৭ 🤖✨\n\n আমাকে যেকোনো কিছু জিজ্ঞেস করতে পারেন:\n\n📚 কোর্স ও ফি সম্পর্কে\n📋 ভর্তি প্রক্রিয়া ও কিস্তি সুবিধা\n👨‍🏫 মেন্টর ও ক্লাস সম্পর্কে\n💼 ক্যারিয়ার গাইডেন্স ও জব প্লেসমেন্ট\n📅 ফ্রি সেমিনার ও ইভেন্ট\n🎓 সার্টিফিকেট ও ফ্রিল্যান্সিং\n\nবাংলা বা ইংরেজি — যেকোনো ভাষায় কথা বলুন, আমি বুঝবো! 😊`,
+        quickReplies: ['📚 কোর্স দেখুন', '📋 ভর্তি প্রক্রিয়া', '💼 ক্যারিয়ার গাইড', '📅 ফ্রি সেমিনার', '📞 যোগাযোগ'],
+      };
+    }
+    return {
+      message: `Hello! 👋\n\nWelcome to BraveTalk Bangladesh! I'm your AI Assistant — here to help you 24/7 🤖✨\n\nFeel free to ask me about:\n\n📚 Courses & Fees\n📋 Admission & Installment Plans\n👨‍🏫 Mentors & Classes\n💼 Career Guidance & Job Placement\n📅 Free Seminars & Events\n🎓 Certificates & Freelancing\n\nAsk me anything in Bengali or English! 😊`,
+      quickReplies: ['📚 View Courses', '📋 Admission Process', '💼 Career Guide', '📅 Free Seminars', '📞 Contact Us'],
+    };
+  },
+};

@@ -1,0 +1,294 @@
+"use client";
+
+import React, { useState, Suspense } from "react";
+import Link from "next/link";
+import { MdOutlineRemoveRedEye, MdOutlineVisibilityOff } from "react-icons/md";
+import { FiMail, FiLock, FiCheck, FiShield, FiClock, FiHeadphones } from "react-icons/fi";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
+
+const Login = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/';
+  const { language } = useLanguage();
+  const bengaliClass = language === "bn" ? "hind-siliguri" : "";
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      if (data?.data?.token) {
+        localStorage.setItem("token", data.data.token);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
+
+        // Redirect to previous page or home
+        router.push(redirectTo);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      setError("Google login is not configured. Please contact support.");
+      return;
+    }
+    // Save redirect URL for after Google callback
+    localStorage.setItem('authRedirect', redirectTo);
+    const redirectUri = `${window.location.origin}/auth/google/callback`;
+    const scope = "openid email profile";
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}`;
+    window.location.href = googleAuthUrl;
+  };
+
+  const features = [
+    { icon: FiShield, text: language === "bn" ? "নিরাপদ লগইন" : "Secure Login" },
+    { icon: FiClock, text: language === "bn" ? "২৪/৭ অ্যাক্সেস" : "24/7 Access" },
+    { icon: FiHeadphones, text: language === "bn" ? "সাপোর্ট টিম" : "Support Team" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#faf8f4] via-white to-[#fdf3e2] py-12">
+      <div className="container mx-auto px-4 lg:px-16">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-5 gap-0 bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+
+            {/* Left Side - Premium Dark Info Panel */}
+            <div className="lg:col-span-2 bg-[#0d0a06] p-8 lg:p-12 text-white relative overflow-hidden">
+              <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: "radial-gradient(rgba(243,165,34,0.14) 1px, transparent 1px)", backgroundSize: "20px 20px" }}></div>
+              <div className="absolute -top-20 -right-10 w-64 h-64 bg-[#0142b2]/20 rounded-full blur-[100px]"></div>
+              <div className="absolute -bottom-16 -left-10 w-56 h-56 bg-[#01368f]/15 rounded-full blur-[90px]"></div>
+
+              <div className="relative z-10 h-full flex flex-col justify-center">
+                {/* Logo/Brand */}
+                <div className="mb-8">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/images/logo.png" alt="Brave Talk Bangladesh" className="h-14 w-auto mb-5" />
+                  <h2 className={`text-3xl font-bold mb-2 outfit ${bengaliClass}`}>
+                    {language === "bn" ? "স্বাগতম!" : "Welcome Back!"}
+                  </h2>
+                  <p className={`text-white/60 text-sm ${bengaliClass}`}>
+                    {language === "bn" ? "আপনার অ্যাকাউন্টে লগইন করুন" : "Sign in to continue your learning"}
+                  </p>
+                </div>
+
+                {/* Features */}
+                <div className="space-y-4 mb-10">
+                  {features.map((feature, index) => {
+                    const Icon = feature.icon;
+                    return (
+                      <div key={index} className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-[#0142b2]/15 border border-[#0142b2]/20 rounded-xl flex items-center justify-center">
+                          <Icon size={18} className="text-[#0142b2]" />
+                        </div>
+                        <span className={`text-sm font-medium text-white/80 ${bengaliClass}`}>{feature.text}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Quote */}
+                <div className="mt-auto pt-6 border-t border-white/10">
+                  <p className={`text-sm text-white/60 italic ${bengaliClass}`}>
+                    {language === "bn"
+                      ? "\"শিক্ষা হলো সবচেয়ে শক্তিশালী অস্ত্র যা দিয়ে আপনি বিশ্বকে বদলাতে পারেন।\""
+                      : "\"Education is the most powerful weapon you can use to change the world.\""}
+                  </p>
+                  <p className="text-xs text-[#0142b2]/70 mt-2">— Nelson Mandela</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - Form Section */}
+            <div className="lg:col-span-3 p-8 lg:p-12 flex items-center">
+              <div className="w-full max-w-md mx-auto">
+                <div className="mb-8">
+                  <h3 className={`text-2xl font-bold text-gray-800 mb-2 outfit ${bengaliClass}`}>
+                    {language === "bn" ? "সাইন ইন করুন" : "Sign In"}
+                  </h3>
+                  <p className={`text-gray-500 text-sm ${bengaliClass}`}>
+                    {language === "bn" ? "অ্যাকাউন্ট নেই? " : "Don't have an account? "}
+                    <Link href="/register" className="text-[#0142b2] font-semibold hover:underline">
+                      {language === "bn" ? "রেজিস্টার করুন" : "Create one"}
+                    </Link>
+                  </p>
+                </div>
+
+                {/* Session Expired Alert */}
+                {searchParams.get('reason') === 'session_expired' && (
+                  <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-2">
+                    <FiClock className="text-amber-500 flex-shrink-0" size={16} />
+                    <p className={`text-sm text-amber-700 ${bengaliClass}`}>
+                      {language === "bn" ? "আপনার সেশন শেষ হয়ে গেছে। আবার লগইন করুন।" : "Your session has expired. Please log in again."}
+                    </p>
+                  </div>
+                )}
+
+                <form className="space-y-5" onSubmit={handleLogin}>
+                  {/* Email */}
+                  <div>
+                    <label className={`block text-sm font-medium text-gray-700 mb-2 ${bengaliClass}`}>
+                      {language === "bn" ? "ইমেইল এড্রেস" : "Email Address"}
+                    </label>
+                    <div className="relative">
+                      <FiMail className="absolute left-4 top-3.5 text-gray-400" size={18} />
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        placeholder={language === "bn" ? "আপনার ইমেইল" : "you@example.com"}
+                        className={`w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Password */}
+                  <div>
+                    <label className={`block text-sm font-medium text-gray-700 mb-2 ${bengaliClass}`}>
+                      {language === "bn" ? "পাসওয়ার্ড" : "Password"}
+                    </label>
+                    <div className="relative">
+                      <FiLock className="absolute left-4 top-3.5 text-gray-400" size={18} />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        placeholder={language === "bn" ? "পাসওয়ার্ড দিন" : "Enter password"}
+                        className={`w-full pl-11 pr-12 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-3.5 text-gray-400 hover:text-[#0142b2] transition"
+                      >
+                        {showPassword ? <MdOutlineVisibilityOff size={20} /> : <MdOutlineRemoveRedEye size={20} />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Remember & Forgot */}
+                  <div className="flex items-center justify-between">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition ${rememberMe ? 'bg-[#0142b2] border-[#0142b2]' : 'border-gray-300'}`}>
+                        {rememberMe && <FiCheck className="text-white" size={12} />}
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        className="hidden"
+                      />
+                      <span className={`text-sm text-gray-600 ${bengaliClass}`}>
+                        {language === "bn" ? "মনে রাখুন" : "Remember me"}
+                      </span>
+                    </label>
+                    <Link href="/forgot-password" className={`text-sm text-[#0142b2] hover:underline font-medium ${bengaliClass}`}>
+                      {language === "bn" ? "পাসওয়ার্ড ভুলে গেছেন?" : "Forgot password?"}
+                    </Link>
+                  </div>
+
+                  {/* Error Message */}
+                  {error && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
+                      <p className="text-red-600 text-sm text-center">{error}</p>
+                    </div>
+                  )}
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full py-3.5 rounded-xl text-white font-semibold shadow-lg transition text-base ${loading
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-gradient-to-r from-[#0142b2] to-[#01368f] hover:shadow-xl hover:-translate-y-0.5"
+                      } ${bengaliClass}`}
+                  >
+                    {loading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></span>
+                        {language === "bn" ? "সাইন ইন হচ্ছে..." : "Signing in..."}
+                      </span>
+                    ) : (
+                      language === "bn" ? "সাইন ইন করুন" : "Sign In"
+                    )}
+                  </button>
+
+                  {/* Divider */}
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1 h-px bg-gray-200"></div>
+                    <span className={`text-sm text-gray-400 ${bengaliClass}`}>
+                      {language === "bn" ? "অথবা" : "or"}
+                    </span>
+                    <div className="flex-1 h-px bg-gray-200"></div>
+                  </div>
+
+                  {/* Google Login Button */}
+                  <button
+                    type="button"
+                    onClick={handleGoogleLogin}
+                    disabled={loading}
+                    className="w-full py-3.5 rounded-xl border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 font-medium text-gray-700 shadow-sm transition flex items-center justify-center gap-3 hover:-translate-y-0.5"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    <span className={bengaliClass}>
+                      {language === "bn" ? "গুগল দিয়ে সাইন ইন" : "Sign in with Google"}
+                    </span>
+                  </button>
+                </form>
+
+                {/* Help Text */}
+                <p className={`text-xs text-gray-400 text-center mt-6 ${bengaliClass}`}>
+                  {language === "bn"
+                    ? "লগইন করতে সমস্যা হলে সাপোর্ট টিমের সাথে যোগাযোগ করুন"
+                    : "Having trouble? Contact our support team"}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-10 h-10 border-4 border-amber-100 border-t-amber-500 rounded-full animate-spin"></div></div>}>
+      <Login />
+    </Suspense>
+  );
+}

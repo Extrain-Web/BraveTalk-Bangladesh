@@ -1,0 +1,7 @@
+node_modules
+.next
+.env
+.env.*
+*.log
+build-errors*.txt
+eslint_errors.json

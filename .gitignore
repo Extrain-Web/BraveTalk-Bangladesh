@@ -1,0 +1,23 @@
+# Dependencies & builds
+node_modules/
+.next/
+dist/
+out/
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Local-only data
+.local-mongo/
+uploads/
+*.log
+
+# Tools / editor
+.claude/
+.vscode/
+.DS_Store
+
+# Personal files in the project root
+kll.pdf
