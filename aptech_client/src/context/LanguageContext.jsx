@@ -10,6 +10,10 @@ const translations = { en, bn };
 
 const LanguageContext = createContext();
 
+// The site is English-only for now. Flip this to true to bring back Bangla
+// (all Bangla text is still in the code) and show the language switcher again.
+export const BANGLA_ENABLED = false;
+
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguageState] = useState("en");
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,14 +21,17 @@ export const LanguageProvider = ({ children }) => {
   // Load language preference from localStorage on mount
   useEffect(() => {
     const savedLanguage = localStorage.getItem("language");
-    if (savedLanguage && (savedLanguage === "en" || savedLanguage === "bn")) {
+    if (!BANGLA_ENABLED) {
+      try { localStorage.setItem("language", "en"); } catch { /* ignore */ }
+    } else if (savedLanguage && (savedLanguage === "en" || savedLanguage === "bn")) {
       setLanguageState(savedLanguage);
     }
     setIsLoaded(true);
   }, []);
 
   // Save language preference to localStorage
-  const setLanguage = useCallback((lang) => {
+  const setLanguage = useCallback((requested) => {
+    const lang = BANGLA_ENABLED ? requested : "en";
     setLanguageState(lang);
     localStorage.setItem("language", lang);
     // Update document language attribute

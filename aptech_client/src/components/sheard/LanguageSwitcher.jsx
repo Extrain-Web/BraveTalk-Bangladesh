@@ -4,8 +4,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { HiLanguage } from "react-icons/hi2";
 import { LuCheck, LuChevronDown } from "react-icons/lu";
+import { BANGLA_ENABLED } from "@/context/LanguageContext";
 
-const LanguageSwitcher = ({ variant = "default" }) => {
+const LanguageSwitcherMenu = ({ variant = "default" }) => {
     const { language, setLanguage, isLoaded } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -118,5 +119,8 @@ const LanguageSwitcher = ({ variant = "default" }) => {
         </div>
     );
 };
+
+// Hidden while the site is English-only (see BANGLA_ENABLED in LanguageContext)
+const LanguageSwitcher = (props) => (BANGLA_ENABLED ? <LanguageSwitcherMenu {...props} /> : null);
 
 export default LanguageSwitcher;
