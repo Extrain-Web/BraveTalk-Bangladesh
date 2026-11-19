@@ -4,6 +4,7 @@ import Link from "next/link";
 import { LuUserPlus, LuCalendarDays, LuMic, LuQrCode, LuArrowRight } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import SectionIntro from "./SectionIntro";
+import { useSiteImage } from "@/lib/siteImages";
 
 const STEP_STYLES = [
     { tile: "bg-blue-50 text-[#0142b2]", num: "text-[#0142b2]" },
@@ -45,37 +46,41 @@ const AboutJourney = () => {
     const { language } = useLanguage();
     const c = COPY[language === "bn" ? "bn" : "en"];
     const bn = language === "bn" ? "hind-siliguri" : "";
+    const classPhoto = useSiteImage("aboutClass");
 
     return (
-        <section className="relative overflow-hidden bg-white py-14 lg:py-20">
-            <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -right-24 top-0 h-[380px] w-[380px] rounded-full bg-blue-100/50 blur-[120px]" />
-                <div className="absolute -left-24 bottom-0 h-[340px] w-[340px] rounded-full bg-emerald-100/50 blur-[120px]" />
-            </div>
-            <div className="relative mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
-                <SectionIntro eyebrow={c.eyebrow} title={c.title} accent={c.accent} text={c.text} dot="bg-[#027a1e]" bn={bn} />
+        <section className="bg-white py-12 lg:py-16">
+            <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
+                <SectionIntro eyebrow={c.eyebrow} title={c.title} accent={c.accent} text={c.text} bn={bn} />
 
-                <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                    {c.steps.map(({ icon: Icon, title, text }, i) => (
-                        <li key={title} className="relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-                            <div className="flex items-center justify-between">
-                                <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${STEP_STYLES[i].tile}`}>
-                                    <Icon className="text-2xl" />
-                                </span>
-                                <span className={`text-3xl font-extrabold opacity-20 outfit ${STEP_STYLES[i].num}`}>
-                                    {String(i + 1).padStart(2, "0")}
-                                </span>
-                            </div>
-                            <h3 className={`mt-4 text-lg font-bold text-[#0b1b4a] outfit ${bn}`}>{title}</h3>
-                            <p className={`mt-1.5 text-sm leading-relaxed text-slate-500 work ${bn}`}>{text}</p>
-                        </li>
-                    ))}
-                </ol>
+                <div className="mt-10 grid items-stretch gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+                    <div className="relative min-h-[260px] overflow-hidden rounded-md border border-slate-200 bg-slate-100 shadow-sm">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={classPhoto} alt={c.eyebrow} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                    </div>
+
+                    <ol className="grid gap-4 sm:grid-cols-2">
+                        {c.steps.map(({ icon: Icon, title, text }, i) => (
+                            <li key={title} className="rounded-md border border-slate-200 bg-white p-5 shadow-sm transition hover:shadow-md">
+                                <div className="flex items-center justify-between">
+                                    <span className={`flex h-11 w-11 items-center justify-center rounded-md ${STEP_STYLES[i].tile}`}>
+                                        <Icon className="text-xl" />
+                                    </span>
+                                    <span className={`text-2xl font-bold opacity-30 outfit ${STEP_STYLES[i].num}`}>
+                                        {String(i + 1).padStart(2, "0")}
+                                    </span>
+                                </div>
+                                <h3 className={`mt-3 text-base font-bold text-[#0b1b4a] outfit ${bn}`}>{title}</h3>
+                                <p className={`mt-1 text-sm leading-relaxed text-slate-600 work ${bn}`}>{text}</p>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
 
                 <div className="mt-8 text-center">
                     <Link
                         href="/verify-certificate"
-                        className={`inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-slate-300 hover:shadow work ${bn}`}
+                        className={`inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-[#0142b2] hover:text-[#0142b2] work ${bn}`}
                     >
                         {c.verify} <LuArrowRight />
                     </Link>

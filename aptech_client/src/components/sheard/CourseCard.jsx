@@ -8,9 +8,9 @@ import { useLanguage } from "@/context/LanguageContext";
 import { getCoursePricing } from "@/lib/coursePrice";
 
 export const COURSE_TYPE_META = {
-  Online: { en: "Online", bn: "অনলাইন", Icon: LuWifi, cls: "bg-blue-50 text-[#0142b2] border-blue-100" },
-  Offline: { en: "Offline", bn: "অফলাইন", Icon: LuMapPin, cls: "bg-red-50 text-[#e5251f] border-red-100" },
-  Recorded: { en: "Recorded", bn: "রেকর্ডেড", Icon: LuCirclePlay, cls: "bg-emerald-50 text-[#027a1e] border-emerald-100" },
+  Online: { en: "Online", bn: "অনলাইন", Icon: LuWifi, cls: "bg-blue-50 text-[#0142b2] border-blue-100", solid: "bg-[#0142b2]" },
+  Offline: { en: "Offline", bn: "অফলাইন", Icon: LuMapPin, cls: "bg-red-50 text-[#e5251f] border-red-100", solid: "bg-[#0b1b4a]" },
+  Recorded: { en: "Recorded", bn: "রেকর্ডেড", Icon: LuCirclePlay, cls: "bg-emerald-50 text-[#027a1e] border-emerald-100", solid: "bg-slate-700" },
 };
 
 const taka = (n) => `৳${Number(n || 0).toLocaleString("en-US")}`;
@@ -54,38 +54,38 @@ const CourseCard = ({ course }) => {
       : null;
 
   return (
-    <div className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl work ${bn}`}>
+    <div className={`group flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md work ${bn}`}>
       {/* Thumbnail */}
-      <Link href={detailHref} className="relative block aspect-video overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
+      <Link href={detailHref} className="relative block aspect-video overflow-hidden bg-slate-100">
         {course.image && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={course.image}
             alt={course.title}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
             loading="lazy"
           />
         )}
-        <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+        <div className="absolute left-2.5 top-2.5 flex flex-wrap gap-1">
           {typeMeta && (
-            <span className={`inline-flex items-center gap-1 rounded-full border bg-white/95 px-2.5 py-1 text-[11px] font-semibold shadow-sm backdrop-blur ${typeMeta.cls}`}>
+            <span className={`inline-flex items-center gap-1 rounded-sm px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm ${typeMeta.solid}`}>
               <typeMeta.Icon className="text-xs" /> {isBn ? typeMeta.bn : typeMeta.en}
             </span>
           )}
+          {isFree ? (
+            <span className="rounded-sm bg-[#027a1e] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
+              {isBn ? "ফ্রি" : "Free"}
+            </span>
+          ) : hasDiscount ? (
+            <span className="rounded-sm bg-[#e5251f] px-2 py-0.5 text-[11px] font-bold text-white shadow-sm">
+              -{percentOff}%
+            </span>
+          ) : null}
         </div>
-        {isFree ? (
-          <span className="absolute right-3 top-3 rounded-full bg-[#027a1e] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
-            {isBn ? "ফ্রি" : "Free"}
-          </span>
-        ) : hasDiscount ? (
-          <span className="absolute right-3 top-3 rounded-full bg-[#e5251f] px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
-            -{percentOff}%
-          </span>
-        ) : null}
       </Link>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
+      <div className="flex flex-1 flex-col p-4">
         {categoryName && (
           <p className="text-[11px] font-semibold uppercase tracking-wider text-[#e5251f]">{categoryName}</p>
         )}
@@ -100,7 +100,7 @@ const CourseCard = ({ course }) => {
           <div className="mt-3 flex items-center gap-2">
             {mentorObj?.image ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={mentorObj.image} alt={mentorName} className="h-6 w-6 rounded-full border border-slate-200 object-cover" />
+              <img src={mentorObj.image} alt={mentorName} className="h-6 w-6 rounded-full border border-slate-200 object-cover" loading="lazy" />
             ) : (
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-50 text-[10px] font-bold text-[#0142b2]">
                 {mentorName.charAt(0).toUpperCase()}
@@ -128,14 +128,14 @@ const CourseCard = ({ course }) => {
 
         {/* Price + actions */}
         <div className="mt-auto pt-4">
-          <div className="flex items-end justify-between gap-2 border-t border-slate-100 pt-4">
-            <div>
+          <div className="flex items-center justify-between gap-2 border-t border-slate-200 pt-3">
+            <div className="min-w-0">
               {isFree ? (
-                <span className="text-xl font-extrabold text-[#027a1e] outfit">{isBn ? "ফ্রি" : "Free"}</span>
+                <span className="text-lg font-bold text-[#027a1e] outfit">{isBn ? "ফ্রি" : "Free"}</span>
               ) : (
-                <div className="flex items-end gap-1.5">
-                  <span className="text-xl font-extrabold text-[#0b1b4a] outfit">{taka(price)}</span>
-                  {hasDiscount && <span className="pb-0.5 text-xs text-slate-400 line-through">{taka(fee)}</span>}
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-lg font-bold text-[#0b1b4a] outfit">{taka(price)}</span>
+                  {hasDiscount && <span className="text-xs text-slate-400 line-through">{taka(fee)}</span>}
                 </div>
               )}
               <p className="text-[10px] text-slate-400">
@@ -144,8 +144,8 @@ const CourseCard = ({ course }) => {
             </div>
             <Link
               href={enrollHref}
-              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold text-white shadow-md transition ${
-                isFree ? "bg-[#027a1e] shadow-emerald-900/20 hover:bg-[#026318]" : "bg-[#0142b2] shadow-blue-900/20 hover:bg-[#01368f]"
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-md px-3.5 py-2 text-xs font-semibold text-white transition ${
+                isFree ? "bg-[#027a1e] hover:bg-[#026318]" : "bg-[#0142b2] hover:bg-[#01368f]"
               }`}
             >
               {isFree ? <LuGift /> : null}

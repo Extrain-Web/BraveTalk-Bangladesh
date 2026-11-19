@@ -48,7 +48,7 @@ const Partners = () => {
                 className="h-9 md:h-11 w-auto max-w-[150px] object-contain opacity-70 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0"
             />
         );
-        const cls = "group flex h-20 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 md:px-8 shadow-sm transition hover:shadow-md";
+        const cls = "group flex h-20 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white px-6 md:px-8 shadow-sm transition hover:shadow-md";
         return p.websiteUrl ? (
             <a key={i} href={p.websiteUrl} target="_blank" rel="noopener noreferrer" className={cls}>
                 {img}
@@ -61,15 +61,13 @@ const Partners = () => {
     };
 
     return (
-        <section className="overflow-hidden bg-slate-50/60 py-12 lg:py-16 border-y border-slate-100">
+        <section className="overflow-hidden bg-slate-50 py-12 lg:py-16 border-y border-slate-200">
             <div className="mx-auto mb-8 max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 text-center">
-                <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 shadow-sm">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#0142b2]" />
-                    <span className={`text-xs font-medium text-slate-600 work ${bn}`}>{isBn ? "আমাদের পার্টনার" : "Our partners"}</span>
-                </div>
-                <h2 className={`text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0b1b4a] outfit ${bn}`}>
+                <p className={`mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-[#0142b2] work ${bn}`}>{isBn ? "আমাদের পার্টনার" : "Our partners"}</p>
+                <h2 className={`text-2xl sm:text-3xl font-bold text-[#0b1b4a] outfit ${bn}`}>
                     {isBn ? "যাদের সাথে আমরা কাজ করি" : "Organisations we work with"}
                 </h2>
+                <span aria-hidden="true" className="mx-auto mt-3 block h-[3px] w-14 bg-[#e5251f]" />
             </div>
 
             {marquee ? (

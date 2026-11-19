@@ -10,9 +10,9 @@ import { FaStar, FaWhatsapp, FaCheckCircle, FaStarHalfAlt } from "react-icons/fa
 import { MdVerified, MdOutlineQuiz, MdOutlineAssignment } from "react-icons/md";
 import {
   LuVideo, LuTarget, LuFileText, LuMonitor, LuCalendarDays, LuInfinity, LuClock, LuUsers,
-  LuArrowLeft, LuArrowRight, LuWifi, LuMapPin, LuCirclePlay, LuLanguages, LuShieldCheck,
+  LuArrowRight, LuWifi, LuMapPin, LuCirclePlay, LuLanguages, LuShieldCheck,
   LuLoader, LuGift, LuShoppingCart, LuLayers, LuCircleCheck, LuChevronDown, LuLock, LuLockOpen,
-  LuAward, LuGraduationCap, LuBriefcase, LuCheck,
+  LuAward, LuGraduationCap, LuBriefcase, LuCheck, LuHouse, LuChevronRight,
 } from "react-icons/lu";
 import { RiLiveLine } from "react-icons/ri";
 import { FiVideo, FiFileText, FiPlay } from "react-icons/fi";
@@ -26,12 +26,9 @@ import { getCoursePricing, isFreeCourse } from "@/lib/coursePrice";
 
 const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api';
 
-const SectionTitle = ({ children, accent = "bg-[#0142b2]", right = null, bn = "" }) => (
-  <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-    <div>
-      <h2 className={`text-xl sm:text-2xl font-bold text-[#0b1b4a] outfit ${bn}`}>{children}</h2>
-      <div className={`mt-2 h-1 w-12 rounded-full ${accent}`} />
-    </div>
+const SectionTitle = ({ children, right = null, bn = "" }) => (
+  <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <h2 className={`border-l-4 border-[#e5251f] pl-3 text-lg sm:text-xl font-bold leading-tight text-[#0b1b4a] outfit ${bn}`}>{children}</h2>
     {right}
   </div>
 );
@@ -348,10 +345,10 @@ const SingleCourse = () => {
             <div className="h-3 w-24 rounded bg-slate-100" />
             <div className="h-9 w-4/5 rounded bg-slate-200" />
             <div className="h-4 w-2/3 rounded bg-slate-100" />
-            <div className="h-20 w-full rounded-2xl bg-slate-100" />
-            <div className="h-40 w-full rounded-2xl bg-slate-100" />
+            <div className="h-20 w-full rounded-md bg-slate-100" />
+            <div className="h-40 w-full rounded-md bg-slate-100" />
           </div>
-          <div className="h-[420px] rounded-3xl bg-slate-100" />
+          <div className="h-[420px] rounded-md bg-slate-100" />
         </div>
         <p className={`sr-only ${bengaliClass}`}>{t("courseDetails.loading")}</p>
       </div>
@@ -421,55 +418,87 @@ const SingleCourse = () => {
   const waNumber = String(settings?.whatsappNumber || rawWhatsappNumber).replace(/[^0-9]/g, "") || whatsappNumber;
   const waText = encodeURIComponent(isBn ? `হ্যালো, "${course.title}" কোর্স সম্পর্কে জানতে চাই।` : `Hi, I'd like to know more about the course "${course.title}".`);
 
+  const reviews = Array.isArray(course.reviews) ? course.reviews.filter(Boolean) : [];
+  const tabs = [
+    { key: "overview", label: isBn ? "ওভারভিউ" : "Overview" },
+    { key: "curriculum", label: isBn ? "কারিকুলাম" : "Curriculum" },
+    { key: "mentor", label: isBn ? "মেন্টর" : "Mentor" },
+    reviews.length > 0 && { key: "reviews", label: isBn ? `রিভিউ (${reviews.length})` : `Reviews (${reviews.length})` },
+  ].filter(Boolean);
+  const currentTab = tabs.some((tb) => tb.key === activeTab) ? activeTab : "overview";
+
+  const openTab = (key) => {
+    setActiveTab(key);
+    if (typeof document !== "undefined") {
+      document.getElementById("course-tabs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const ctaBase = `inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#e5251f] to-[#0142b2] px-6 py-3.5 text-[15px] font-semibold text-white shadow-sm transition hover:shadow-md hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70 work ${bn}`;
+
   const enrollButton = isEnrolled ? (
-    <Link
-      href={continueHref}
-      className={`inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#027a1e] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-[#026318] work ${bn}`}
-    >
+    <Link href={continueHref} className={ctaBase}>
       <LuCirclePlay /> {isBn ? "কোর্স চালিয়ে যান" : "Continue learning"} <LuArrowRight />
     </Link>
   ) : (
-    <button
-      type="button"
-      onClick={handleEnroll}
-      disabled={enrolling}
-      className={`inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition disabled:cursor-not-allowed disabled:opacity-70 work ${bn} ${isFree ? "bg-[#027a1e] shadow-emerald-900/20 hover:bg-[#026318]" : "bg-[#0142b2] shadow-blue-900/25 hover:bg-[#01368f]"}`}
-    >
+    <button type="button" onClick={handleEnroll} disabled={enrolling} className={ctaBase}>
       {enrolling ? <LuLoader className="animate-spin" /> : isFree ? <LuGift /> : <LuShoppingCart />}
       {enrollLabel}
     </button>
   );
 
-  return (
-    <div className="min-h-screen bg-white">
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[560px]">
-          <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-blue-100/70 blur-[120px]" />
-          <div className="absolute top-20 right-[-100px] h-[380px] w-[380px] rounded-full bg-red-100/50 blur-[120px]" />
-          <div className="absolute bottom-0 left-1/2 h-[340px] w-[340px] rounded-full bg-emerald-100/50 blur-[120px]" />
-        </div>
+  const statBoxes = [
+    showRating && {
+      key: "rating",
+      icon: <FaStar className="text-amber-400" />,
+      value: Number(course.rating).toFixed(1),
+      label: isBn ? `${course.totalRating} রেটিং` : `${course.totalRating} ${Number(course.totalRating) === 1 ? "rating" : "ratings"}`,
+    },
+    students > 0 && {
+      key: "students",
+      icon: <LuUsers className="text-[#0142b2]" />,
+      value: students.toLocaleString("en-US"),
+      label: isBn ? "শিক্ষার্থী" : students === 1 ? "student" : "students",
+    },
+    lessonCount > 0 && {
+      key: "lessons",
+      icon: <LuCirclePlay className="text-[#e5251f]" />,
+      value: lessonCount,
+      label: isRecorded ? (isBn ? "লেসন" : lessonCount === 1 ? "lesson" : "lessons") : (isBn ? "ক্লাস" : lessonCount === 1 ? "class" : "classes"),
+    },
+  ].filter(Boolean);
 
-        <div className="relative z-10 mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-6 sm:py-10">
-          <Link href="/courses" className={`mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-[#0142b2] work ${bn}`}>
-            <LuArrowLeft /> {isBn ? "সব কোর্স" : "All courses"}
-          </Link>
+  const badge = "inline-flex items-center gap-1 rounded-sm px-2 py-0.5 text-[11px] font-semibold text-white";
+  const panel = "rounded-md border border-slate-200 bg-white p-5 sm:p-6";
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <section className="border-b border-slate-200">
+        <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-6 sm:py-8">
+          {/* Breadcrumb */}
+          <nav aria-label="Breadcrumb" className={`mb-6 flex min-w-0 items-center gap-1.5 text-xs text-slate-500 work ${bn}`}>
+            <Link href="/" className="inline-flex shrink-0 items-center gap-1 transition hover:text-[#0142b2]"><LuHouse /> {isBn ? "হোম" : "Home"}</Link>
+            <LuChevronRight className="shrink-0 text-slate-300" />
+            <Link href="/courses" className="shrink-0 transition hover:text-[#0142b2]">{isBn ? "কোর্স" : "Courses"}</Link>
+            <LuChevronRight className="shrink-0 text-slate-300" />
+            <span className="truncate font-medium text-[#0b1b4a]">{course.title}</span>
+          </nav>
 
           <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-10 2xl:grid-cols-[minmax(0,1fr)_380px]">
             {/* ---------- Header info ---------- */}
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="lg:col-start-1 lg:row-start-1">
-              <div className={`flex flex-wrap items-center gap-2 text-xs work ${bn}`}>
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="min-w-0 lg:col-start-1 lg:row-start-1">
+              <div className={`flex flex-wrap items-center gap-1.5 work ${bn}`}>
                 {typeLabel && (
-                  <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 font-semibold ${typeLabel.cls}`}>
+                  <span className={`${badge} ${course.type === "Online" ? "bg-[#0142b2]" : course.type === "Offline" ? "bg-[#0b1b4a]" : "bg-slate-700"}`}>
                     <typeLabel.Icon /> {isBn ? typeLabel.bn : typeLabel.en}
                   </span>
                 )}
-                {isFree && (
-                  <span className="rounded-full bg-[#027a1e] px-3 py-1 font-bold uppercase tracking-wide text-white">{isBn ? "ফ্রি কোর্স" : "Free course"}</span>
-                )}
-                {categoryName && <span className="font-semibold uppercase tracking-wider text-[#e5251f]">{categoryName}</span>}
+                {isFree && <span className={`${badge} bg-[#027a1e] uppercase tracking-wide`}>{isBn ? "ফ্রি" : "Free"}</span>}
+                {hasOffer && offerNumber && <span className={`${badge} bg-[#e5251f]`}>{isBn ? `${percentOff}% ছাড়` : `${percentOff}% off`}</span>}
+                {categoryName && <span className="ml-1 text-[11px] font-semibold uppercase tracking-wider text-[#e5251f]">{categoryName}</span>}
               </div>
 
-              <h1 className={`mt-3 text-[28px] sm:text-4xl lg:text-[42px] font-extrabold leading-tight tracking-tight text-[#0b1b4a] outfit ${bn}`}>
+              <h1 className={`mt-3 text-[28px] sm:text-4xl lg:text-[40px] font-bold leading-tight text-[#0b1b4a] outfit ${bn}`}>
                 {course.title}
               </h1>
 
@@ -479,72 +508,74 @@ const SingleCourse = () => {
                 </p>
               )}
 
-              <div className={`mt-5 flex flex-wrap items-center gap-2 text-xs work ${bn}`}>
-                {showRating && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 font-medium text-slate-600">
-                    <span className="flex text-[11px]">{renderStars(Number(course.rating))}</span>
-                    <span className="font-bold text-[#0b1b4a]">{Number(course.rating).toFixed(1)}</span>
-                    <span className="text-slate-400">({course.totalRating})</span>
+              <div className={`mt-5 flex flex-wrap gap-2.5 work ${bn}`}>
+                {statBoxes.map((s) => (
+                  <div key={s.key} className="flex items-center gap-2.5 rounded-md border border-slate-200 bg-white px-3.5 py-2">
+                    <span className="text-base">{s.icon}</span>
+                    <span className="leading-tight">
+                      <span className="block text-sm font-bold text-[#0b1b4a] outfit">{s.value}</span>
+                      <span className="block text-[11px] text-slate-500">{s.label}</span>
+                    </span>
+                  </div>
+                ))}
+                <div className="flex items-center gap-2.5 rounded-md border border-slate-200 bg-white px-3.5 py-2">
+                  <LuLanguages className="text-base text-[#027a1e]" />
+                  <span className="leading-tight">
+                    <span className="block text-sm font-bold text-[#0b1b4a] outfit">{isBn ? "বাংলা ও ইংরেজি" : "Bangla & English"}</span>
+                    <span className="block text-[11px] text-slate-500">{isBn ? "ভাষা" : "Language"}</span>
                   </span>
-                )}
-                {students > 0 && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 font-medium text-slate-600">
-                    <LuUsers className="text-[#0142b2]" /> {students.toLocaleString("en-US")} {isBn ? "শিক্ষার্থী এনরোল করেছেন" : students === 1 ? "student enrolled" : "students enrolled"}
-                  </span>
-                )}
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 font-medium text-slate-600">
-                  <LuLanguages className="text-[#0142b2]" /> {isBn ? "বাংলা ও ইংরেজি" : "Bangla & English"}
-                </span>
+                </div>
               </div>
 
               {instructor && (
-                <a href="#mentor" className="mt-5 inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white/90 py-1.5 pl-1.5 pr-4 shadow-sm transition hover:border-[#0142b2]/40">
+                <button
+                  type="button"
+                  onClick={() => openTab("mentor")}
+                  className="mt-5 inline-flex items-center gap-3 rounded-md border border-slate-200 bg-white py-1.5 pl-1.5 pr-4 text-left transition hover:border-[#0142b2]/40"
+                >
                   {instructor.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={instructor.image} alt={instructor.name} className="h-9 w-9 rounded-full object-cover" />
                   ) : (
                     <span className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-sm font-bold text-[#0142b2]">{instructor.name?.charAt(0)}</span>
                   )}
-                  <span className={`text-left text-xs leading-tight work ${bn}`}>
+                  <span className={`text-xs leading-tight work ${bn}`}>
                     <span className="block text-slate-400">{isBn ? "মেন্টর" : "Your mentor"}</span>
                     <span className="flex items-center gap-1 font-semibold text-[#0b1b4a]">{instructor.name} <MdVerified className="text-[#0142b2]" /></span>
                   </span>
-                </a>
+                </button>
               )}
             </motion.div>
 
             {/* ---------- Sticky price / enroll card ---------- */}
             <aside className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-stretch">
               <div className="lg:sticky lg:top-24">
-                <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10">
-                  <div className="relative aspect-video bg-gradient-to-br from-slate-50 to-blue-50">
+                <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+                  <div className="relative aspect-video bg-slate-100">
                     {course.image && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={course.image} alt={course.title} className="h-full w-full object-cover" />
                     )}
                     {hasOffer && offerNumber && (
-                      <span className="absolute right-3 top-3 rounded-full bg-[#e5251f] px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">-{percentOff}%</span>
+                      <span className="absolute left-3 top-3 rounded-sm bg-[#e5251f] px-2 py-0.5 text-[11px] font-bold text-white">-{percentOff}%</span>
                     )}
                   </div>
 
-                  <div className="p-5 sm:p-6">
-                    <p className={`text-[11px] font-semibold uppercase tracking-wider text-slate-400 work ${bn}`}>{isBn ? "কোর্স ফি" : "Course fee"}</p>
-                    <div className="mt-1 flex flex-wrap items-end gap-2">
-                      <span className={`text-3xl font-extrabold leading-none outfit ${isFree ? "text-[#027a1e]" : "text-[#0b1b4a]"} ${bn}`}>
+                  <div className="p-5">
+                    <div className="flex flex-wrap items-baseline gap-2">
+                      <span className={`text-3xl font-bold leading-none outfit ${isFree ? "text-[#027a1e]" : "text-[#0b1b4a]"} ${bn}`}>
                         {isFree ? (isBn ? "ফ্রি" : "Free") : taka(displayFee)}
                       </span>
-                      {hasOffer && <span className="pb-0.5 text-sm text-slate-400 line-through">{taka(feeNumber)}</span>}
+                      {hasOffer && <span className="text-sm text-slate-400 line-through">{taka(feeNumber)}</span>}
                     </div>
-                    <p className={`mt-2 flex items-center gap-1.5 text-xs text-slate-500 work ${bn}`}>
-                      <LuShieldCheck className={isFree ? "text-[#027a1e]" : "text-[#0142b2]"} />
+                    <p className={`mt-2 flex items-center gap-1.5 text-xs font-medium text-[#e5251f] work ${bn}`}>
+                      <LuShieldCheck className="shrink-0" />
                       {isFree
-                        ? (isBn ? "সম্পূর্ণ ফ্রি — কোনো পেমেন্ট লাগবে না" : "Completely free — no payment needed")
+                        ? (isBn ? "ফ্রি — কোনো পেমেন্ট লাগবে না" : "Free — no payment needed")
                         : (isBn ? "একবার পেমেন্ট — পুরো কোর্সে অ্যাক্সেস" : "One-time payment — full course access")}
                     </p>
 
-                    <div className="mt-5">
-                      {enrollButton}
-                    </div>
+                    <div className="mt-5">{enrollButton}</div>
                     {isEnrolled && (
                       <p className={`mt-2 text-center text-xs font-medium text-[#027a1e] work ${bn}`}>
                         {isBn ? "আপনি এই কোর্সে এনরোল করেছেন" : "You are enrolled in this course"}
@@ -555,12 +586,12 @@ const SingleCourse = () => {
                       href={`https://wa.me/${waNumber}?text=${waText}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-[#0b1b4a] transition hover:border-emerald-300 hover:text-[#027a1e] work ${bn}`}
+                      className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-[#0b1b4a] transition hover:border-[#25D366] hover:text-[#027a1e] work ${bn}`}
                     >
                       <FaWhatsapp className="text-base text-[#25D366]" /> {isBn ? "হোয়াটসঅ্যাপে প্রশ্ন করুন" : "Ask on WhatsApp"}
                     </a>
 
-                    <div className="mt-6 border-t border-slate-100 pt-5">
+                    <div className="mt-5 border-t border-slate-200 pt-4">
                       <p className={`text-sm font-bold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "এই কোর্সে যা পাচ্ছেন" : "This course includes"}</p>
                       <ul className={`mt-3 space-y-2.5 text-sm text-slate-600 work ${bn}`}>
                         {lessonCount > 0 && (
@@ -593,277 +624,330 @@ const SingleCourse = () => {
               </div>
             </aside>
 
-            {/* ---------- Body ---------- */}
-            <div className="min-w-0 space-y-12 lg:col-start-1 lg:row-start-2">
-              {/* Facts */}
-              {courseFacts.length > 0 && (
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  {courseFacts.slice(0, 4).map((fact, idx) => (
-                    <div key={idx} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-[#0142b2]">
-                        <fact.Icon className="text-lg" />
-                      </span>
-                      <p className={`mt-3 text-sm font-bold leading-tight text-[#0b1b4a] outfit ${bn}`}>{fact.value}</p>
-                      <p className={`mt-0.5 text-[11px] text-slate-500 work ${bn}`}>{fact.label}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* About */}
-              {course.details && (
-                <div>
-                  <SectionTitle bn={bn} accent="bg-[#e5251f]">{isBn ? "কোর্সটি সম্পর্কে" : "About this course"}</SectionTitle>
-                  <div className={`whitespace-pre-line text-sm sm:text-[15px] leading-relaxed text-slate-600 work ${bn}`}>{course.details}</div>
-                </div>
-              )}
-
-              {/* What's included */}
-              {course.courseIncludes?.length > 0 && (
-                <div>
-                  <SectionTitle bn={bn} accent="bg-[#027a1e]">{isBn ? "কোর্সে যা যা থাকছে" : "What you get"}</SectionTitle>
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {course.courseIncludes.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[#027a1e]">
-                          {renderIcon(item.icon)}
-                        </span>
-                        <span className={`text-sm font-semibold text-[#0b1b4a] work ${bn}`}>{item.text || item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Curriculum */}
-              <div id="curriculum">
-                <SectionTitle
-                  bn={bn}
-                  right={isRecorded && modules.length > 0 ? (
-                    <p className={`text-xs text-slate-500 work ${bn}`}>
-                      {modules.length} {isBn ? "মডিউল" : "modules"} · {totalLessons} {isBn ? "লেসন" : "lessons"}{videoHours ? ` · ${videoHours}` : ""}
-                    </p>
-                  ) : null}
-                >
-                  {isBn ? "কোর্স কারিকুলাম" : "Course curriculum"}
-                </SectionTitle>
-
-                {isRecorded && loadingCurriculum ? (
-                  <div className="space-y-3 animate-pulse">
-                    {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-16 rounded-2xl bg-slate-100" />)}
-                  </div>
-                ) : isRecorded && modules.length > 0 ? (
-                  <div className="space-y-3">
-                    {modules.map((mod, idx) => {
-                      const lessons = moduleLessons[mod._id] || [];
-                      const isExpanded = expandedModules[mod._id];
-                      const moduleDuration = lessons.reduce((acc, l) => acc + (l.videoDuration || 0), 0);
-                      const freeCount = lessons.filter((l) => l.isFree).length;
-
-                      return (
-                        <div key={mod._id} className={`overflow-hidden rounded-2xl border bg-white shadow-sm transition ${isExpanded ? "border-[#0142b2]/30" : "border-slate-200"}`}>
-                          <button
-                            type="button"
-                            onClick={() => toggleModule(mod._id)}
-                            aria-expanded={!!isExpanded}
-                            className="flex w-full items-center gap-4 px-4 py-4 text-left transition hover:bg-slate-50 sm:px-5"
-                          >
-                            <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold outfit ${isExpanded ? "bg-[#0142b2] text-white" : "bg-blue-50 text-[#0142b2]"}`}>
-                              {String(idx + 1).padStart(2, "0")}
-                            </span>
-                            <span className="min-w-0 flex-1">
-                              <span className={`block font-semibold text-[#0b1b4a] work ${bn}`}>{mod.title}</span>
-                              <span className={`mt-0.5 flex flex-wrap items-center gap-x-3 text-xs text-slate-400 work ${bn}`}>
-                                <span>{lessons.length} {isBn ? "লেসন" : lessons.length === 1 ? "lesson" : "lessons"}</span>
-                                {moduleDuration > 0 && <span>{Math.round(moduleDuration / 60)} {isBn ? "মিনিট" : "min"}</span>}
-                                {freeCount > 0 && !isEnrolled && <span className="font-semibold text-[#027a1e]">{freeCount} {isBn ? "ফ্রি প্রিভিউ" : "free preview"}</span>}
-                              </span>
-                            </span>
-                            <LuChevronDown className={`shrink-0 text-slate-400 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
-                          </button>
-
-                          <AnimatePresence initial={false}>
-                            {isExpanded && (
-                              <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="overflow-hidden border-t border-slate-100"
-                              >
-                                <ul className="divide-y divide-slate-100">
-                                  {lessons.length === 0 && (
-                                    <li className={`px-5 py-3.5 text-sm text-slate-400 work ${bn}`}>{isBn ? "লেসন শীঘ্রই যোগ হবে" : "Lessons coming soon"}</li>
-                                  )}
-                                  {lessons.map((lesson) => {
-                                    const canOpen = (lesson.isFree || isEnrolled) && lesson.type === "video";
-                                    return (
-                                      <li key={lesson._id} className="flex items-center gap-3 px-4 py-3 sm:px-5">
-                                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-50">
-                                          {getLessonIcon(lesson.type)}
-                                        </span>
-                                        <span className="min-w-0 flex-1">
-                                          <span className={`block truncate text-sm font-medium ${lesson.isFree || isEnrolled ? "text-[#0b1b4a]" : "text-slate-500"} work ${bn}`}>{lesson.title}</span>
-                                          {lesson.videoDuration > 0 && (
-                                            <span className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-400 work"><LuClock /> {Math.round(lesson.videoDuration / 60)} min</span>
-                                          )}
-                                        </span>
-                                        {lesson.isFree && !isEnrolled && (
-                                          <span className={`inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-[#027a1e] work ${bn}`}>
-                                            <LuLockOpen /> {isBn ? "ফ্রি প্রিভিউ" : "Free preview"}
-                                          </span>
-                                        )}
-                                        {!lesson.isFree && !isEnrolled && <LuLock className="shrink-0 text-slate-300" />}
-                                        {canOpen && isEnrolled && (
-                                          <Link
-                                            href={`/learn/${course._id}?lesson=${lesson._id}`}
-                                            aria-label={isBn ? "লেসন দেখুন" : "Play lesson"}
-                                            className="shrink-0 rounded-full p-1.5 text-[#0142b2] transition hover:bg-blue-50"
-                                          >
-                                            <FiPlay size={14} />
-                                          </Link>
-                                        )}
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : isRecorded || !(course.curriculum?.length > 0) ? (
-                  <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 px-6 py-12 text-center">
-                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-xl text-[#0142b2] shadow-sm">
-                      <LuVideo />
-                    </div>
-                    <h4 className={`mt-3 font-bold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "কারিকুলাম শীঘ্রই আসছে" : "Curriculum coming soon"}</h4>
-                    <p className={`mt-1 text-sm text-slate-500 work ${bn}`}>
-                      {isRecorded
-                        ? (isBn ? "মডিউল ও লেসনগুলো যোগ করা হচ্ছে" : "Modules and lessons are being added")
-                        : (isBn ? "ক্লাসের বিষয়গুলো শীঘ্রই যোগ করা হবে" : "Class topics will be added soon")}
-                    </p>
-                  </div>
-                ) : (
-                  /* Live (Online/Offline): curriculum topic list */
-                  <ol className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm divide-y divide-slate-100">
-                    {course.curriculum.map((item, idx) => (
-                      <li key={idx} className="flex items-center gap-4 px-4 py-3.5 sm:px-5">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-xs font-bold text-[#0142b2] outfit">
-                          {String(idx + 1).padStart(2, "0")}
-                        </span>
-                        <span className={`text-sm font-medium text-[#0b1b4a] work ${bn}`}>{item}</span>
-                      </li>
-                    ))}
-                  </ol>
-                )}
+            {/* ---------- Tabs + panels ---------- */}
+            <div id="course-tabs" className="min-w-0 scroll-mt-24 lg:col-start-1 lg:row-start-2">
+              <div role="tablist" aria-label={isBn ? "কোর্সের তথ্য" : "Course information"} className="flex overflow-x-auto rounded-md border border-slate-200 bg-white">
+                {tabs.map((tb) => (
+                  <button
+                    key={tb.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={currentTab === tb.key}
+                    onClick={() => setActiveTab(tb.key)}
+                    className={`shrink-0 border-b-2 px-4 py-3 text-sm font-semibold transition sm:px-6 work ${bn} ${currentTab === tb.key ? "border-[#e5251f] text-[#0b1b4a]" : "border-transparent text-slate-500 hover:text-[#0142b2]"}`}
+                  >
+                    {tb.label}
+                  </button>
+                ))}
               </div>
 
-              {/* Skills */}
-              {skills.length > 0 && (
-                <div>
-                  <SectionTitle bn={bn} accent="bg-[#e5251f]">{isBn ? "যেসব দক্ষতা গড়বেন" : "Skills you'll build"}</SectionTitle>
-                  <div className="flex flex-wrap gap-2">
-                    {skills.map((skill, idx) => (
-                      <span key={idx} className={`inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 work ${bn}`}>
-                        <LuCircleCheck className="text-[#027a1e]" /> {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Where these skills help */}
-              {course.jobPositions?.length > 0 && (
-                <div>
-                  <SectionTitle bn={bn}>{isBn ? "যেখানে কাজে লাগবে" : "Where these skills help"}</SectionTitle>
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {course.jobPositions.map((job, idx) => (
-                      <div key={idx} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#0142b2]">
-                          <LuTarget />
-                        </span>
-                        <span className={`text-sm font-semibold text-[#0b1b4a] work ${bn}`}>{job}</span>
+              <div className="mt-5 space-y-5">
+                {/* ===== Overview ===== */}
+                {currentTab === "overview" && (
+                  <>
+                    {courseFacts.length > 0 && (
+                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                        {courseFacts.slice(0, 4).map((fact, idx) => (
+                          <div key={idx} className="rounded-md border border-slate-200 bg-white p-4">
+                            <fact.Icon className="text-lg text-[#0142b2]" />
+                            <p className={`mt-2 text-sm font-bold leading-tight text-[#0b1b4a] outfit ${bn}`}>{fact.value}</p>
+                            <p className={`mt-0.5 text-[11px] text-slate-500 work ${bn}`}>{fact.label}</p>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                    )}
 
-              {/* Mentor */}
-              <div id="mentor" className="scroll-mt-24">
-                <SectionTitle bn={bn} accent="bg-[#027a1e]">{isBn ? "আপনার মেন্টর" : "Your mentor"}</SectionTitle>
-                {instructor ? (
-                  <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                    <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-                      <div className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
-                        {instructor.image && (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={instructor.image} alt={instructor.name} className="h-full w-full object-cover" />
-                        )}
+                    {course.details && (
+                      <div className={panel}>
+                        <SectionTitle bn={bn}>{isBn ? "কোর্সের বিবরণ" : "Course description"}</SectionTitle>
+                        <div className={`whitespace-pre-line text-sm sm:text-[15px] leading-relaxed text-slate-600 work ${bn}`}>{course.details}</div>
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="flex items-center gap-2 text-xl font-bold text-[#0b1b4a] outfit">
-                          {instructor.name} <MdVerified className="text-[#0142b2]" />
-                        </h3>
-                        {(instructor.designation || instructor.subject) && (
-                          <p className={`mt-1 text-sm font-medium text-[#0142b2] work ${bn}`}>
-                            {[instructor.designation, instructor.subject].filter(Boolean).join(" · ")}
-                          </p>
-                        )}
-                        {Number(instructor.training_experience?.years) > 0 && (
-                          <span className={`mt-3 inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-[#0142b2] work ${bn}`}>
-                            <LuAward /> {instructor.training_experience.years}+ {isBn ? "বছরের অভিজ্ঞতা" : "years of experience"}
-                          </span>
-                        )}
-                        {instructor.details && (
-                          <p className={`mt-3 text-sm leading-relaxed text-slate-600 work ${bn}`}>{instructor.details}</p>
-                        )}
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {(instructor._id || instructor.id) && (
-                            <Link
-                              href={`/mentors/${instructor._id || instructor.id}`}
-                              className={`inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-[#0b1b4a] transition hover:border-[#0142b2]/40 hover:text-[#0142b2] work ${bn}`}
-                            >
-                              {isBn ? "পুরো প্রোফাইল দেখুন" : "View full profile"} <LuArrowRight />
-                            </Link>
-                          )}
+                    )}
+
+                    {course.courseIncludes?.length > 0 && (
+                      <div className={panel}>
+                        <SectionTitle bn={bn}>{isBn ? "কোর্সে যা যা থাকছে" : "What you get"}</SectionTitle>
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                          {course.courseIncludes.map((item, idx) => (
+                            <div key={idx} className="flex items-center gap-3 rounded-md border border-slate-200 bg-slate-50 p-3">
+                              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded bg-white text-[#027a1e] ring-1 ring-slate-200">
+                                {renderIcon(item.icon)}
+                              </span>
+                              <span className={`text-sm font-semibold text-[#0b1b4a] work ${bn}`}>{item.text || item}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                    </div>
+                    )}
 
-                    {(instructor.education_qualification?.length > 0 || instructor.work_experience?.length > 0) && (
-                      <div className="mt-6 grid gap-4 border-t border-slate-100 pt-5 sm:grid-cols-2">
-                        {instructor.education_qualification?.length > 0 && (
-                          <div>
-                            <p className={`flex items-center gap-2 text-sm font-bold text-[#0b1b4a] outfit ${bn}`}><LuGraduationCap className="text-[#0142b2]" /> {isBn ? "শিক্ষাগত যোগ্যতা" : "Education"}</p>
-                            <ul className={`mt-2 space-y-1.5 text-sm text-slate-600 work ${bn}`}>
-                              {instructor.education_qualification.map((item, idx) => (
-                                <li key={idx} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0142b2]" /> {item}</li>
-                              ))}
-                            </ul>
+                    {skills.length > 0 && (
+                      <div className={panel}>
+                        <SectionTitle bn={bn}>{isBn ? "যেসব দক্ষতা গড়বেন" : "Skills you'll build"}</SectionTitle>
+                        <ul className="grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                          {skills.map((skill, idx) => (
+                            <li key={idx} className={`flex items-start gap-2 text-sm text-slate-700 work ${bn}`}>
+                              <LuCheck className="mt-0.5 shrink-0 text-[#027a1e]" /> {skill}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {course.jobPositions?.length > 0 && (
+                      <div className={panel}>
+                        <SectionTitle bn={bn}>{isBn ? "যেখানে কাজে লাগবে" : "Where these skills help"}</SectionTitle>
+                        <ul className="grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                          {course.jobPositions.map((job, idx) => (
+                            <li key={idx} className={`flex items-start gap-2 text-sm text-slate-700 work ${bn}`}>
+                              <LuTarget className="mt-0.5 shrink-0 text-[#0142b2]" /> {job}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {!course.details && !(course.courseIncludes?.length > 0) && skills.length === 0 && !(course.jobPositions?.length > 0) && (
+                      <div className={panel}>
+                        <SectionTitle bn={bn}>{isBn ? "কোর্সের বিবরণ" : "Course description"}</SectionTitle>
+                        <p className={`text-sm text-slate-500 work ${bn}`}>{isBn ? "বিস্তারিত তথ্য শীঘ্রই যোগ করা হবে।" : "More details will be added soon."}</p>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* ===== Curriculum ===== */}
+                {currentTab === "curriculum" && (
+                  <div id="curriculum" className={panel}>
+                    <SectionTitle
+                      bn={bn}
+                      right={isRecorded && modules.length > 0 ? (
+                        <p className={`text-xs text-slate-500 work ${bn}`}>
+                          {modules.length} {isBn ? "মডিউল" : "modules"} · {totalLessons} {isBn ? "লেসন" : "lessons"}{videoHours ? ` · ${videoHours}` : ""}
+                        </p>
+                      ) : null}
+                    >
+                      {isBn ? "কোর্স কারিকুলাম" : "Course curriculum"}
+                    </SectionTitle>
+
+                    {isRecorded && loadingCurriculum ? (
+                      <div className="space-y-2 animate-pulse">
+                        {Array.from({ length: 3 }).map((_, i) => <div key={i} className="h-14 rounded-md bg-slate-100" />)}
+                      </div>
+                    ) : isRecorded && modules.length > 0 ? (
+                      <div className="divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+                        {modules.map((mod, idx) => {
+                          const lessons = moduleLessons[mod._id] || [];
+                          const isExpanded = expandedModules[mod._id];
+                          const moduleDuration = lessons.reduce((acc, l) => acc + (l.videoDuration || 0), 0);
+                          const freeCount = lessons.filter((l) => l.isFree).length;
+
+                          return (
+                            <div key={mod._id} className="bg-white">
+                              <button
+                                type="button"
+                                onClick={() => toggleModule(mod._id)}
+                                aria-expanded={!!isExpanded}
+                                className={`flex w-full items-center gap-4 px-4 py-3.5 text-left transition sm:px-5 ${isExpanded ? "bg-slate-50" : "hover:bg-slate-50"}`}
+                              >
+                                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded text-xs font-bold outfit ${isExpanded ? "bg-[#0142b2] text-white" : "bg-blue-50 text-[#0142b2]"}`}>
+                                  {String(idx + 1).padStart(2, "0")}
+                                </span>
+                                <span className="min-w-0 flex-1">
+                                  <span className={`block font-semibold text-[#0b1b4a] work ${bn}`}>{mod.title}</span>
+                                  <span className={`mt-0.5 flex flex-wrap items-center gap-x-3 text-xs text-slate-400 work ${bn}`}>
+                                    <span>{lessons.length} {isBn ? "লেসন" : lessons.length === 1 ? "lesson" : "lessons"}</span>
+                                    {moduleDuration > 0 && <span>{Math.round(moduleDuration / 60)} {isBn ? "মিনিট" : "min"}</span>}
+                                    {freeCount > 0 && !isEnrolled && <span className="font-semibold text-[#027a1e]">{freeCount} {isBn ? "ফ্রি প্রিভিউ" : "free preview"}</span>}
+                                  </span>
+                                </span>
+                                <LuChevronDown className={`shrink-0 text-slate-400 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                              </button>
+
+                              <AnimatePresence initial={false}>
+                                {isExpanded && (
+                                  <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="overflow-hidden border-t border-slate-100"
+                                  >
+                                    <ul className="divide-y divide-slate-100">
+                                      {lessons.length === 0 && (
+                                        <li className={`px-5 py-3.5 text-sm text-slate-400 work ${bn}`}>{isBn ? "লেসন শীঘ্রই যোগ হবে" : "Lessons coming soon"}</li>
+                                      )}
+                                      {lessons.map((lesson) => {
+                                        const canOpen = (lesson.isFree || isEnrolled) && lesson.type === "video";
+                                        return (
+                                          <li key={lesson._id} className="flex items-center gap-3 px-4 py-3 sm:px-5">
+                                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded bg-slate-50 ring-1 ring-slate-200">
+                                              {getLessonIcon(lesson.type)}
+                                            </span>
+                                            <span className="min-w-0 flex-1">
+                                              <span className={`block truncate text-sm font-medium ${lesson.isFree || isEnrolled ? "text-[#0b1b4a]" : "text-slate-500"} work ${bn}`}>{lesson.title}</span>
+                                              {lesson.videoDuration > 0 && (
+                                                <span className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-400 work"><LuClock /> {Math.round(lesson.videoDuration / 60)} min</span>
+                                              )}
+                                            </span>
+                                            {lesson.isFree && !isEnrolled && (
+                                              <span className={`inline-flex shrink-0 items-center gap-1 rounded-sm bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-[#027a1e] ring-1 ring-emerald-100 work ${bn}`}>
+                                                <LuLockOpen /> {isBn ? "ফ্রি প্রিভিউ" : "Free preview"}
+                                              </span>
+                                            )}
+                                            {!lesson.isFree && !isEnrolled && <LuLock className="shrink-0 text-slate-300" />}
+                                            {canOpen && isEnrolled && (
+                                              <Link
+                                                href={`/learn/${course._id}?lesson=${lesson._id}`}
+                                                aria-label={isBn ? "লেসন দেখুন" : "Play lesson"}
+                                                className="shrink-0 rounded p-1.5 text-[#0142b2] transition hover:bg-blue-50"
+                                              >
+                                                <FiPlay size={14} />
+                                              </Link>
+                                            )}
+                                          </li>
+                                        );
+                                      })}
+                                    </ul>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : isRecorded || !(course.curriculum?.length > 0) ? (
+                      <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center">
+                        <LuVideo className="mx-auto text-2xl text-[#0142b2]" />
+                        <h4 className={`mt-2 font-bold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "কারিকুলাম শীঘ্রই আসছে" : "Curriculum coming soon"}</h4>
+                        <p className={`mt-1 text-sm text-slate-500 work ${bn}`}>
+                          {isRecorded
+                            ? (isBn ? "মডিউল ও লেসনগুলো যোগ করা হচ্ছে" : "Modules and lessons are being added")
+                            : (isBn ? "ক্লাসের বিষয়গুলো শীঘ্রই যোগ করা হবে" : "Class topics will be added soon")}
+                        </p>
+                      </div>
+                    ) : (
+                      /* Live (Online/Offline): curriculum topic list */
+                      <ol className="divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+                        {course.curriculum.map((item, idx) => (
+                          <li key={idx} className="flex items-center gap-4 px-4 py-3 sm:px-5">
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-blue-50 text-xs font-bold text-[#0142b2] outfit">
+                              {String(idx + 1).padStart(2, "0")}
+                            </span>
+                            <span className={`text-sm font-medium text-[#0b1b4a] work ${bn}`}>{item}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </div>
+                )}
+
+                {/* ===== Mentor ===== */}
+                {currentTab === "mentor" && (
+                  <div id="mentor" className={panel}>
+                    <SectionTitle bn={bn}>{isBn ? "আপনার মেন্টর" : "Your mentor"}</SectionTitle>
+                    {instructor ? (
+                      <>
+                        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+                          <div className="h-28 w-28 shrink-0 overflow-hidden rounded-md border border-slate-200 bg-slate-50">
+                            {instructor.image && (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={instructor.image} alt={instructor.name} className="h-full w-full object-cover" />
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="flex items-center gap-2 text-xl font-bold text-[#0b1b4a] outfit">
+                              {instructor.name} <MdVerified className="text-[#0142b2]" />
+                            </h3>
+                            {(instructor.designation || instructor.subject) && (
+                              <p className={`mt-1 text-sm font-medium text-[#0142b2] work ${bn}`}>
+                                {[instructor.designation, instructor.subject].filter(Boolean).join(" · ")}
+                              </p>
+                            )}
+                            {Number(instructor.training_experience?.years) > 0 && (
+                              <span className={`mt-3 inline-flex items-center gap-1.5 rounded-sm bg-blue-50 px-2 py-0.5 text-xs font-semibold text-[#0142b2] ring-1 ring-blue-100 work ${bn}`}>
+                                <LuAward /> {instructor.training_experience.years}+ {isBn ? "বছরের অভিজ্ঞতা" : "years of experience"}
+                              </span>
+                            )}
+                            {instructor.details && (
+                              <p className={`mt-3 text-sm leading-relaxed text-slate-600 work ${bn}`}>{instructor.details}</p>
+                            )}
+                            {(instructor._id || instructor.id) && (
+                              <Link
+                                href={`/mentors/${instructor._id || instructor.id}`}
+                                className={`mt-4 inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-xs font-semibold text-[#0b1b4a] transition hover:border-[#0142b2] hover:text-[#0142b2] work ${bn}`}
+                              >
+                                {isBn ? "পুরো প্রোফাইল দেখুন" : "View full profile"} <LuArrowRight />
+                              </Link>
+                            )}
+                          </div>
+                        </div>
+
+                        {(instructor.education_qualification?.length > 0 || instructor.work_experience?.length > 0) && (
+                          <div className="mt-6 grid gap-5 border-t border-slate-200 pt-5 sm:grid-cols-2">
+                            {instructor.education_qualification?.length > 0 && (
+                              <div>
+                                <p className={`flex items-center gap-2 text-sm font-bold text-[#0b1b4a] outfit ${bn}`}><LuGraduationCap className="text-[#0142b2]" /> {isBn ? "শিক্ষাগত যোগ্যতা" : "Education"}</p>
+                                <ul className={`mt-2 space-y-1.5 text-sm text-slate-600 work ${bn}`}>
+                                  {instructor.education_qualification.map((item, idx) => (
+                                    <li key={idx} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0142b2]" /> {item}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            {instructor.work_experience?.length > 0 && (
+                              <div>
+                                <p className={`flex items-center gap-2 text-sm font-bold text-[#0b1b4a] outfit ${bn}`}><LuBriefcase className="text-[#e5251f]" /> {isBn ? "অভিজ্ঞতা" : "Experience"}</p>
+                                <ul className={`mt-2 space-y-1.5 text-sm text-slate-600 work ${bn}`}>
+                                  {instructor.work_experience.slice(0, 5).map((item, idx) => (
+                                    <li key={idx} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#e5251f]" /> {item}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
                           </div>
                         )}
-                        {instructor.work_experience?.length > 0 && (
-                          <div>
-                            <p className={`flex items-center gap-2 text-sm font-bold text-[#0b1b4a] outfit ${bn}`}><LuBriefcase className="text-[#e5251f]" /> {isBn ? "অভিজ্ঞতা" : "Experience"}</p>
-                            <ul className={`mt-2 space-y-1.5 text-sm text-slate-600 work ${bn}`}>
-                              {instructor.work_experience.slice(0, 5).map((item, idx) => (
-                                <li key={idx} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#e5251f]" /> {item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
+                      </>
+                    ) : (
+                      <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center">
+                        <LuUsers className="mx-auto text-3xl text-slate-300" />
+                        <h4 className={`mt-2 font-bold text-[#0b1b4a] outfit ${bn}`}>{t("courseDetails.mentorNotAssigned")}</h4>
+                        <p className={`mt-1 text-sm text-slate-500 work ${bn}`}>{t("courseDetails.checkBack")}</p>
                       </div>
                     )}
                   </div>
-                ) : (
-                  <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 px-6 py-10 text-center">
-                    <LuUsers className="mx-auto text-3xl text-slate-300" />
-                    <h4 className={`mt-2 font-bold text-[#0b1b4a] outfit ${bn}`}>{t("courseDetails.mentorNotAssigned")}</h4>
-                    <p className={`mt-1 text-sm text-slate-500 work ${bn}`}>{t("courseDetails.checkBack")}</p>
+                )}
+
+                {/* ===== Reviews (only when the course record carries review data) ===== */}
+                {currentTab === "reviews" && reviews.length > 0 && (
+                  <div className={panel}>
+                    <SectionTitle
+                      bn={bn}
+                      right={showRating ? (
+                        <span className="flex items-center gap-1.5 text-sm">
+                          <span className="flex text-xs">{renderStars(Number(course.rating))}</span>
+                          <span className="font-bold text-[#0b1b4a]">{Number(course.rating).toFixed(1)}</span>
+                        </span>
+                      ) : null}
+                    >
+                      {isBn ? "শিক্ষার্থীদের রিভিউ" : "Student reviews"}
+                    </SectionTitle>
+                    <ul className="divide-y divide-slate-200">
+                      {reviews.map((r, idx) => {
+                        const name = r.name || r.user?.name || r.userName || (isBn ? "শিক্ষার্থী" : "Student");
+                        const text = r.comment || r.review || r.text || r.message || "";
+                        const stars = Number(r.rating) || 0;
+                        return (
+                          <li key={r._id || idx} className="flex gap-3 py-4 first:pt-0 last:pb-0">
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-sm font-bold text-[#0142b2]">{String(name).charAt(0)}</span>
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-[#0b1b4a]">{name}</p>
+                              {stars > 0 && <span className="mt-0.5 flex text-[11px]">{renderStars(stars)}</span>}
+                              {text && <p className={`mt-1.5 text-sm leading-relaxed text-slate-600 work ${bn}`}>{text}</p>}
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
                   </div>
                 )}
               </div>
@@ -874,16 +958,16 @@ const SingleCourse = () => {
 
       {/* ---------- Related courses ---------- */}
       {popularCourses.length > 0 && (
-        <section className="border-t border-slate-100 bg-slate-50/60">
-          <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-12 sm:py-16">
+        <section className="bg-white">
+          <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-12 lg:py-16">
             <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
               <div>
-                <h2 className={`text-2xl sm:text-3xl font-extrabold text-[#0b1b4a] outfit ${bn}`}>
-                  {isBn ? <>আরও <span className="text-[#e5251f]">কোর্স</span></> : <>More <span className="text-[#e5251f]">courses</span></>}
+                <h2 className={`border-l-4 border-[#e5251f] pl-3 text-2xl sm:text-[28px] font-bold text-[#0b1b4a] outfit ${bn}`}>
+                  {isBn ? "আরও কোর্স" : "More courses"}
                 </h2>
-                <p className={`mt-1 text-sm text-slate-500 work ${bn}`}>{isBn ? "আপনার পছন্দ হতে পারে" : "You might also like"}</p>
+                <p className={`mt-1 pl-4 text-sm text-slate-500 work ${bn}`}>{isBn ? "আপনার পছন্দ হতে পারে" : "You might also like"}</p>
               </div>
-              <Link href="/courses" className={`inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] transition hover:border-[#0142b2]/40 hover:text-[#0142b2] work ${bn}`}>
+              <Link href="/courses" className={`inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-[#0b1b4a] transition hover:border-[#0142b2] hover:text-[#0142b2] work ${bn}`}>
                 {isBn ? "সব কোর্স দেখুন" : "View all courses"} <LuArrowRight />
               </Link>
             </div>
@@ -900,7 +984,7 @@ const SingleCourse = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl"
+            className="w-full max-w-md overflow-hidden rounded-md bg-white shadow-xl"
           >
             <div className="bg-[#0b1b4a] px-6 py-5 text-white">
               <h3 className="text-lg font-bold outfit">{isBn ? "পেমেন্ট মেথড বেছে নিন" : "Select payment method"}</h3>
@@ -916,7 +1000,7 @@ const SingleCourse = () => {
                   key={method.id}
                   type="button"
                   onClick={() => setPaymentMethod(method.id)}
-                  className={`flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left transition ${paymentMethod === method.id ? 'border-[#0142b2] bg-blue-50/60' : 'border-slate-200 hover:border-slate-300'}`}
+                  className={`flex w-full items-center gap-4 rounded-md border-2 p-4 text-left transition ${paymentMethod === method.id ? 'border-[#0142b2] bg-blue-50/60' : 'border-slate-200 hover:border-slate-300'}`}
                 >
                   <div className="flex-1">
                     <p className="font-bold text-[#0b1b4a]">{method.label}</p>
@@ -930,7 +1014,7 @@ const SingleCourse = () => {
               <button
                 type="button"
                 onClick={() => setShowPaymentModal(false)}
-                className="flex-1 rounded-full border border-slate-200 py-3 font-medium text-slate-600 transition hover:bg-slate-50"
+                className="flex-1 rounded-md border border-slate-200 py-3 font-medium text-slate-600 transition hover:bg-slate-50"
               >
                 {isBn ? "বাতিল" : "Cancel"}
               </button>
@@ -938,7 +1022,7 @@ const SingleCourse = () => {
                 type="button"
                 onClick={handlePayment}
                 disabled={paymentLoading}
-                className="flex flex-1 items-center justify-center gap-2 rounded-full bg-[#0142b2] py-3 font-bold text-white shadow-lg transition hover:bg-[#01368f] disabled:opacity-50"
+                className="flex flex-1 items-center justify-center gap-2 rounded-md bg-[#0142b2] py-3 font-bold text-white transition hover:bg-[#01368f] disabled:opacity-50"
               >
                 {paymentLoading ? <LuLoader className="animate-spin" /> : <LuShoppingCart />}
                 {isBn ? "পেমেন্ট করুন" : "Pay now"}

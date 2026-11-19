@@ -7,7 +7,7 @@ import {
   FiHome, FiUsers, FiAward, FiMessageSquare,
   FiMenu, FiX, FiLogOut, FiChevronDown, FiArrowLeft,
   FiSettings, FiLayers, FiShoppingCart, FiDollarSign, FiPlus,
-  FiBarChart2, FiBell, FiChevronLeft, FiHeadphones, FiTag, FiGlobe, FiClipboard, FiLink, FiBook,
+  FiBarChart2, FiBell, FiChevronLeft, FiHeadphones, FiTag, FiGlobe, FiClipboard, FiLink, FiBook, FiImage,
 } from 'react-icons/fi';
 
 const AdminSidebar = () => {
@@ -157,6 +157,7 @@ const AdminSidebar = () => {
             { title: 'Contact Page', href: '/dashboard/admin/site-content/contact' },
           ],
         },
+        { title: 'Site Images', href: '/dashboard/admin/site-images', icon: FiImage },
         { title: 'Partners', href: '/dashboard/admin/partners', icon: FiLink },
         {
           title: 'Users', icon: FiUsers,

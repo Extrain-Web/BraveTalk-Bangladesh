@@ -5,12 +5,14 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { LuMonitorPlay, LuBuilding2, LuCirclePlay, LuMic, LuArrowRight } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSiteImages } from "@/lib/siteImages";
 import SectionHeader from "./SectionHeader";
 
 // Learning formats → course list filtered by type / category
 const MODES = [
     {
         key: "online",
+        slot: "homeOnline",
         Icon: LuMonitorPlay,
         tile: "bg-blue-50 text-[#0142b2]",
         bar: "bg-[#0142b2]",
@@ -20,6 +22,7 @@ const MODES = [
     },
     {
         key: "offline",
+        slot: "homeInPerson",
         Icon: LuBuilding2,
         tile: "bg-emerald-50 text-[#027a1e]",
         bar: "bg-[#027a1e]",
@@ -29,6 +32,7 @@ const MODES = [
     },
     {
         key: "recorded",
+        slot: "homeRecorded",
         Icon: LuCirclePlay,
         tile: "bg-red-50 text-[#e5251f]",
         bar: "bg-[#e5251f]",
@@ -38,6 +42,7 @@ const MODES = [
     },
     {
         key: "speaking",
+        slot: "homeSpeaking",
         Icon: LuMic,
         tile: "bg-blue-50 text-[#0142b2]",
         bar: "bg-[#0142b2]",
@@ -54,9 +59,10 @@ const HomeCategory = () => {
 
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
+    const img = useSiteImages();
 
     return (
-        <section className="relative bg-white py-14 lg:py-20">
+        <section className="relative bg-white py-12 lg:py-16">
             <div ref={sectionRef} className="relative mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
                 <SectionHeader
                     badge={isBn ? "শেখার ধরন" : "Learning formats"}
@@ -86,17 +92,28 @@ const HomeCategory = () => {
                             >
                                 <Link
                                     href={m.href}
-                                    className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 lg:p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#0142b2]/30 hover:shadow-xl hover:shadow-slate-900/10"
+                                    className="group flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
                                 >
-                                    <span className={`absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100 ${m.bar}`} />
-                                    <span className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${m.tile}`}>
-                                        <m.Icon className="text-[22px]" />
-                                    </span>
-                                    <h3 className={`text-base lg:text-lg font-bold leading-snug text-[#0b1b4a] outfit ${bn}`}>{c.title}</h3>
-                                    <p className={`mt-1.5 flex-1 text-sm leading-relaxed text-slate-500 work ${bn}`}>{c.desc}</p>
-                                    <span className={`mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#0142b2] transition-all group-hover:gap-2.5 work ${bn}`}>
-                                        {isBn ? "কোর্স দেখুন" : "See courses"} <LuArrowRight />
-                                    </span>
+                                    <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={img[m.slot]}
+                                            alt={c.title}
+                                            loading="lazy"
+                                            className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+                                        />
+                                        <span className={`absolute inset-x-0 bottom-0 h-[3px] ${m.bar}`} />
+                                        <span className={`absolute left-3 bottom-3 flex h-9 w-9 items-center justify-center rounded-md shadow-sm ${m.tile}`}>
+                                            <m.Icon className="text-lg" />
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-1 flex-col p-4 lg:p-5">
+                                        <h3 className={`text-base lg:text-[17px] font-bold leading-snug text-[#0b1b4a] outfit ${bn}`}>{c.title}</h3>
+                                        <p className={`mt-1.5 flex-1 text-sm leading-relaxed text-slate-600 work ${bn}`}>{c.desc}</p>
+                                        <span className={`mt-4 inline-flex items-center gap-1.5 border-t border-slate-100 pt-3 text-sm font-semibold text-[#0142b2] transition-all group-hover:gap-2.5 work ${bn}`}>
+                                            {isBn ? "কোর্স দেখুন" : "See courses"} <LuArrowRight />
+                                        </span>
+                                    </div>
                                 </Link>
                             </motion.div>
                         );

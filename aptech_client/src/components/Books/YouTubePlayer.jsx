@@ -11,7 +11,7 @@ export default function YouTubePlayer({ url, title = "Video lesson", locked = fa
     const src = !locked ? getYouTubeEmbedUrl(url, { autoplay }) : null;
 
     return (
-        <div className={`relative w-full overflow-hidden rounded-2xl bg-[#0b1b4a] aspect-video shadow-lg shadow-slate-900/10 ${className}`}>
+        <div className={`relative w-full overflow-hidden rounded-md bg-[#0b1b4a] aspect-video shadow-sm ${className}`}>
             {src ? (
                 <iframe
                     key={src}

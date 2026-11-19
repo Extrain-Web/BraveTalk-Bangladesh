@@ -69,15 +69,12 @@ const Footer = () => {
         <span className="flex-1 bg-[#e5251f]" />
         <span className="flex-1 bg-[#027a1e]" />
       </div>
-      {/* Soft glows */}
-      <div className="pointer-events-none absolute -left-32 top-0 h-[380px] w-[380px] rounded-full bg-[#0142b2]/40 blur-[130px]" />
-      <div className="pointer-events-none absolute -right-24 bottom-0 h-[320px] w-[320px] rounded-full bg-[#e5251f]/15 blur-[130px]" />
 
       <div className="relative mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-12 lg:py-16">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:grid-cols-12 lg:gap-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-4 lg:col-span-4">
-            <Link href="/" className="inline-flex rounded-2xl bg-white px-4 py-3 shadow-lg shadow-black/20" aria-label="BraveTalk Bangladesh">
+            <Link href="/" className="inline-flex rounded-md bg-white px-4 py-3 shadow-sm" aria-label="BraveTalk Bangladesh">
               <img src={logoSrc} alt="BraveTalk Bangladesh" className="h-12 w-auto" />
             </Link>
             <p className={`mt-4 max-w-sm text-sm leading-relaxed text-white/60 work ${bn}`}>{t("footer.brandDescription")}</p>
@@ -92,7 +89,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     title={label}
                     aria-label={label}
-                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/80 transition hover:border-white/30 hover:bg-white hover:text-[#0b1b4a]"
+                    className="flex h-10 w-10 items-center justify-center rounded-md border border-white/10 bg-white/5 text-white/80 transition hover:border-white/30 hover:bg-white hover:text-[#0b1b4a]"
                   >
                     <Icon className="text-[15px]" />
                   </a>
@@ -102,7 +99,7 @@ const Footer = () => {
                     title={label}
                     aria-label={label}
                     aria-disabled="true"
-                    className="flex h-10 w-10 cursor-default items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/40"
+                    className="flex h-10 w-10 cursor-default items-center justify-center rounded-md border border-white/10 bg-white/5 text-white/40"
                   >
                     <Icon className="text-[15px]" />
                   </span>
@@ -153,7 +150,7 @@ const Footer = () => {
             <h4 className={headCls}>{t("footer.contactUs")}</h4>
             <ul className="space-y-3.5">
               <li className="flex items-start gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white/10 text-white">
                   <LuPhone className="text-sm" />
                 </span>
                 <span className="flex flex-col">
@@ -162,13 +159,13 @@ const Footer = () => {
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white/10 text-white">
                   <LuMail className="text-sm" />
                 </span>
                 <a href={`mailto:${emailAddress}`} className="break-all text-sm text-white/80 transition hover:text-white work">{emailAddress}</a>
               </li>
               <li className="flex items-start gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white/10 text-white">
                   <LuMapPin className="text-sm" />
                 </span>
                 <span className={`pt-2 text-sm text-white/80 work ${bn}`}>{address}</span>
@@ -178,7 +175,7 @@ const Footer = () => {
               href={`https://wa.me/${whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
-              className={`mt-5 inline-flex items-center gap-2 rounded-full bg-[#027a1e] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-black/20 transition hover:bg-[#026318] work ${bn}`}
+              className={`mt-5 inline-flex items-center gap-2 rounded-md bg-[#027a1e] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#026318] work ${bn}`}
             >
               <FaWhatsapp className="text-base" /> {isBn ? "হোয়াটসঅ্যাপে মেসেজ দিন" : "Chat on WhatsApp"}
               <LuArrowUpRight className="text-sm" />

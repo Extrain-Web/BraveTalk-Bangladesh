@@ -43,20 +43,20 @@ const Value = () => {
     const bn = language === "bn" ? "hind-siliguri" : "";
 
     return (
-        <section className="bg-slate-50/60 py-14 lg:py-20">
+        <section className="border-t border-slate-200 bg-slate-50 py-12 lg:py-16">
             <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
-                <SectionIntro eyebrow={c.eyebrow} title={c.title} accent={c.accent} dot="bg-[#e5251f]" bn={bn} />
+                <SectionIntro eyebrow={c.eyebrow} title={c.title} accent={c.accent} bn={bn} />
                 <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
                     {c.values.map(({ icon: Icon, title, text }, i) => (
                         <div
                             key={title}
-                            className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+                            className="rounded-md border border-slate-200 border-t-[3px] border-t-[#0142b2] bg-white p-6 text-center shadow-sm transition hover:shadow-md"
                         >
-                            <span className={`mx-auto flex h-12 w-12 items-center justify-center rounded-xl ${TINTS[i % 3]}`}>
+                            <span className={`mx-auto flex h-11 w-11 items-center justify-center rounded-md ${TINTS[i % 3]}`}>
                                 <Icon className="text-2xl" />
                             </span>
                             <h3 className={`mt-4 text-lg font-bold text-[#0b1b4a] outfit ${bn}`}>{title}</h3>
-                            <p className={`mt-1.5 text-sm leading-relaxed text-slate-500 work ${bn}`}>{text}</p>
+                            <p className={`mt-1.5 text-sm leading-relaxed text-slate-600 work ${bn}`}>{text}</p>
                         </div>
                     ))}
                 </div>

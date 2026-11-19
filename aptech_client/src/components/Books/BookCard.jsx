@@ -21,25 +21,25 @@ export default function BookCard({ book, href, owned = false }) {
     return (
         <Link
             href={link}
-            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#0142b2]/30 hover:shadow-xl hover:shadow-slate-900/10"
+            className="group flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
         >
             {/* Cover */}
-            <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
+            <div className="relative aspect-[4/3] overflow-hidden border-b border-slate-200 bg-slate-50">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={book.coverImage}
                     alt={book.title}
-                    className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.03]"
                 />
                 <span
-                    className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-sm ${
+                    className={`absolute left-3 top-3 rounded-sm px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-sm ${
                         book.isFree ? "bg-[#027a1e] text-white" : "bg-white text-[#0b1b4a] border border-slate-200"
                     }`}
                 >
                     {book.isFree ? (language === "bn" ? "ফ্রি" : "Free") : language === "bn" ? "পেইড" : "Paid"}
                 </span>
                 {owned && (
-                    <span className="absolute right-3 top-3 rounded-full bg-[#0142b2] px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+                    <span className="absolute right-3 top-3 rounded-sm bg-[#0142b2] px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
                         {language === "bn" ? "আপনার বই" : "Owned"}
                     </span>
                 )}
@@ -65,7 +65,7 @@ export default function BookCard({ book, href, owned = false }) {
                         <span className={`text-sm font-semibold text-[#0142b2] work ${bn}`}>{language === "bn" ? "পড়া শুরু করুন →" : "Open book →"}</span>
                     ) : (
                         <div>
-                            <span className={`text-lg font-extrabold outfit ${book.isFree ? "text-[#027a1e]" : "text-[#0b1b4a]"}`}>
+                            <span className={`text-lg font-bold outfit ${book.isFree ? "text-[#027a1e]" : "text-[#0b1b4a]"}`}>
                                 {book.isFree ? (language === "bn" ? "ফ্রি" : "Free") : formatTaka(price)}
                             </span>
                             {hasOffer && <span className="ml-2 text-xs text-slate-400 line-through">{formatTaka(book.price)}</span>}

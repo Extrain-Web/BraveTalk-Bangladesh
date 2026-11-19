@@ -45,15 +45,15 @@ const CounterSection = () => {
     if (!stats.length) return null;
 
     return (
-        <div className="mt-10 lg:mt-12 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+        <div className="mt-10 lg:mt-12 rounded-md border border-slate-200 bg-white p-2 shadow-sm">
             <div className={`grid divide-y divide-slate-100 sm:divide-y-0 sm:divide-x ${stats.length === 3 ? "sm:grid-cols-3" : stats.length === 2 ? "sm:grid-cols-2" : ""}`}>
                 {stats.map((s) => (
-                    <Link key={s.href} href={s.href} className="group flex items-center gap-4 rounded-xl px-4 py-4 transition hover:bg-slate-50">
-                        <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${s.tile}`}>
+                    <Link key={s.href} href={s.href} className="group flex items-center gap-4 rounded-md px-4 py-4 transition hover:bg-slate-50">
+                        <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md ${s.tile}`}>
                             <s.Icon className="text-[22px]" />
                         </span>
                         <span>
-                            <span className={`block text-2xl font-extrabold leading-none text-[#0b1b4a] outfit ${bn}`}>{fmt(s.n)}</span>
+                            <span className={`block text-2xl font-bold leading-none text-[#0b1b4a] outfit ${bn}`}>{fmt(s.n)}</span>
                             <span className={`mt-1 block text-xs text-slate-500 transition group-hover:text-[#0142b2] work ${bn}`}>{isBn ? s.bn : s.en}</span>
                         </span>
                     </Link>

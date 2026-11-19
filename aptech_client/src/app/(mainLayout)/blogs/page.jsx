@@ -4,8 +4,9 @@ import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogsData } from "@/redux/blogSlice";
 import Link from "next/link";
-import { LuSearch, LuX, LuCalendar, LuClock, LuArrowRight, LuNewspaper, LuSparkles, LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { LuSearch, LuX, LuCalendar, LuClock, LuArrowRight, LuNewspaper, LuSparkles, LuChevronLeft, LuChevronRight, LuHouse } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSiteImage } from "@/lib/siteImages";
 
 const BLOGS_PER_PAGE = 9;
 
@@ -33,9 +34,9 @@ const getText = (blog, language) => {
 const Cover = ({ blog, title, className = "" }) => (
     blog.image ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={blog.image} alt={title} loading="lazy" className={`h-full w-full object-cover transition duration-500 group-hover:scale-105 ${className}`} />
+        <img src={blog.image} alt={title} loading="lazy" className={`h-full w-full object-cover transition duration-500 group-hover:scale-[1.03] ${className}`} />
     ) : (
-        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 via-white to-red-50">
+        <div className="flex h-full w-full items-center justify-center bg-slate-100">
             <LuNewspaper className="text-5xl text-[#0142b2]/30" />
         </div>
     )
@@ -43,7 +44,7 @@ const Cover = ({ blog, title, className = "" }) => (
 
 function CardSkeleton() {
     return (
-        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm animate-pulse">
+        <div className="flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm animate-pulse">
             <div className="aspect-[16/9] bg-slate-100" />
             <div className="space-y-2.5 p-5">
                 <div className="h-2.5 w-24 rounded bg-slate-100" />
@@ -62,11 +63,11 @@ const BlogCard = ({ blog, language }) => {
     const href = `/blogs/${blog._id || blog.id}`;
 
     return (
-        <Link href={href} className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl work ${bn}`}>
+        <Link href={href} className={`group flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md work ${bn}`}>
             <div className="relative aspect-[16/9] overflow-hidden bg-slate-50">
                 <Cover blog={blog} title={title} />
                 {blog.category && (
-                    <span className="absolute left-3 top-3 rounded-full border border-slate-200 bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-[#0142b2] shadow-sm backdrop-blur">
+                    <span className="absolute left-2.5 top-2.5 rounded-sm bg-[#0142b2] px-2 py-0.5 text-[11px] font-semibold text-white shadow-sm">
                         {blog.category}
                     </span>
                 )}
@@ -95,25 +96,25 @@ const FeaturedBlogCard = ({ blog, language }) => {
     const href = `/blogs/${blog._id || blog.id}`;
 
     return (
-        <Link href={href} className={`group grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:shadow-xl lg:grid-cols-2 work ${bn}`}>
+        <Link href={href} className={`group grid overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition duration-200 hover:shadow-md lg:grid-cols-2 work ${bn}`}>
             <div className="relative aspect-[16/9] overflow-hidden bg-slate-50 lg:aspect-auto lg:min-h-[320px]">
                 <Cover blog={blog} title={title} />
             </div>
             <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
                 <div className="flex flex-wrap items-center gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-[#e5251f]">
+                    <span className="inline-flex items-center gap-1 rounded-sm bg-[#e5251f] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
                         <LuSparkles /> {isBn ? "ফিচার্ড" : "Featured"}
                     </span>
-                    {blog.category && <span className="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-semibold text-[#0142b2]">{blog.category}</span>}
+                    {blog.category && <span className="rounded-sm bg-[#0142b2] px-2 py-0.5 text-[11px] font-semibold text-white">{blog.category}</span>}
                 </div>
-                <h2 className="mt-4 text-2xl sm:text-3xl font-extrabold leading-tight text-[#0b1b4a] transition group-hover:text-[#0142b2] outfit">{title}</h2>
+                <h2 className="mt-4 text-2xl sm:text-3xl font-bold leading-tight text-[#0b1b4a] transition group-hover:text-[#0142b2] outfit">{title}</h2>
                 {excerpt && <p className="mt-3 line-clamp-4 text-sm sm:text-[15px] leading-relaxed text-slate-500">{excerpt}</p>}
                 <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
                     {blog.author && <span className="font-medium text-slate-600">{blog.author}</span>}
                     {(blog.createdAt || blog.date) && <span className="flex items-center gap-1"><LuCalendar /> {formatDate(blog.createdAt || blog.date, language)}</span>}
                     <span className="flex items-center gap-1"><LuClock /> {readMinutes(blog)} {isBn ? "মিনিট" : "min read"}</span>
                 </div>
-                <span className="mt-6 inline-flex items-center gap-2 self-start rounded-full bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition group-hover:bg-[#01368f]">
+                <span className="mt-6 inline-flex items-center gap-2 self-start rounded-md bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white transition group-hover:bg-[#01368f]">
                     {isBn ? "সম্পূর্ণ পড়ুন" : "Read full article"} <LuArrowRight />
                 </span>
             </div>
@@ -130,6 +131,7 @@ const BlogContent = () => {
     const { language } = useLanguage();
     const isBn = language === "bn";
     const bn = isBn ? "hind-siliguri" : "";
+    const bannerImg = useSiteImage("blogBanner");
 
     useEffect(() => {
         dispatch(fetchBlogsData());
@@ -161,43 +163,42 @@ const BlogContent = () => {
 
     return (
         <div className="min-h-screen bg-white">
-            {/* ---------- Hero strip ---------- */}
-            <section className="relative overflow-hidden border-b border-slate-100 bg-white">
-                <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-red-100/60 blur-[120px]" />
-                    <div className="absolute -top-10 right-[-80px] h-[420px] w-[420px] rounded-full bg-blue-200/60 blur-[120px]" />
-                    <div className="absolute bottom-[-180px] left-1/3 h-[380px] w-[380px] rounded-full bg-emerald-100/60 blur-[120px]" />
-                </div>
-                <div className="relative z-10 mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-10 sm:py-14 text-center">
-                    <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3.5 py-1.5 shadow-sm">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#0142b2]" />
-                        <span className={`text-xs font-medium text-slate-600 work ${bn}`}>{isBn ? "ব্রেভটক ব্লগ" : "BraveTalk blog"}</span>
-                    </div>
-                    <h1 className={`text-[30px] sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight text-[#0b1b4a] outfit ${bn}`}>
-                        {isBn ? <>টিপস ও <span className="text-[#e5251f]">অনুপ্রেরণা</span></> : <>Tips & <span className="text-[#e5251f]">inspiration</span></>}
+            {/* ---------- Photo banner ---------- */}
+            <section className="relative overflow-hidden bg-[#0b1b4a]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={bannerImg} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-[#0b1b4a]/75" />
+                <div className="relative z-10 mx-auto flex min-h-[240px] max-w-[1140px] 2xl:max-w-[1280px] flex-col justify-center px-4 sm:px-6 py-10 sm:min-h-[300px]">
+                    <nav aria-label="Breadcrumb" className={`flex items-center gap-1.5 text-xs text-white/70 work ${bn}`}>
+                        <Link href="/" className="inline-flex items-center gap-1 transition hover:text-white"><LuHouse /> {isBn ? "হোম" : "Home"}</Link>
+                        <LuChevronRight className="text-white/40" />
+                        <span className="font-medium text-white">{isBn ? "ব্লগ" : "Blog"}</span>
+                    </nav>
+                    <h1 className={`mt-3 text-3xl sm:text-4xl lg:text-[44px] font-bold leading-tight text-white outfit ${bn}`}>
+                        {isBn ? "টিপস ও অনুপ্রেরণা" : "Tips & inspiration"}
                     </h1>
-                    <p className={`mx-auto mt-3 max-w-xl text-sm sm:text-[15px] leading-relaxed text-slate-500 work ${bn}`}>
+                    <p className={`mt-3 max-w-2xl text-sm sm:text-[15px] leading-relaxed text-white/80 work ${bn}`}>
                         {isBn
                             ? "স্পোকেন ইংলিশ, পাবলিক স্পিকিং ও লিডারশিপ নিয়ে সহজ টিপস, গাইড আর গল্প।"
                             : "Practical tips, guides and stories on spoken English, public speaking and leadership."}
                     </p>
 
-                    <div className="mx-auto mt-7 max-w-xl">
+                    <div className="mt-6 max-w-xl">
                         <div className="relative">
-                            <LuSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400" />
+                            <LuSearch className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-lg text-slate-400" />
                             <input
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setFilter(() => setSearchQuery(e.target.value))}
                                 placeholder={isBn ? "আর্টিকেল খুঁজুন..." : "Search articles..."}
-                                className={`w-full rounded-full border border-slate-200 bg-white py-3.5 pl-11 pr-11 text-sm text-[#0b1b4a] shadow-sm outline-none transition focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 work ${bn}`}
+                                className={`w-full rounded-md border border-white/20 bg-white py-3 pl-10 pr-10 text-sm text-[#0b1b4a] shadow-sm outline-none transition focus:ring-2 focus:ring-[#0142b2]/40 work ${bn}`}
                             />
                             {searchQuery && (
                                 <button
                                     type="button"
                                     onClick={() => setFilter(() => setSearchQuery(""))}
                                     aria-label="Clear search"
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+                                    className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
                                 >
                                     <LuX />
                                 </button>
@@ -208,18 +209,18 @@ const BlogContent = () => {
             </section>
 
             {/* ---------- List ---------- */}
-            <section className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-8 sm:py-10">
+            <section className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-10 lg:py-14">
                 {categories.length > 0 && (
-                    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="mb-6 flex flex-col gap-3 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 sm:pb-0">
                             {["", ...categories].map((cat) => (
                                 <button
                                     key={cat || "all"}
                                     type="button"
                                     onClick={() => setFilter(() => setSelectedCategory(cat))}
-                                    className={`shrink-0 rounded-full border px-4 py-2 text-xs sm:text-[13px] font-semibold transition work ${bn} ${
+                                    className={`shrink-0 rounded-md border px-4 py-2 text-xs sm:text-[13px] font-semibold transition work ${bn} ${
                                         selectedCategory === cat
-                                            ? "border-[#0142b2] bg-[#0142b2] text-white shadow-md shadow-blue-900/20"
+                                            ? "border-[#0142b2] bg-[#0142b2] text-white"
                                             : "border-slate-200 bg-white text-slate-600 hover:border-[#0142b2]/40 hover:text-[#0142b2]"
                                     }`}
                                 >
@@ -240,8 +241,8 @@ const BlogContent = () => {
                         {Array.from({ length: 6 }).map((_, i) => <CardSkeleton key={i} />)}
                     </div>
                 ) : filteredBlogs.length === 0 ? (
-                    <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 px-6 py-16 text-center">
-                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl text-[#0142b2] shadow-sm">
+                    <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 px-6 py-16 text-center">
+                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-md border border-slate-200 bg-white text-2xl text-[#0142b2]">
                             <LuNewspaper />
                         </div>
                         <h3 className={`mt-4 text-lg font-bold text-[#0b1b4a] outfit ${bn}`}>
@@ -256,12 +257,12 @@ const BlogContent = () => {
                             <button
                                 type="button"
                                 onClick={() => setFilter(() => { setSearchQuery(""); setSelectedCategory(""); })}
-                                className={`mt-5 inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] work ${bn}`}
+                                className={`mt-5 inline-flex items-center gap-2 rounded-md bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#01368f] work ${bn}`}
                             >
                                 {isBn ? "সব আর্টিকেল দেখুন" : "Show all articles"}
                             </button>
                         ) : (
-                            <Link href="/courses" className={`mt-5 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] transition hover:border-[#0142b2]/40 hover:text-[#0142b2] work ${bn}`}>
+                            <Link href="/courses" className={`mt-5 inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] transition hover:border-[#0142b2]/40 hover:text-[#0142b2] work ${bn}`}>
                                 {isBn ? "কোর্স দেখুন" : "Browse courses"} <LuArrowRight />
                             </Link>
                         )}
@@ -287,7 +288,7 @@ const BlogContent = () => {
                                     onClick={() => setCurrentPage(Math.max(1, page - 1))}
                                     disabled={page === 1}
                                     aria-label="Previous page"
-                                    className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                     <LuChevronLeft />
                                 </button>
@@ -298,9 +299,9 @@ const BlogContent = () => {
                                                 key={i}
                                                 type="button"
                                                 onClick={() => setCurrentPage(i + 1)}
-                                                className={`h-10 w-10 rounded-full text-sm font-semibold transition ${page === i + 1
-                                                    ? "bg-[#0142b2] text-white shadow-md shadow-blue-900/20"
-                                                    : "border border-slate-200 text-slate-600 hover:bg-slate-50"}`}
+                                                className={`h-10 w-10 rounded-md text-sm font-semibold transition ${page === i + 1
+                                                    ? "bg-[#0142b2] text-white"
+                                                    : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}
                                             >
                                                 {i + 1}
                                             </button>
@@ -314,7 +315,7 @@ const BlogContent = () => {
                                     onClick={() => setCurrentPage(Math.min(totalPages, page + 1))}
                                     disabled={page === totalPages}
                                     aria-label="Next page"
-                                    className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                                    className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                     <LuChevronRight />
                                 </button>

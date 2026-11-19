@@ -6,6 +6,7 @@ import { FaFacebookF, FaYoutube, FaLinkedinIn, FaWhatsapp } from "react-icons/fa
 import { useLanguage } from "@/context/LanguageContext";
 import { useSettings } from "@/context/SettingsContext";
 import { CONTACT_DEFAULTS } from "@/lib/siteContent/contactContent";
+import PhotoBanner from "@/components/Shared/PhotoBanner";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -96,7 +97,7 @@ const ContactPage = () => {
     { icon: FaWhatsapp, href: whatsappLink, label: "WhatsApp", color: "text-[#25D366]" },
   ];
 
-  const inputClass = `w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-[#0b1b4a] outline-none transition focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 work ${bn}`;
+  const inputClass = `w-full rounded-md border border-slate-300 bg-white px-4 py-3 text-sm text-[#0b1b4a] outline-none transition focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/10 work ${bn}`;
   const labelClass = `mb-1.5 block text-sm font-medium text-slate-700 work ${bn}`;
 
   return (
@@ -105,8 +106,8 @@ const ContactPage = () => {
       {messageSent && (
         <>
           <div className="fixed inset-0 z-[9998] bg-[#0b1b4a]/50 backdrop-blur-sm" onClick={() => setMessageSent(false)} />
-          <div className="fixed left-1/2 top-1/2 z-[9999] w-11/12 max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-8 text-center shadow-2xl">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-50">
+          <div className="fixed left-1/2 top-1/2 z-[9999] w-11/12 max-w-md -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-8 text-center shadow-2xl">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50">
               <LuCircleCheck className="text-3xl text-[#027a1e]" />
             </div>
             <h3 className={`mb-2 text-xl font-bold text-[#0b1b4a] outfit ${bn}`}>{L("Message sent!", "মেসেজ পাঠানো হয়েছে!")}</h3>
@@ -116,7 +117,7 @@ const ContactPage = () => {
             <button
               type="button"
               onClick={() => setMessageSent(false)}
-              className={`rounded-full bg-[#0142b2] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#01368f] work ${bn}`}
+              className={`rounded-md bg-[#0142b2] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#01368f] work ${bn}`}
             >
               {L("Close", "বন্ধ করুন")}
             </button>
@@ -125,42 +126,35 @@ const ContactPage = () => {
       )}
 
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-slate-100 bg-white">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-red-100/60 blur-[120px]" />
-          <div className="absolute -top-10 right-[-80px] h-[420px] w-[420px] rounded-full bg-blue-200/60 blur-[120px]" />
-          <div className="absolute bottom-[-180px] left-1/3 h-[380px] w-[380px] rounded-full bg-emerald-100/60 blur-[120px]" />
-        </div>
-        <div className="relative z-10 mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 pt-10 pb-24 sm:pt-14 sm:pb-28 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3.5 py-1.5 shadow-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#027a1e]" />
-            <span className={`text-xs font-medium text-slate-600 work ${bn}`}>{isBn ? hero.badgeBn : hero.badge}</span>
-          </div>
-          <h1 className={`text-[30px] sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight text-[#0b1b4a] outfit ${bn}`}>
+      <PhotoBanner
+        slot="contactBanner"
+        eyebrow={isBn ? hero.badgeBn : hero.badge}
+        crumbs={[{ label: L("Contact", "যোগাযোগ") }]}
+        title={
+          <>
             {isBn ? hero.titleBn : hero.title}
-            <span className="text-[#e5251f]">{isBn ? hero.highlightBn : hero.highlight}</span>
-          </h1>
-          <p className={`mx-auto mt-3 max-w-xl text-sm sm:text-[15px] leading-relaxed text-slate-500 work ${bn}`}>
-            {isBn ? hero.subtitleBn : hero.subtitle}
-          </p>
-        </div>
-      </section>
+            <span className="text-[#ff6b63]">{isBn ? hero.highlightBn : hero.highlight}</span>
+          </>
+        }
+        subtitle={isBn ? hero.subtitleBn : hero.subtitle}
+      />
 
       {/* Info cards */}
-      <section className="relative z-10 mx-auto -mt-16 max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
+      <section className="border-b border-slate-200 bg-slate-50">
+        <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-8">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {contactInfo.map((item) => {
             const Icon = item.icon;
             const inner = (
               <>
-                <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${item.tint}`}>
+                <span className={`flex h-10 w-10 items-center justify-center rounded-md ${item.tint}`}>
                   <Icon className="text-xl" />
                 </span>
                 <p className={`mt-4 text-xs font-medium uppercase tracking-wider text-slate-400 work ${bn}`}>{item.title}</p>
                 <p className={`mt-1 break-words text-sm font-semibold text-[#0b1b4a] outfit ${bn}`}>{item.value}</p>
               </>
             );
-            const cls = "block h-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl";
+            const cls = "block h-full rounded-md border border-slate-200 bg-white p-5 shadow-sm transition hover:border-[#0142b2]/40 hover:shadow-md";
             return item.link ? (
               <a
                 key={item.title}
@@ -177,18 +171,16 @@ const ContactPage = () => {
             );
           })}
         </div>
+        </div>
       </section>
 
       {/* Form + office/map */}
-      <section className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-14 lg:py-20">
+      <section className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-12 lg:py-16">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           {/* Form */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#0142b2]" />
-              <span className={`text-xs font-medium text-slate-600 work ${bn}`}>{L("Send a message", "মেসেজ পাঠান")}</span>
-            </div>
-            <h2 className={`mt-4 text-2xl sm:text-3xl font-extrabold text-[#0b1b4a] outfit ${bn}`}>
+          <div className="rounded-md border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+            <p className={`text-xs font-semibold uppercase tracking-wider text-[#e5251f] work ${bn}`}>{L("Send a message", "মেসেজ পাঠান")}</p>
+            <h2 className={`mt-2 border-l-4 border-[#e5251f] pl-3 text-2xl sm:text-3xl font-bold text-[#0b1b4a] outfit ${bn}`}>
               {L("How can we ", "কীভাবে ")}
               <span className="text-[#0142b2]">{L("help you?", "সাহায্য করতে পারি?")}</span>
             </h2>
@@ -215,11 +207,11 @@ const ContactPage = () => {
                 <label htmlFor="message" className={labelClass}>{L("Message", "মেসেজ")}</label>
                 <textarea id="message" rows="5" value={formData.message} onChange={handleChange} className={`${inputClass} resize-none`} placeholder={L("Write your message here...", "আপনার মেসেজ এখানে লিখুন...")} required />
               </div>
-              {error && <div className="rounded-xl border border-red-100 bg-red-50 p-3 text-sm text-[#e5251f] work">{error}</div>}
+              {error && <div className="rounded-md border border-red-100 bg-red-50 p-3 text-sm text-[#e5251f] work">{error}</div>}
               <button
                 type="submit"
                 disabled={loading}
-                className={`flex w-full items-center justify-center gap-2 rounded-full bg-[#0142b2] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] disabled:cursor-not-allowed disabled:opacity-60 work ${bn}`}
+                className={`flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#e5251f] to-[#0142b2] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 work ${bn}`}
               >
                 {loading ? (
                   <>
@@ -238,9 +230,9 @@ const ContactPage = () => {
           {/* Office + map */}
           <div className="flex flex-col gap-6">
             {branches.map((branch, idx) => (
-              <div key={idx} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div key={idx} className="rounded-md border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="flex items-start gap-3.5">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-[#e5251f]">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-red-50 text-[#e5251f]">
                     <LuMapPin className="text-xl" />
                   </span>
                   <div className="min-w-0">
@@ -251,7 +243,7 @@ const ContactPage = () => {
                         <a
                           key={p}
                           href={`tel:${digits(p)}`}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-[#0b1b4a] transition hover:border-[#0142b2]/40 hover:text-[#0142b2]"
+                          className="inline-flex items-center gap-1.5 rounded-sm border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-[#0b1b4a] transition hover:border-[#0142b2]/40 hover:text-[#0142b2]"
                         >
                           <LuPhone className="text-[#0142b2]" /> {p}
                         </a>
@@ -263,7 +255,7 @@ const ContactPage = () => {
             ))}
 
             {map?.embedUrl && (
-              <div id="map" className="scroll-mt-28 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+              <div id="map" className="scroll-mt-28 overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
                 <iframe
                   src={map.embedUrl}
                   width="100%"
@@ -289,7 +281,7 @@ const ContactPage = () => {
 
         {/* Social + quick help */}
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-7 shadow-sm">
+          <div className="rounded-md border border-slate-200 bg-white p-6 sm:p-7 shadow-sm">
             <h3 className={`text-lg font-bold text-[#0b1b4a] outfit ${bn}`}>{isBn ? social.followTitleBn : social.followTitle}</h3>
             <p className={`mt-1 text-sm text-slate-500 work ${bn}`}>{isBn ? social.followDescBn : social.followDesc}</p>
             <div className="mt-5 flex flex-wrap gap-3">
@@ -301,7 +293,7 @@ const ContactPage = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md"
+                    className="flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 bg-slate-50 transition hover:bg-white hover:shadow-md"
                   >
                     <Icon className={`text-lg ${color}`} />
                   </a>
@@ -310,7 +302,7 @@ const ContactPage = () => {
                     key={label}
                     aria-label={`${label} (${L("coming soon", "শীঘ্রই আসছে")})`}
                     title={L("Coming soon", "শীঘ্রই আসছে")}
-                    className="flex h-12 w-12 cursor-default items-center justify-center rounded-xl border border-slate-200 bg-slate-50 opacity-40"
+                    className="flex h-11 w-11 cursor-default items-center justify-center rounded-md border border-slate-200 bg-slate-50 opacity-40"
                   >
                     <Icon className="text-lg text-slate-500" />
                   </span>
@@ -319,11 +311,10 @@ const ContactPage = () => {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-emerald-50/70 p-6 sm:p-7">
-            <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-200/50 blur-[60px]" />
+          <div className="relative overflow-hidden rounded-md border border-emerald-200 border-l-4 border-l-[#027a1e] bg-emerald-50/70 p-6 sm:p-7">
             <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-start gap-3.5">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-[#25D366] shadow-sm">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-white text-[#25D366] shadow-sm">
                   <FaWhatsapp className="text-2xl" />
                 </span>
                 <div>
@@ -335,7 +326,7 @@ const ContactPage = () => {
                 href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#027a1e] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-[#026318] hover:gap-3 work ${bn}`}
+                className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-md bg-[#027a1e] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#026318] work ${bn}`}
               >
                 <FaWhatsapp /> {L("Chat on WhatsApp", "WhatsApp-এ চ্যাট করুন")} <LuArrowRight />
               </a>

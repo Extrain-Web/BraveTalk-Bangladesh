@@ -66,7 +66,7 @@ const TopHeader = () => {
             {/* Phone */}
             <a
               href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
-              className="group flex gap-2 items-center px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:border-[#0142b2]/50 hover:bg-[#0142b2]/10 transition-all duration-300"
+              className="group flex gap-2 items-center px-4 py-1.5 rounded-md bg-white/5 backdrop-blur-sm border border-white/10 hover:border-[#0142b2]/50 hover:bg-[#0142b2]/10 transition-all duration-300"
             >
               <span className="relative">
                 <IoMdCall className="text-[18px] text-sky-300 group-hover:scale-110 transition-transform duration-300" />
@@ -80,7 +80,7 @@ const TopHeader = () => {
             {/* Email */}
             <a
               href={`mailto:${email}`}
-              className="group flex gap-2 items-center px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:border-[#027a1e]/50 hover:bg-[#027a1e]/10 transition-all duration-300"
+              className="group flex gap-2 items-center px-4 py-1.5 rounded-md bg-white/5 backdrop-blur-sm border border-white/10 hover:border-[#027a1e]/50 hover:bg-[#027a1e]/10 transition-all duration-300"
             >
               <IoMailOutline className="text-[18px] text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
               <span className="text-[13px] font-medium text-white/90 group-hover:text-white tracking-wide">
@@ -89,7 +89,7 @@ const TopHeader = () => {
             </a>
 
             {/* Branches */}
-            <div className="flex gap-2 items-center px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-sm border border-white/10">
+            <div className="flex gap-2 items-center px-4 py-1.5 rounded-md bg-white/5 backdrop-blur-sm border border-white/10">
               <LuMapPin className="text-[16px] text-rose-400" />
               <span className="text-[13px] font-medium text-white/70 tracking-wide">
                 {language === "bn" ? "দক্ষিণ বাড্ডা, ঢাকা" : "South Badda, Dhaka"}
@@ -105,7 +105,7 @@ const TopHeader = () => {
                 href={facebookUrl || undefined}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative w-9 h-9 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:border-[#1877F2]/50 hover:bg-[#1877F2]/20 transition-all duration-300 overflow-hidden"
+                className="group relative w-9 h-9 flex items-center justify-center rounded-md bg-white/5 border border-white/10 hover:border-[#1877F2]/50 hover:bg-[#1877F2]/20 transition-all duration-300 overflow-hidden"
               >
                 <LuFacebook className="text-[16px] text-white/80 group-hover:text-[#1877F2] group-hover:scale-110 transition-all duration-300 z-10" />
                 <span className="absolute inset-0 bg-gradient-to-t from-[#1877F2]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -116,7 +116,7 @@ const TopHeader = () => {
                 href={youtubeUrl || undefined}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative w-9 h-9 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:border-[#FF0000]/50 hover:bg-[#FF0000]/20 transition-all duration-300 overflow-hidden"
+                className="group relative w-9 h-9 flex items-center justify-center rounded-md bg-white/5 border border-white/10 hover:border-[#FF0000]/50 hover:bg-[#FF0000]/20 transition-all duration-300 overflow-hidden"
               >
                 <FiYoutube className="text-[16px] text-white/80 group-hover:text-[#FF0000] group-hover:scale-110 transition-all duration-300 z-10" />
                 <span className="absolute inset-0 bg-gradient-to-t from-[#FF0000]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -127,7 +127,7 @@ const TopHeader = () => {
                 href={linkedinUrl || undefined}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative w-9 h-9 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:border-[#0A66C2]/50 hover:bg-[#0A66C2]/20 transition-all duration-300 overflow-hidden"
+                className="group relative w-9 h-9 flex items-center justify-center rounded-md bg-white/5 border border-white/10 hover:border-[#0A66C2]/50 hover:bg-[#0A66C2]/20 transition-all duration-300 overflow-hidden"
               >
                 <SlSocialLinkedin className="text-[14px] text-white/80 group-hover:text-[#0A66C2] group-hover:scale-110 transition-all duration-300 z-10" />
                 <span className="absolute inset-0 bg-gradient-to-t from-[#0A66C2]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -138,7 +138,7 @@ const TopHeader = () => {
                 href={settings?.instagramUrl || undefined}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative w-9 h-9 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:border-[#E4405F]/50 hover:bg-[#E4405F]/20 transition-all duration-300 overflow-hidden"
+                className="group relative w-9 h-9 flex items-center justify-center rounded-md bg-white/5 border border-white/10 hover:border-[#E4405F]/50 hover:bg-[#E4405F]/20 transition-all duration-300 overflow-hidden"
               >
                 <FaInstagram className="text-[16px] text-white/80 group-hover:text-[#E4405F] group-hover:scale-110 transition-all duration-300 z-10" />
                 <span className="absolute inset-0 bg-gradient-to-t from-[#E4405F]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>

@@ -30,7 +30,7 @@ export default function PopularCourseCard({ course, categoryName }) {
     return (
         <Link
             href={`/courses/${courseId}`}
-            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#0142b2]/30 hover:shadow-xl hover:shadow-slate-900/10"
+            className="group flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0142b2]/30 hover:shadow-md"
         >
             {/* Cover */}
             <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50">
@@ -40,23 +40,23 @@ export default function PopularCourseCard({ course, categoryName }) {
                         src={course.image}
                         alt={course.title}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                 )}
                 <div className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
                     {pricing.isFree && (
-                        <span className="rounded-full bg-[#027a1e] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
+                        <span className="rounded-sm bg-[#027a1e] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm">
                             {isBn ? "ফ্রি" : "Free"}
                         </span>
                     )}
                     {type && (
-                        <span className={`inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-[#0b1b4a] shadow-sm work ${bn}`}>
+                        <span className={`inline-flex items-center gap-1 rounded-sm border border-slate-200 bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-[#0b1b4a] shadow-sm work ${bn}`}>
                             <TypeIcon className="text-[#0142b2]" /> {isBn ? type.bn : type.en}
                         </span>
                     )}
                 </div>
                 {pricing.hasDiscount && (
-                    <span className="absolute right-3 top-3 rounded-full bg-[#e5251f] px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+                    <span className="absolute right-3 top-3 rounded-sm bg-[#e5251f] px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
                         -{pricing.percentOff}%
                     </span>
                 )}
@@ -92,7 +92,7 @@ export default function PopularCourseCard({ course, categoryName }) {
 
                 <div className="mt-auto flex items-end justify-between gap-2 pt-4">
                     <div>
-                        <span className={`text-lg font-extrabold outfit ${pricing.isFree ? "text-[#027a1e]" : "text-[#0b1b4a]"}`}>
+                        <span className={`text-lg font-bold outfit ${pricing.isFree ? "text-[#027a1e]" : "text-[#0b1b4a]"}`}>
                             {pricing.isFree ? (isBn ? "ফ্রি" : "Free") : taka(pricing.price)}
                         </span>
                         {pricing.hasDiscount && <span className="ml-2 text-xs text-slate-400 line-through">{taka(pricing.fee)}</span>}

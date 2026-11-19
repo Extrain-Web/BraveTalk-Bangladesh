@@ -129,11 +129,11 @@ const AddReviewModal = ({ open, onClose, onSuccess, bengaliClass = "", language 
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         transition={{ duration: 0.25 }}
-                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[9999] w-[92%] max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-2xl"
+                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[9999] w-[92%] max-w-lg max-h-[90vh] overflow-y-auto bg-white rounded-md shadow-2xl"
                     >
                         {/* Header */}
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white rounded-t-2xl">
-                            <h3 className={`text-lg font-extrabold text-[#0b1b4a] outfit ${bengaliClass}`}>
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 sticky top-0 bg-white rounded-t-md">
+                            <h3 className={`text-lg font-bold text-[#0b1b4a] outfit ${bengaliClass}`}>
                                 {bn ? "আপনার রিভিউ দিন" : "Add Your Review"}
                             </h3>
                             <button onClick={onClose} className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
@@ -156,7 +156,7 @@ const AddReviewModal = ({ open, onClose, onSuccess, bengaliClass = "", language 
                                     <button
                                         type="button"
                                         onClick={() => fileInputRef.current?.click()}
-                                        className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:border-[#0142b2] hover:text-[#0142b2] transition-colors ${bengaliClass}`}
+                                        className={`inline-flex items-center gap-2 px-4 py-2 rounded-md border border-gray-200 text-sm font-medium text-gray-700 hover:border-[#0142b2] hover:text-[#0142b2] transition-colors ${bengaliClass}`}
                                     >
                                         <LuUpload className="text-base" />
                                         {bn ? "ছবি আপলোড করুন" : "Upload Photo"}
@@ -173,7 +173,7 @@ const AddReviewModal = ({ open, onClose, onSuccess, bengaliClass = "", language 
                                     <input
                                         value={form.name}
                                         onChange={(e) => setForm({ ...form, name: e.target.value })}
-                                        className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 transition-colors"
+                                        className="w-full px-3.5 py-2.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 transition-colors"
                                         placeholder={bn ? "যেমন: রাকিবুল হাসান" : "e.g. Rakibul Hasan"}
                                         required
                                     />
@@ -183,7 +183,7 @@ const AddReviewModal = ({ open, onClose, onSuccess, bengaliClass = "", language 
                                     <input
                                         value={form.role}
                                         onChange={(e) => setForm({ ...form, role: e.target.value })}
-                                        className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 transition-colors"
+                                        className="w-full px-3.5 py-2.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 transition-colors"
                                         placeholder={bn ? "যেমন: শিক্ষার্থী, ঢাকা বিশ্ববিদ্যালয়" : "e.g. Student, University of Dhaka"}
                                     />
                                 </div>
@@ -195,7 +195,7 @@ const AddReviewModal = ({ open, onClose, onSuccess, bengaliClass = "", language 
                                 <select
                                     value={form.courseTag}
                                     onChange={(e) => setForm({ ...form, courseTag: e.target.value })}
-                                    className="w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 transition-colors bg-white"
+                                    className="w-full px-3.5 py-2.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 transition-colors bg-white"
                                 >
                                     <option value="">{bn ? "নির্বাচন করুন" : "Select a course"}</option>
                                     {COURSE_TAGS.map((tag) => (
@@ -230,20 +230,20 @@ const AddReviewModal = ({ open, onClose, onSuccess, bengaliClass = "", language 
                                     value={form.text}
                                     onChange={(e) => setForm({ ...form, text: e.target.value })}
                                     rows={4}
-                                    className={`w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm resize-none focus:outline-none focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 transition-colors ${bengaliClass}`}
+                                    className={`w-full px-3.5 py-2.5 border border-gray-200 rounded-md text-sm resize-none focus:outline-none focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 transition-colors ${bengaliClass}`}
                                     placeholder={bn ? "BraveTalk Bangladesh-এ আপনার অভিজ্ঞতা লিখুন..." : "Share your experience at BraveTalk Bangladesh..."}
                                     required
                                 />
                             </div>
 
                             {error && (
-                                <div className={`text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl px-3 py-2 ${bengaliClass}`}>{error}</div>
+                                <div className={`text-sm text-red-600 bg-red-50 border border-red-100 rounded-md px-3 py-2 ${bengaliClass}`}>{error}</div>
                             )}
 
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className={`w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#0142b2] text-white rounded-full font-semibold shadow-lg shadow-blue-900/20 hover:bg-[#01368f] transition-all disabled:opacity-60 ${bengaliClass}`}
+                                className={`w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#0142b2] text-white rounded-md font-semibold shadow-sm hover:bg-[#01368f] transition-all disabled:opacity-60 ${bengaliClass}`}
                             >
                                 {loading ? (
                                     <>

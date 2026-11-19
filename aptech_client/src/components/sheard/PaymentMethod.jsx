@@ -41,7 +41,7 @@ const PaymentMethod = () => {
     : ["Pay once at full price — no instalments", "Free courses need no payment at all", "Your course unlocks once payment is verified"];
 
   return (
-    <section className="relative bg-slate-50/60 py-14 lg:py-20 border-t border-slate-100">
+    <section className="relative bg-slate-50 py-12 lg:py-16 border-t border-slate-200">
       <div ref={sectionRef} className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
         <SectionHeader
           badge={isBn ? "পেমেন্ট" : "Payment"}
@@ -61,13 +61,13 @@ const PaymentMethod = () => {
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="mx-auto grid max-w-4xl gap-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 md:grid-cols-2 md:items-center"
+          className="mx-auto grid max-w-4xl gap-6 rounded-md border border-slate-200 bg-white p-6 shadow-sm sm:p-8 md:grid-cols-2 md:items-center"
         >
           {/* How it works */}
           <div>
             <div className="mb-4 flex items-center gap-3">
               {logos.map((m) => (
-                <span key={m.key} className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                <span key={m.key} className="flex h-12 w-12 items-center justify-center rounded-md border border-slate-200 bg-white shadow-sm">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={m.logo} alt={m.name} className="h-8 w-8 object-contain" />
                 </span>
@@ -90,19 +90,19 @@ const PaymentMethod = () => {
                   key={m.key}
                   type="button"
                   onClick={() => copyToClipboard(m.key, PAYMENT_NUMBERS[m.key])}
-                  className="group flex w-full items-center gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-left transition hover:-translate-y-0.5 hover:border-[#0142b2]/30 hover:shadow-lg"
+                  className="group flex w-full items-center gap-4 rounded-md border border-slate-200 bg-white px-4 py-3.5 text-left transition hover:border-[#0142b2]/30 hover:shadow-md"
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-50">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-slate-50">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={m.logo} alt={m.name} className="h-7 w-7 object-contain" />
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-xs text-slate-400 work">{m.name} · Send Money</span>
-                    <span className="block text-lg font-extrabold tracking-wide outfit" style={{ color: m.color }}>
+                    <span className="block text-lg font-bold tracking-wide outfit" style={{ color: m.color }}>
                       {PAYMENT_NUMBERS[m.key]}
                     </span>
                   </span>
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-slate-400 transition group-hover:bg-blue-50 group-hover:text-[#0142b2]">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-50 text-slate-400 transition group-hover:bg-blue-50 group-hover:text-[#0142b2]">
                     {copiedKey === m.key ? <LuCheck className="text-[#027a1e]" /> : <LuCopy />}
                   </span>
                 </button>
@@ -110,16 +110,16 @@ const PaymentMethod = () => {
             ) : (
               <a
                 href={`tel:${PAYMENT_CONTACT_PHONE}`}
-                className="group flex items-center gap-4 rounded-2xl border border-blue-100 bg-blue-50/60 px-5 py-5 transition hover:border-[#0142b2]/30 hover:bg-blue-50"
+                className="group flex items-center gap-4 rounded-md border border-blue-100 bg-blue-50/60 px-5 py-5 transition hover:border-[#0142b2]/30 hover:bg-blue-50"
               >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#0142b2] text-white shadow-lg shadow-blue-900/20">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-[#0142b2] text-white shadow-sm">
                   <LuPhoneCall className="text-xl" />
                 </span>
                 <span>
                   <span className={`block text-sm text-slate-600 work ${bn}`}>
                     {isBn ? "পেমেন্ট নম্বর জানতে কল করুন" : "Call us for our payment number"}
                   </span>
-                  <span className="block text-xl font-extrabold text-[#0b1b4a] transition group-hover:text-[#0142b2] outfit">
+                  <span className="block text-xl font-bold text-[#0b1b4a] transition group-hover:text-[#0142b2] outfit">
                     {PAYMENT_CONTACT_PHONE}
                   </span>
                 </span>

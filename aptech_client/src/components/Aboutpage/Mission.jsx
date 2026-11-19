@@ -1,8 +1,9 @@
 "use client";
 
-import { LuCircleCheck, LuQuote } from "react-icons/lu";
+import { LuCircleCheck } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import SectionIntro from "./SectionIntro";
+import { useSiteImage } from "@/lib/siteImages";
 
 const COPY = {
     en: {
@@ -49,34 +50,33 @@ const Mission = () => {
     const { language } = useLanguage();
     const c = COPY[language === "bn" ? "bn" : "en"];
     const bn = language === "bn" ? "hind-siliguri" : "";
+    const storyPhoto = useSiteImage("aboutStory");
 
     return (
-        <section className="bg-white py-14 lg:py-20">
-            <div className="mx-auto grid max-w-[1140px] 2xl:max-w-[1280px] gap-10 px-4 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
+        <section className="bg-white py-12 lg:py-16">
+            <div className="mx-auto grid max-w-[1140px] 2xl:max-w-[1280px] items-start gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14">
                 <div>
-                    <SectionIntro eyebrow={c.eyebrow} title={c.title} accent={c.accent} center={false} dot="bg-[#e5251f]" bn={bn} />
-                    <div className={`mt-6 space-y-4 text-sm sm:text-[15px] leading-relaxed text-slate-500 work ${bn}`}>
-                        {c.paras.map((p) => <p key={p}>{p}</p>)}
+                    <div className="relative overflow-hidden rounded-md border border-slate-200 bg-slate-100 shadow-sm">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={storyPhoto} alt={c.eyebrow} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                    </div>
+                    <div className="mt-4 border-l-4 border-[#e5251f] bg-slate-50 px-5 py-4">
+                        <p className={`text-2xl font-bold text-[#e5251f] outfit ${bn}`}>{c.quote}</p>
+                        <p className={`mt-1 text-sm text-slate-600 work ${bn}`}>{c.quoteNote}</p>
                     </div>
                 </div>
 
-                <div className="space-y-5">
-                    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-blue-50 via-white to-red-50 p-6 shadow-sm">
-                        <LuQuote className="absolute right-5 top-5 text-5xl text-[#0142b2]/10" />
-                        <p
-                            className={`text-3xl font-bold text-[#e5251f] ${bn}`}
-                            style={language === "bn" ? undefined : { fontFamily: "var(--font-caveat), cursive" }}
-                        >
-                            {c.quote}
-                        </p>
-                        <p className={`mt-1 text-sm text-slate-500 work ${bn}`}>{c.quoteNote}</p>
+                <div>
+                    <SectionIntro eyebrow={c.eyebrow} title={c.title} accent={c.accent} center={false} bn={bn} />
+                    <div className={`mt-5 space-y-4 text-sm sm:text-[15px] leading-relaxed text-slate-600 work ${bn}`}>
+                        {c.paras.map((p) => <p key={p}>{p}</p>)}
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <div className="mt-6 rounded-md border border-slate-200 bg-white p-5">
                         <h3 className={`text-base font-bold text-[#0b1b4a] outfit ${bn}`}>{c.pointsTitle}</h3>
-                        <ul className="mt-4 space-y-3">
+                        <ul className="mt-3 grid gap-2.5 sm:grid-cols-2">
                             {c.points.map((p) => (
-                                <li key={p} className={`flex items-start gap-2.5 text-sm text-slate-600 work ${bn}`}>
+                                <li key={p} className={`flex items-start gap-2 text-sm text-slate-600 work ${bn}`}>
                                     <LuCircleCheck className="mt-0.5 shrink-0 text-base text-[#027a1e]" />
                                     {p}
                                 </li>

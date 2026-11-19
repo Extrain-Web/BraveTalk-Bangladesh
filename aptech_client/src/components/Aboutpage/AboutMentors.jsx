@@ -33,7 +33,7 @@ const AboutMentors = () => {
     if (mentors.length === 0) return null;
 
     return (
-        <section className="bg-white py-14 lg:py-20">
+        <section className="border-t border-slate-200 bg-white py-12 lg:py-16">
             <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
                 <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
                     <SectionIntro
@@ -46,7 +46,7 @@ const AboutMentors = () => {
                     />
                     <Link
                         href="/mentors"
-                        className={`inline-flex shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-slate-300 hover:shadow work ${bn}`}
+                        className={`inline-flex shrink-0 items-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-[#0142b2] hover:text-[#0142b2] work ${bn}`}
                     >
                         {isBn ? "সব মেন্টর" : "All mentors"} <LuArrowRight />
                     </Link>
@@ -59,14 +59,14 @@ const AboutMentors = () => {
                             <Link
                                 key={m._id || m.id}
                                 href={`/mentors/${m._id || m.id}`}
-                                className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+                                className="group overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
                             >
                                 <div className="aspect-[4/3] overflow-hidden bg-slate-100">
                                     {m.image ? (
                                         // eslint-disable-next-line @next/next/no-img-element
-                                        <img src={m.image} alt={m.name || "Mentor"} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                                        <img src={m.image} alt={m.name || "Mentor"} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
                                     ) : (
-                                        <div className="flex h-full w-full items-center justify-center bg-blue-50 text-4xl font-extrabold text-[#0142b2] outfit">
+                                        <div className="flex h-full w-full items-center justify-center bg-blue-50 text-4xl font-bold text-[#0142b2] outfit">
                                             {(m.name || "?").replace(/\[.*?\]\s*/, "").charAt(0).toUpperCase()}
                                         </div>
                                     )}
@@ -77,7 +77,7 @@ const AboutMentors = () => {
                                     {tags.length > 0 && (
                                         <div className="mt-3 flex flex-wrap gap-1.5">
                                             {tags.map((tg) => (
-                                                <span key={tg} className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-[#0142b2]">
+                                                <span key={tg} className="rounded-sm bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-[#0142b2]">
                                                     {tg}
                                                 </span>
                                             ))}

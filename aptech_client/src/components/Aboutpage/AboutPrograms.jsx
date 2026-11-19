@@ -70,7 +70,7 @@ const AboutPrograms = () => {
     const bn = language === "bn" ? "hind-siliguri" : "";
 
     return (
-        <section className="bg-slate-50/60 py-14 lg:py-20">
+        <section className="border-y border-slate-200 bg-slate-50 py-12 lg:py-16">
             <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
                 <SectionIntro eyebrow={c.eyebrow} title={c.title} accent={c.accent} text={c.text} bn={bn} />
 
@@ -78,30 +78,30 @@ const AboutPrograms = () => {
                     {c.programs.map(({ icon: Icon, title, text }, i) => (
                         <div
                             key={title}
-                            className={`rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl lg:col-span-2 ${
+                            className={`rounded-md border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md lg:col-span-2 ${
                                 i === 3 ? "lg:col-start-2" : ""
                             }`}
                         >
-                            <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${TINTS[i % 3]}`}>
+                            <span className={`flex h-11 w-11 items-center justify-center rounded-md ${TINTS[i % 3]}`}>
                                 <Icon className="text-2xl" />
                             </span>
                             <h3 className={`mt-4 text-lg font-bold text-[#0b1b4a] outfit ${bn}`}>{title}</h3>
-                            <p className={`mt-1.5 text-sm leading-relaxed text-slate-500 work ${bn}`}>{text}</p>
+                            <p className={`mt-1.5 text-sm leading-relaxed text-slate-600 work ${bn}`}>{text}</p>
                         </div>
                     ))}
                 </div>
 
-                <div className="mt-12 rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
-                    <h3 className={`text-xl font-bold text-[#0b1b4a] outfit ${bn}`}>{c.formatsTitle}</h3>
+                <div className="mt-10 rounded-md border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+                    <h3 className={`border-l-4 border-[#e5251f] pl-3 text-xl font-bold text-[#0b1b4a] outfit ${bn}`}>{c.formatsTitle}</h3>
                     <div className="mt-6 grid gap-6 md:grid-cols-3">
                         {c.formats.map(({ icon: Icon, title, text, href, cta }, i) => (
                             <div key={title} className="flex items-start gap-3.5">
-                                <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${TINTS[i % 3]}`}>
+                                <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-md ${TINTS[i % 3]}`}>
                                     <Icon className="text-xl" />
                                 </span>
                                 <div>
                                     <p className={`font-bold text-[#0b1b4a] outfit ${bn}`}>{title}</p>
-                                    <p className={`mt-0.5 text-sm text-slate-500 work ${bn}`}>{text}</p>
+                                    <p className={`mt-0.5 text-sm text-slate-600 work ${bn}`}>{text}</p>
                                     {href && (
                                         <Link href={href} className={`mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[#0142b2] hover:gap-2 transition-all work ${bn}`}>
                                             {cta} <LuArrowRight />
@@ -114,7 +114,7 @@ const AboutPrograms = () => {
                     <div className="mt-8 border-t border-slate-100 pt-6">
                         <Link
                             href="/courses"
-                            className={`inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] hover:gap-3 work ${bn}`}
+                            className={`inline-flex items-center gap-2 rounded-md bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] work ${bn}`}
                         >
                             {c.coursesCta} <LuArrowRight />
                         </Link>

@@ -12,7 +12,7 @@ import { booksApi, formatTaka, isLoggedIn, FORMAT_LABEL } from "@/lib/booksApi";
 import { PAYMENT_NUMBERS, PAYMENT_CONTACT_PHONE, hasPaymentNumbers } from "@/lib/paymentNumbers";
 
 const inputCls =
-    "w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-[#0b1b4a] outline-none transition focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10";
+    "w-full rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm text-[#0b1b4a] outline-none transition focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15";
 
 function readUser() {
     try {
@@ -89,10 +89,10 @@ export default function BookCheckoutPage() {
     if (!book) {
         return (
             <div className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center px-4 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-2xl text-[#e5251f]"><LuCircleAlert /></div>
+                <div className="flex h-14 w-14 items-center justify-center rounded-md bg-red-50 text-2xl text-[#e5251f]"><LuCircleAlert /></div>
                 <h1 className={`mt-4 text-2xl font-bold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "বইটি পাওয়া যায়নি" : "Book not found"}</h1>
                 <p className="mt-1 text-sm text-slate-500 work">{loadError}</p>
-                <Link href="/books" className={`mt-5 inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#01368f] work ${bn}`}>
+                <Link href="/books" className={`mt-5 inline-flex items-center gap-2 rounded-md bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#01368f] work ${bn}`}>
                     <LuArrowLeft /> {isBn ? "সব বই দেখুন" : "Browse books"}
                 </Link>
             </div>
@@ -165,19 +165,15 @@ export default function BookCheckoutPage() {
     /* ---------- Success panel ---------- */
     if (placed) {
         return (
-            <div className="relative overflow-hidden bg-white">
-                <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-100/60 blur-[120px]" />
-                    <div className="absolute top-10 right-[-80px] h-[420px] w-[420px] rounded-full bg-blue-200/50 blur-[120px]" />
-                </div>
+            <div className="relative overflow-hidden bg-slate-50 min-h-screen">
                 <div className="relative z-10 mx-auto max-w-lg px-4 py-16 sm:py-24">
-                    <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 text-center shadow-xl shadow-slate-900/10">
+                    <div className="rounded-md border border-slate-200 bg-white p-6 sm:p-8 text-center shadow-sm">
                         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-3xl text-[#027a1e]">
                             <LuCircleCheck />
                         </div>
-                        <h1 className={`mt-4 text-2xl font-extrabold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "অর্ডার সম্পন্ন হয়েছে" : "Order placed"}</h1>
+                        <h1 className={`mt-4 text-2xl font-bold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "অর্ডার সম্পন্ন হয়েছে" : "Order placed"}</h1>
                         {placed.orderNo && <p className="mt-1 font-mono text-xs text-slate-400">#{placed.orderNo}</p>}
-                        <div className={`mx-auto mt-4 flex max-w-sm items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm text-amber-700 work ${bn}`}>
+                        <div className={`mx-auto mt-4 flex max-w-sm items-start gap-2.5 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm text-amber-700 work ${bn}`}>
                             <LuHourglass className="mt-0.5 shrink-0" />
                             <span>
                                 {isBn
@@ -187,10 +183,10 @@ export default function BookCheckoutPage() {
                             </span>
                         </div>
                         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
-                            <Link href="/dashboard/user/books" className={`inline-flex items-center justify-center gap-2 rounded-full bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-900/25 transition hover:bg-[#01368f] work ${bn}`}>
+                            <Link href="/dashboard/user/books" className={`inline-flex items-center justify-center gap-2 rounded-md bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] work ${bn}`}>
                                 <LuLibrary /> {isBn ? "আমার বই" : "Go to My Books"}
                             </Link>
-                            <Link href={`/books/${slug}`} className={`inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-slate-300 work ${bn}`}>
+                            <Link href={`/books/${slug}`} className={`inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-slate-300 work ${bn}`}>
                                 <LuArrowLeft /> {isBn ? "বইয়ে ফিরে যান" : "Back to the book"}
                             </Link>
                         </div>
@@ -201,11 +197,7 @@ export default function BookCheckoutPage() {
     }
 
     return (
-        <div className="relative overflow-hidden bg-white">
-            <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-blue-100/70 blur-[120px]" />
-                <div className="absolute top-40 right-[-100px] h-[380px] w-[380px] rounded-full bg-red-100/40 blur-[120px]" />
-            </div>
+        <div className="relative overflow-hidden bg-slate-50 min-h-screen">
 
             <div className="relative z-10 mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-6 sm:py-10">
                 <div className="mb-6 flex items-center justify-between gap-3">
@@ -217,7 +209,14 @@ export default function BookCheckoutPage() {
                     </span>
                 </div>
 
-                <h1 className={`text-2xl sm:text-3xl font-extrabold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "চেকআউট" : "Checkout"}</h1>
+                <nav aria-label="Breadcrumb" className={`mb-2 flex items-center gap-1.5 overflow-hidden text-xs text-slate-500 work ${bn}`}>
+                    <Link href="/" className="shrink-0 transition hover:text-[#0142b2]">{isBn ? "হোম" : "Home"}</Link>
+                    <span className="text-slate-300">/</span>
+                    <Link href="/books" className="shrink-0 transition hover:text-[#0142b2]">{isBn ? "বই" : "Books"}</Link>
+                    <span className="text-slate-300">/</span>
+                    <span className="truncate font-medium text-[#0b1b4a]">{isBn ? "চেকআউট" : "Checkout"}</span>
+                </nav>
+                <h1 className={`text-2xl sm:text-3xl font-bold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "চেকআউট" : "Checkout"}</h1>
                 <p className={`mt-1 text-sm text-slate-500 work ${bn}`}>
                     {isBn ? "পেমেন্ট করে তথ্য জমা দিন — যাচাইয়ের পর বইটি আপনার হবে।" : "Send the payment and submit the details — the book is yours once verified."}
                 </p>
@@ -227,8 +226,8 @@ export default function BookCheckoutPage() {
                     <div className="space-y-6 lg:col-span-8">
                         {/* Format picker */}
                         {book.format === "both" && (
-                            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                                <h2 className={`text-sm font-bold uppercase tracking-wide text-[#0b1b4a] work ${bn}`}>{isBn ? "ফরম্যাট বাছাই করুন" : "Choose format"}</h2>
+                            <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
+                                <h2 className={`border-l-4 border-[#e5251f] pl-3 text-sm font-bold uppercase tracking-wide text-[#0b1b4a] work ${bn}`}>{isBn ? "ফরম্যাট বাছাই করুন" : "Choose format"}</h2>
                                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
                                     {[
                                         { key: "printed", icon: LuTruck, en: "Printed book", bnL: "ছাপা বই", subEn: "Home delivery + video lessons", subBn: "হোম ডেলিভারি + ভিডিও লেসন", disabled: printedOut },
@@ -242,7 +241,7 @@ export default function BookCheckoutPage() {
                                                 type="button"
                                                 disabled={opt.disabled}
                                                 onClick={() => setFormat(opt.key)}
-                                                className={`flex items-start gap-3 rounded-xl border p-4 text-left transition ${
+                                                className={`flex items-start gap-3 rounded-md border p-4 text-left transition ${
                                                     opt.disabled
                                                         ? "cursor-not-allowed border-slate-200 bg-slate-50 opacity-60"
                                                         : active
@@ -250,7 +249,7 @@ export default function BookCheckoutPage() {
                                                             : "border-slate-200 bg-white hover:border-[#0142b2]/40"
                                                 }`}
                                             >
-                                                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${active ? "bg-[#0142b2] text-white" : "bg-slate-100 text-[#0142b2]"}`}>
+                                                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${active ? "bg-[#0142b2] text-white" : "bg-slate-100 text-[#0142b2]"}`}>
                                                     <Icon />
                                                 </span>
                                                 <span>
@@ -268,13 +267,13 @@ export default function BookCheckoutPage() {
 
                         {/* Delivery */}
                         {isPrinted && (
-                            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                            <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm">
                                 <div className="flex flex-wrap items-center justify-between gap-3">
-                                    <h2 className={`text-sm font-bold uppercase tracking-wide text-[#0b1b4a] work ${bn}`}>{isBn ? "ডেলিভারি তথ্য" : "Delivery details"}</h2>
+                                    <h2 className={`border-l-4 border-[#e5251f] pl-3 text-sm font-bold uppercase tracking-wide text-[#0b1b4a] work ${bn}`}>{isBn ? "ডেলিভারি তথ্য" : "Delivery details"}</h2>
                                     {!printedOut && (
                                         <div className="flex items-center gap-3">
                                             <span className={`text-xs font-semibold text-slate-500 work ${bn}`}>{isBn ? "পরিমাণ" : "Quantity"}</span>
-                                            <div className="flex items-center overflow-hidden rounded-full border border-slate-200">
+                                            <div className="flex items-center overflow-hidden rounded-md border border-slate-200">
                                                 <button type="button" aria-label="Decrease" onClick={() => setQuantity(Math.max(1, qty - 1))} disabled={qty <= 1} className="px-3 py-2 text-slate-500 transition hover:bg-slate-50 disabled:opacity-40">
                                                     <LuMinus />
                                                 </button>
@@ -319,8 +318,8 @@ export default function BookCheckoutPage() {
                         )}
 
                         {/* Payment */}
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-5">
-                            <h2 className={`text-sm font-bold uppercase tracking-wide text-[#0b1b4a] work ${bn}`}>{isBn ? "পেমেন্ট" : "Payment"}</h2>
+                        <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm space-y-5">
+                            <h2 className={`border-l-4 border-[#e5251f] pl-3 text-sm font-bold uppercase tracking-wide text-[#0b1b4a] work ${bn}`}>{isBn ? "পেমেন্ট" : "Payment"}</h2>
 
                             {/* Step 1 */}
                             <div>
@@ -329,14 +328,14 @@ export default function BookCheckoutPage() {
                                     <h3 className={`text-sm font-bold text-[#0b1b4a] work ${bn}`}>{isBn ? "টাকা পাঠান" : "Send Money"}</h3>
                                 </div>
                                 {!hasPaymentNumbers() && (
-                                    <p className={`rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3 text-sm text-slate-600 work ${bn}`}>
+                                    <p className={`rounded-md border border-blue-100 bg-blue-50/60 px-4 py-3 text-sm text-slate-600 work ${bn}`}>
                                         {isBn ? `পেমেন্ট নম্বর জানতে কল করুন: ${PAYMENT_CONTACT_PHONE}` : `Call ${PAYMENT_CONTACT_PHONE} to get our payment number.`}
                                     </p>
                                 )}
                                 {accounts.length > 0 && (
                                     <div className="grid gap-3 sm:grid-cols-3">
                                         {accounts.map((acc) => (
-                                            <div key={acc.key} className="rounded-xl border border-slate-200 bg-slate-50/60 p-3">
+                                            <div key={acc.key} className="rounded-md border border-slate-200 bg-slate-50/60 p-3">
                                                 <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">{acc.label}</p>
                                                 <div className="flex items-center justify-between">
                                                     <span className="font-mono text-base font-bold text-[#0b1b4a]">{acc.number}</span>
@@ -374,7 +373,7 @@ export default function BookCheckoutPage() {
                                                     key={t.k}
                                                     type="button"
                                                     onClick={() => setPayment({ ...payment, paymentType: t.k })}
-                                                    className={`rounded-full border px-4 py-2 text-xs font-bold transition ${
+                                                    className={`rounded-md border px-4 py-2 text-xs font-bold transition ${
                                                         payment.paymentType === t.k
                                                             ? "border-[#0142b2] bg-blue-50 text-[#0142b2]"
                                                             : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
@@ -402,10 +401,10 @@ export default function BookCheckoutPage() {
 
                     {/* ---------- Right: summary ---------- */}
                     <div className="lg:col-span-4">
-                        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
-                            <h2 className={`mb-4 text-sm font-bold uppercase tracking-wide text-[#0b1b4a] work ${bn}`}>{isBn ? "অর্ডার সারাংশ" : "Order summary"}</h2>
+                        <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
+                            <h2 className={`mb-4 border-l-4 border-[#e5251f] pl-3 text-sm font-bold uppercase tracking-wide text-[#0b1b4a] work ${bn}`}>{isBn ? "অর্ডার সারাংশ" : "Order summary"}</h2>
                             <div className="flex gap-3 border-b border-slate-100 pb-4">
-                                <div className="h-20 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-gradient-to-br from-slate-50 to-blue-50">
+                                <div className="h-20 w-16 shrink-0 overflow-hidden rounded-md border border-slate-200 bg-slate-50">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img src={book.coverImage} alt={book.title} className="h-full w-full object-contain p-1" />
                                 </div>
@@ -435,7 +434,7 @@ export default function BookCheckoutPage() {
 
                             <div className="flex items-end justify-between pt-4">
                                 <span className={`text-sm font-semibold text-slate-600 work ${bn}`}>{isBn ? "মোট" : "Total"}</span>
-                                <span className="text-2xl font-extrabold text-[#0142b2] outfit">{formatTaka(total)}</span>
+                                <span className="text-2xl font-bold text-[#0142b2] outfit">{formatTaka(total)}</span>
                             </div>
 
                             <label className="mt-4 flex cursor-pointer items-start gap-2.5">
@@ -450,7 +449,7 @@ export default function BookCheckoutPage() {
                             </label>
 
                             {error && (
-                                <p className={`mt-4 flex items-start gap-2 rounded-xl border border-red-100 bg-red-50 px-3 py-2.5 text-xs font-medium text-[#e5251f] work ${bn}`}>
+                                <p className={`mt-4 flex items-start gap-2 rounded-md border border-red-100 bg-red-50 px-3 py-2.5 text-xs font-medium text-[#e5251f] work ${bn}`}>
                                     <LuCircleAlert className="mt-0.5 shrink-0" /> {error}
                                 </p>
                             )}
@@ -458,10 +457,10 @@ export default function BookCheckoutPage() {
                             <button
                                 type="submit"
                                 disabled={!agreed || submitting || blocked}
-                                className={`mt-5 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold transition work ${bn} ${
+                                className={`mt-5 flex w-full items-center justify-center gap-2 rounded-md py-3.5 text-sm font-semibold transition work ${bn} ${
                                     !agreed || submitting || blocked
                                         ? "cursor-not-allowed bg-slate-200 text-slate-400"
-                                        : "bg-[#0142b2] text-white shadow-lg shadow-blue-900/25 hover:bg-[#01368f]"
+                                        : "bg-gradient-to-r from-[#e5251f] to-[#0142b2] text-white shadow-sm hover:shadow-md hover:brightness-110"
                                 }`}
                             >
                                 {submitting ? <LuLoader className="animate-spin" /> : <LuShoppingCart />}

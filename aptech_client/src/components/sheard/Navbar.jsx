@@ -136,7 +136,7 @@ const Navbar = () => {
           <div className="mt-6 space-y-4">
             {user ? (
               <div className="space-y-3">
-                <div className="flex items-center gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+                <div className="flex items-center gap-3 p-4 rounded-md bg-gray-50 border border-gray-100">
                   <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#0142b2]">
                     {user.image ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
@@ -159,14 +159,14 @@ const Navbar = () => {
                   <Link
                     href={user.role === 'admin' ? "/dashboard/admin" : user.role === 'mentor' ? "/dashboard/mentor" : "/dashboard/user"}
                     onClick={closeMobileMenu}
-                    className="flex flex-col items-center justify-center gap-2 py-4 rounded-xl border border-gray-100 bg-white hover:bg-gray-50 transition-colors group"
+                    className="flex flex-col items-center justify-center gap-2 py-4 rounded-md border border-gray-100 bg-white hover:bg-gray-50 transition-colors group"
                   >
                     <LuLayoutDashboard className="text-xl text-[#0142b2] group-hover:scale-110 transition-transform" />
                     <span className={`text-xs font-bold text-gray-600 ${bengaliClass}`}>{t("navbar.dashboard")}</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex flex-col items-center justify-center gap-2 py-4 rounded-xl border border-red-100 bg-red-50/30 hover:bg-red-50 transition-colors group"
+                    className="flex flex-col items-center justify-center gap-2 py-4 rounded-md border border-red-100 bg-red-50/30 hover:bg-red-50 transition-colors group"
                   >
                     <LuLogOut className="text-xl text-red-500 group-hover:scale-110 transition-transform" />
                     <span className={`text-xs font-bold text-red-600 ${bengaliClass}`}>{t("navbar.logout")}</span>
@@ -175,11 +175,11 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex flex-col gap-3">
-                <Link href={`/login?redirect=${encodeURIComponent(pathname)}`} onClick={closeMobileMenu} className={`flex items-center justify-center gap-2 py-4 rounded-xl border border-gray-100 bg-white text-[15px] font-bold text-gray-700 hover:bg-gray-50 transition-colors ${bengaliClass}`}>
+                <Link href={`/login?redirect=${encodeURIComponent(pathname)}`} onClick={closeMobileMenu} className={`flex items-center justify-center gap-2 py-4 rounded-md border border-gray-100 bg-white text-[15px] font-bold text-gray-700 hover:bg-gray-50 transition-colors ${bengaliClass}`}>
                   <HiOutlineUserCircle className="text-xl" />
                   {t("navbar.signIn")}
                 </Link>
-                <Link href={`/register?redirect=${encodeURIComponent(pathname)}`} onClick={closeMobileMenu} className={`block text-center py-4 rounded-xl bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-[15px] font-bold shadow-lg shadow-amber-100 ${bengaliClass}`}>
+                <Link href={`/register?redirect=${encodeURIComponent(pathname)}`} onClick={closeMobileMenu} className={`block text-center py-4 rounded-md bg-gradient-to-r from-[#0142b2] to-[#01368f] text-white text-[15px] font-bold shadow-sm ${bengaliClass}`}>
                   {t("navbar.getStarted")}
                 </Link>
               </div>
@@ -191,7 +191,7 @@ const Navbar = () => {
       {/* Main Navbar */}
       <nav
         className={`poppins sticky top-0 z-40 transition-all duration-500 ease-out ${isSticky
-          ? "bg-white/95 backdrop-blur-xl shadow-lg shadow-gray-200/50 border-b border-gray-100"
+          ? "bg-white/95 backdrop-blur-xl shadow-sm border-b border-gray-100"
           : "bg-white border-b border-gray-100"
           }`}
       >
@@ -224,7 +224,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Dropdown Menu */}
-                <div className="absolute top-full mt-3 left-0 w-56 bg-white rounded-md shadow-xl shadow-gray-200/50 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-50 overflow-hidden">
+                <div className="absolute top-full mt-3 left-0 w-56 bg-white rounded-md shadow-md border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-50 overflow-hidden">
                   <div className="p-2">
                     {courseTypes.map((type, index) => (
                       <button
@@ -278,7 +278,7 @@ const Navbar = () => {
               {/* Login / User Profile - Desktop */}
               {user ? (
                 <div className="hidden lg:block relative group">
-                  <button className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-gray-100 hover:border-gray-200 bg-white hover:bg-gray-50 transition-all duration-300 cursor-pointer">
+                  <button className="flex items-center gap-2.5 px-3 py-1.5 rounded-md border border-gray-100 hover:border-gray-200 bg-white hover:bg-gray-50 transition-all duration-300 cursor-pointer">
                     <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#0142b2] shadow-sm">
                       {user.image ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
@@ -299,7 +299,7 @@ const Navbar = () => {
                   </button>
 
                   {/* User Dropdown */}
-                  <div className="absolute top-full mt-2 right-0 w-56 bg-white rounded-xl shadow-xl shadow-gray-200/50 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-50 overflow-hidden">
+                  <div className="absolute top-full mt-2 right-0 w-56 bg-white rounded-md shadow-md border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 translate-y-2 transition-all duration-300 z-50 overflow-hidden">
                     <div className="p-3 border-b border-gray-100">
                       <p className="text-sm font-bold text-gray-800">
                         {user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : (user.name || 'User')}
@@ -309,14 +309,14 @@ const Navbar = () => {
                     <div className="p-2">
                       <Link
                         href={user.role === 'admin' || user.role === 'superAdmin' || user.role === 'trainingManager' ? "/dashboard/admin" : user.role === 'mentor' ? "/dashboard/mentor" : "/dashboard/user"}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-gray-50 transition-colors"
                       >
                         <LuLayoutDashboard className="text-[#0142b2]" />
                         <span className={`text-sm font-medium text-gray-700 ${bengaliClass}`}>{t("navbar.dashboard")}</span>
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-50 transition-colors"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-red-50 transition-colors"
                       >
                         <LuLogOut className="text-red-500" />
                         <span className={`text-sm font-medium text-red-600 ${bengaliClass}`}>{t("navbar.logout")}</span>
@@ -328,9 +328,6 @@ const Navbar = () => {
                 <Link href={`/login?redirect=${encodeURIComponent(pathname)}`} className="hidden lg:block">
                   <div className="relative group overflow-hidden rounded-md">
                     <div className="absolute inset-0 bg-gradient-to-r from-[#0142b2] via-[#01368f] to-[#0142b2] bg-[length:200%_100%] group-hover:animate-[shimmer_2s_linear_infinite] transition-all"></div>
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      <div className="absolute inset-0 bg-[#0142b2] blur-xl opacity-40"></div>
-                    </div>
                     <div className="relative flex gap-2 items-center px-5 py-2.5">
                       <HiOutlineUserCircle className="text-xl text-white group-hover:scale-110 transition-transform duration-300" />
                       <span className={`text-white font-semibold text-[14px] tracking-wide whitespace-nowrap ${bengaliClass}`}>

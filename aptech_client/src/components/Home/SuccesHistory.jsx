@@ -79,7 +79,7 @@ const SuccesHistory = () => {
     <button
       type="button"
       onClick={() => setModalOpen(true)}
-      className={`inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] work ${bengaliClass}`}
+      className={`inline-flex w-fit shrink-0 items-center gap-2 rounded-md bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] work ${bengaliClass}`}
     >
       <LuPlus className="text-base" />
       {isBn ? "আপনার রিভিউ দিন" : "Add your review"}
@@ -87,11 +87,7 @@ const SuccesHistory = () => {
   );
 
   return (
-    <section className="relative overflow-hidden bg-white py-14 lg:py-20">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-24 top-0 h-[380px] w-[380px] rounded-full bg-red-100/50 blur-[120px]" />
-        <div className="absolute -right-24 bottom-0 h-[380px] w-[380px] rounded-full bg-blue-100/60 blur-[120px]" />
-      </div>
+    <section className="relative overflow-hidden bg-white py-12 lg:py-16">
 
       <div ref={sectionRef} className="relative z-10 mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
         <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -117,7 +113,7 @@ const SuccesHistory = () => {
                   type="button"
                   onClick={handlePrev}
                   aria-label={isBn ? "আগের রিভিউ" : "Previous review"}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-[#0142b2] hover:text-[#0142b2]"
+                  className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-[#0142b2] hover:text-[#0142b2]"
                 >
                   <LuChevronLeft />
                 </button>
@@ -125,7 +121,7 @@ const SuccesHistory = () => {
                   type="button"
                   onClick={handleNext}
                   aria-label={isBn ? "পরের রিভিউ" : "Next review"}
-                  className="mr-1 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-[#0142b2] hover:text-[#0142b2]"
+                  className="mr-1 flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-[#0142b2] hover:text-[#0142b2]"
                 >
                   <LuChevronRight />
                 </button>
@@ -138,12 +134,12 @@ const SuccesHistory = () => {
         {!loaded ? (
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {[0, 1, 2].slice(0, visibleItems).map((i) => (
-              <div key={i} className="h-[230px] animate-pulse rounded-2xl border border-slate-200 bg-slate-50" />
+              <div key={i} className="h-[230px] animate-pulse rounded-md border border-slate-200 bg-slate-50" />
             ))}
           </div>
         ) : reviews.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 px-6 py-14 text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl text-[#0142b2] shadow-sm">
+          <div className="rounded-md border border-dashed border-slate-200 bg-slate-50/50 px-6 py-14 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-md bg-white text-2xl text-[#0142b2] shadow-sm">
               <LuMessageSquareQuote />
             </div>
             <h3 className={`mt-4 text-lg font-bold text-[#0b1b4a] outfit ${bengaliClass}`}>
@@ -170,9 +166,9 @@ const SuccesHistory = () => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -40 }}
                       transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      className="relative flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-slate-900/10"
+                      className="relative flex h-full flex-col rounded-md border border-slate-200 border-t-[3px] border-t-[#0142b2] bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md"
                     >
-                      <LuQuote className="absolute right-5 top-5 text-3xl text-blue-100" />
+                      <LuQuote className="absolute right-5 top-5 text-3xl text-slate-200" />
 
                       {rating > 0 && (
                         <div className="mb-4 flex gap-0.5" aria-label={`${rating} / 5`}>
@@ -205,7 +201,7 @@ const SuccesHistory = () => {
                           </div>
                         </div>
                         {review.courseTag && (
-                          <span className="shrink-0 whitespace-nowrap rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-[#0142b2]">
+                          <span className="shrink-0 whitespace-nowrap rounded-sm bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-[#0142b2]">
                             {review.courseTag}
                           </span>
                         )}
@@ -224,7 +220,7 @@ const SuccesHistory = () => {
                     type="button"
                     aria-label={`${index + 1}`}
                     onClick={() => setStartIndex(index)}
-                    className={`h-2 rounded-full transition-all duration-300 ${startIndex === index ? "w-8 bg-[#0142b2]" : "w-2 bg-slate-300 hover:bg-slate-400"}`}
+                    className={`h-1.5 rounded-sm transition-all duration-300 ${startIndex === index ? "w-8 bg-[#0142b2]" : "w-2 bg-slate-300 hover:bg-slate-400"}`}
                   />
                 ))}
               </div>

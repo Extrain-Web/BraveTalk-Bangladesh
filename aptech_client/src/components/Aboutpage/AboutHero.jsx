@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { LuArrowRight, LuMic, LuUsers, LuMegaphone, LuCheck } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
+import PhotoBanner from "@/components/Shared/PhotoBanner";
 
 const COPY = {
     en: {
@@ -40,16 +40,7 @@ const COPY = {
     },
 };
 
-const TINTS = [
-    "bg-blue-50 text-[#0142b2]",
-    "bg-red-50 text-[#e5251f]",
-    "bg-emerald-50 text-[#027a1e]",
-];
-
-const fadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
-};
+const TINTS = ["text-[#0142b2]", "text-[#e5251f]", "text-[#027a1e]"];
 
 const AboutHero = () => {
     const { language } = useLanguage();
@@ -57,90 +48,63 @@ const AboutHero = () => {
     const bn = language === "bn" ? "hind-siliguri" : "";
 
     return (
-        <section className="relative overflow-hidden border-b border-slate-100 bg-white">
-            <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -top-32 -left-24 h-[480px] w-[480px] rounded-full bg-red-100/60 blur-[120px]" />
-                <div className="absolute top-10 right-[-80px] h-[480px] w-[480px] rounded-full bg-blue-200/60 blur-[120px]" />
-                <div className="absolute bottom-[-160px] left-1/3 h-[420px] w-[420px] rounded-full bg-emerald-100/60 blur-[120px]" />
-                <div className="absolute top-10 right-[22%] hidden h-2.5 w-2.5 rounded-full bg-[#0142b2] md:block" />
-            </div>
+        <>
+            <PhotoBanner
+                slot="aboutHero"
+                tall
+                eyebrow={c.badge}
+                crumbs={[{ label: language === "bn" ? "আমাদের সম্পর্কে" : "About us" }]}
+                title={
+                    <>
+                        {c.h1a} <span className="text-[#ff6b63]">{c.h1b}</span>
+                    </>
+                }
+                subtitle={c.desc}
+            >
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                    <Link
+                        href="/courses"
+                        className={`inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-[#e5251f] to-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:shadow-md work ${bn}`}
+                    >
+                        {c.ctaPrimary} <LuArrowRight />
+                    </Link>
+                    <Link
+                        href="/contact"
+                        className={`inline-flex items-center gap-2 rounded-md border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10 work ${bn}`}
+                    >
+                        {c.ctaSecondary}
+                    </Link>
+                </div>
+                <ul className={`mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs sm:text-[13px] text-white/80 work ${bn}`}>
+                    {c.ticks.map((tk) => (
+                        <li key={tk} className="flex items-center gap-1.5">
+                            <LuCheck className="text-[#4ade80]" /> {tk}
+                        </li>
+                    ))}
+                </ul>
+            </PhotoBanner>
 
-            <div className="relative z-10 mx-auto grid max-w-[1140px] 2xl:max-w-[1280px] items-center gap-10 px-4 sm:px-6 py-12 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-20">
-                <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08 } } }}
-                >
-                    <motion.div variants={fadeUp} className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3.5 py-1.5 shadow-sm">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#027a1e]" />
-                        <span className={`text-xs font-medium text-slate-600 work ${bn}`}>{c.badge}</span>
-                    </motion.div>
-
-                    <motion.h1 variants={fadeUp} className={`text-[34px] sm:text-5xl lg:text-[52px] font-extrabold leading-[1.1] tracking-tight text-[#0b1b4a] outfit ${bn}`}>
-                        {c.h1a}{" "}
-                        <span
-                            className="text-[#e5251f] italic font-bold"
-                            style={language === "bn" ? undefined : { fontFamily: "var(--font-caveat), cursive", fontSize: "1.1em" }}
-                        >
-                            {c.h1b}
-                        </span>
-                    </motion.h1>
-
-                    <motion.p variants={fadeUp} className={`mt-4 max-w-xl text-sm sm:text-[15px] leading-relaxed text-slate-500 work ${bn}`}>
-                        {c.desc}
-                    </motion.p>
-
-                    <motion.div variants={fadeUp} className="mt-6 flex flex-wrap items-center gap-3">
-                        <Link
-                            href="/courses"
-                            className={`inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-900/25 transition hover:bg-[#01368f] hover:gap-3 work ${bn}`}
-                        >
-                            {c.ctaPrimary} <LuArrowRight />
-                        </Link>
-                        <Link
-                            href="/contact"
-                            className={`inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-slate-300 hover:shadow work ${bn}`}
-                        >
-                            {c.ctaSecondary}
-                        </Link>
-                    </motion.div>
-
-                    <motion.ul variants={fadeUp} className={`mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs sm:text-[13px] text-slate-500 work ${bn}`}>
-                        {c.ticks.map((tk) => (
-                            <li key={tk} className="flex items-center gap-1.5">
-                                <LuCheck className="text-[#027a1e]" /> {tk}
-                            </li>
+            {/* Mission pillars strip */}
+            <section className="border-b border-slate-200 bg-white">
+                <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
+                    <div className="grid divide-y divide-slate-200 md:grid-cols-[0.8fr_1fr_1fr_1fr] md:divide-x md:divide-y-0">
+                        <div className="py-6 md:pr-6">
+                            <p className={`text-xs font-semibold uppercase tracking-wider text-[#e5251f] work ${bn}`}>{c.panelHint}</p>
+                            <h2 className={`mt-1 text-lg font-bold leading-snug text-[#0b1b4a] outfit ${bn}`}>{c.panelTitle}</h2>
+                        </div>
+                        {c.pillars.map(({ icon: Icon, title, text }, i) => (
+                            <div key={title} className="flex items-start gap-3 py-6 md:px-6">
+                                <Icon className={`mt-0.5 shrink-0 text-2xl ${TINTS[i]}`} />
+                                <div>
+                                    <p className={`text-[15px] font-bold text-[#0b1b4a] outfit ${bn}`}>{title}</p>
+                                    <p className={`mt-0.5 text-sm text-slate-600 work ${bn}`}>{text}</p>
+                                </div>
+                            </div>
                         ))}
-                    </motion.ul>
-                </motion.div>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.15 }}
-                    className="mx-auto w-full max-w-[460px] lg:ml-auto"
-                >
-                    <div className="rounded-3xl border border-slate-200/80 bg-white p-5 sm:p-7 shadow-2xl shadow-slate-900/10">
-                        <p className={`text-xs uppercase tracking-wider text-slate-400 work ${bn}`}>{c.panelHint}</p>
-                        <h3 className={`mt-1 text-lg font-bold leading-snug text-[#0b1b4a] outfit ${bn}`}>{c.panelTitle}</h3>
-                        <div className="my-4 h-px bg-slate-100" />
-                        <ul className="space-y-4">
-                            {c.pillars.map(({ icon: Icon, title, text }, i) => (
-                                <li key={title} className="flex items-start gap-3.5">
-                                    <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${TINTS[i]}`}>
-                                        <Icon className="text-xl" />
-                                    </span>
-                                    <div>
-                                        <p className={`text-[15px] font-bold text-[#0b1b4a] outfit ${bn}`}>{title}</p>
-                                        <p className={`text-sm text-slate-500 work ${bn}`}>{text}</p>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
                     </div>
-                </motion.div>
-            </div>
-        </section>
+                </div>
+            </section>
+        </>
     );
 };
 

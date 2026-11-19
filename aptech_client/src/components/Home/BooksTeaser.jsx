@@ -35,11 +35,7 @@ const BooksTeaser = () => {
     if (books && books.length === 0) return null;
 
     return (
-        <section className="relative overflow-hidden bg-white py-14 lg:py-20">
-            <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -right-24 top-10 h-[380px] w-[380px] rounded-full bg-red-100/50 blur-[120px]" />
-                <div className="absolute -left-24 bottom-0 h-[360px] w-[360px] rounded-full bg-blue-100/60 blur-[120px]" />
-            </div>
+        <section className="relative overflow-hidden bg-white py-12 lg:py-16">
 
             <div ref={sectionRef} className="relative mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
                 <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -67,7 +63,7 @@ const BooksTeaser = () => {
                     </div>
                     <Link
                         href="/books"
-                        className={`inline-flex w-fit shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-[#0142b2]/40 hover:text-[#0142b2] work ${bn}`}
+                        className={`inline-flex w-fit shrink-0 items-center gap-2 rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-[#0142b2]/40 hover:text-[#0142b2] work ${bn}`}
                     >
                         {isBn ? "সব বই দেখুন" : "Browse all books"} <LuArrowRight />
                     </Link>
@@ -81,7 +77,7 @@ const BooksTeaser = () => {
                 >
                     {books === null
                         ? Array.from({ length: MAX_BOOKS }).map((_, i) => (
-                              <div key={i} className="h-[340px] animate-pulse rounded-2xl border border-slate-200 bg-slate-50" />
+                              <div key={i} className="h-[340px] animate-pulse rounded-md border border-slate-200 bg-slate-50" />
                           ))
                         : books.map((book) => <BookCard key={book._id || book.slug} book={book} />)}
                 </motion.div>

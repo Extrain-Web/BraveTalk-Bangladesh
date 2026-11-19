@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { LuSearch, LuCircleCheck, LuCircleX, LuShieldCheck, LuLoaderCircle, LuQrCode, LuClock, LuArrowRight } from 'react-icons/lu';
 import { useLanguage } from '@/context/LanguageContext';
+import PhotoBanner from '@/components/Shared/PhotoBanner';
 
 const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api';
 
@@ -75,32 +76,20 @@ function VerifyCertificateContent() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-slate-100 bg-white">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-32 -left-24 h-[380px] w-[380px] rounded-full bg-red-100/60 blur-[120px]" />
-          <div className="absolute -top-10 right-[-80px] h-[380px] w-[380px] rounded-full bg-blue-200/60 blur-[120px]" />
-          <div className="absolute bottom-[-200px] left-1/3 h-[340px] w-[340px] rounded-full bg-emerald-100/60 blur-[120px]" />
-        </div>
-        <div className="relative z-10 mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 pt-10 pb-20 sm:pt-14 sm:pb-24 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3.5 py-1.5 shadow-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#027a1e]" />
-            <span className={`text-xs font-medium text-slate-600 work ${bn}`}>{L('Certificate verification', 'সার্টিফিকেট যাচাই')}</span>
-          </div>
-          <h1 className={`text-[30px] sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight text-[#0b1b4a] outfit ${bn}`}>
-            {isBn ? <>সার্টিফিকেট <span className="text-[#e5251f]">যাচাই করুন</span></> : <>Verify a <span className="text-[#e5251f]">Certificate</span></>}
-          </h1>
-          <p className={`mx-auto mt-3 max-w-xl text-sm sm:text-[15px] leading-relaxed text-slate-500 work ${bn}`}>
-            {L(
-              'Enter the certificate ID printed on the certificate, or scan its QR code, to check that it is genuine.',
-              'সার্টিফিকেটে ছাপা আইডি লিখুন অথবা QR কোড স্ক্যান করুন — সার্টিফিকেটটি আসল কিনা যাচাই করুন।'
-            )}
-          </p>
-        </div>
-      </section>
+      <PhotoBanner
+        slot="pageBanner"
+        eyebrow={L('Certificate verification', 'সার্টিফিকেট যাচাই')}
+        crumbs={[{ label: L('Verify certificate', 'সার্টিফিকেট যাচাই') }]}
+        title={isBn ? <>সার্টিফিকেট <span className="text-[#ff6b63]">যাচাই করুন</span></> : <>Verify a <span className="text-[#ff6b63]">Certificate</span></>}
+        subtitle={L(
+          'Enter the certificate ID printed on the certificate, or scan its QR code, to check that it is genuine.',
+          'সার্টিফিকেটে ছাপা আইডি লিখুন অথবা QR কোড স্ক্যান করুন — সার্টিফিকেটটি আসল কিনা যাচাই করুন।'
+        )}
+      />
 
-      <section className="relative z-10 mx-auto -mt-12 max-w-[680px] px-4 sm:px-6 pb-14 lg:pb-20">
+      <section className="mx-auto max-w-[680px] px-4 sm:px-6 py-12 lg:py-16">
         {/* Search form */}
-        <form onSubmit={handleSubmit} className="rounded-3xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xl shadow-slate-900/10">
+        <form onSubmit={handleSubmit} className="rounded-md border border-slate-200 border-t-[3px] border-t-[#0142b2] bg-white p-4 sm:p-5 shadow-md">
           <label htmlFor="certId" className={`mb-2 block text-sm font-medium text-slate-700 work ${bn}`}>
             {L('Certificate ID', 'সার্টিফিকেট আইডি')}
           </label>
@@ -112,13 +101,13 @@ function VerifyCertificateContent() {
                 value={certId}
                 onChange={(e) => setCertId(e.target.value)}
                 placeholder="e.g. BT-CERT-0001"
-                className="w-full rounded-full border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm font-medium uppercase text-[#0b1b4a] outline-none transition placeholder:normal-case focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 work"
+                className="w-full rounded-md border border-slate-300 bg-white py-3.5 pl-11 pr-4 text-sm font-medium uppercase text-[#0b1b4a] outline-none transition placeholder:normal-case focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/10 work"
               />
             </div>
             <button
               type="submit"
               disabled={loading || !certId.trim()}
-              className={`inline-flex items-center justify-center gap-2 rounded-full bg-[#0142b2] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] disabled:cursor-not-allowed disabled:opacity-60 work ${bn}`}
+              className={`inline-flex items-center justify-center gap-2 rounded-md bg-[#0142b2] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] disabled:cursor-not-allowed disabled:opacity-60 work ${bn}`}
             >
               {loading ? <LuLoaderCircle className="animate-spin text-base" /> : <LuSearch className="text-base" />}
               {L('Verify', 'যাচাই করুন')}
@@ -129,7 +118,7 @@ function VerifyCertificateContent() {
         {/* Result */}
         {searched && !loading && result && (
           <div
-            className={`mt-6 overflow-hidden rounded-3xl border bg-white shadow-sm ${
+            className={`mt-6 overflow-hidden rounded-md border bg-white shadow-sm ${
               result.valid ? 'border-emerald-200' : status === 'pending' ? 'border-amber-200' : 'border-red-200'
             }`}
           >
@@ -139,7 +128,7 @@ function VerifyCertificateContent() {
               }`}
             >
               <span
-                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm ${
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-white shadow-sm ${
                   result.valid ? 'text-[#027a1e]' : status === 'pending' ? 'text-amber-500' : 'text-[#e5251f]'
                 }`}
               >
@@ -168,16 +157,16 @@ function VerifyCertificateContent() {
 
         {/* How it works */}
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <div className="flex items-start gap-3.5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#0142b2]">
+          <div className="flex items-start gap-3.5 rounded-md border border-slate-200 bg-slate-50 p-5">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[#0142b2]">
               <LuQrCode className="text-lg" />
             </span>
             <p className={`text-sm text-slate-600 work ${bn}`}>
               {L('Every BraveTalk Bangladesh certificate has a unique ID and a QR code that opens this page.', 'ব্রেভটক বাংলাদেশের প্রতিটি সার্টিফিকেটে একটি ইউনিক আইডি ও QR কোড থাকে, যা এই পেজটি খোলে।')}
             </p>
           </div>
-          <div className="flex items-start gap-3.5 rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[#027a1e]">
+          <div className="flex items-start gap-3.5 rounded-md border border-slate-200 bg-slate-50 p-5">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-emerald-50 text-[#027a1e]">
               <LuShieldCheck className="text-lg" />
             </span>
             <div className={`text-sm text-slate-600 work ${bn}`}>

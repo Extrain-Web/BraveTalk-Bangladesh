@@ -208,7 +208,7 @@ export default function CheckoutPage() {
       <div className="flex min-h-[60vh] items-center justify-center bg-white px-4">
         <div className="text-center">
           <h2 className={`mb-2 text-2xl font-bold text-[#0b1b4a] outfit ${bengaliClass}`}>{language === "bn" ? "কোর্সটি পাওয়া যায়নি" : "Course not found"}</h2>
-          <Link href="/courses" className={`mt-3 inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#01368f] ${bengaliClass}`}>{language === "bn" ? "সব কোর্স দেখুন" : "Browse courses"}</Link>
+          <Link href="/courses" className={`mt-3 inline-flex items-center gap-2 rounded-md bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#01368f] ${bengaliClass}`}>{language === "bn" ? "সব কোর্স দেখুন" : "Browse courses"}</Link>
         </div>
       </div>
     );
@@ -218,14 +218,10 @@ export default function CheckoutPage() {
   const payNow = totalNum;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-white work">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-blue-100/70 blur-[120px]" />
-        <div className="absolute top-40 right-[-100px] h-[380px] w-[380px] rounded-full bg-red-100/40 blur-[120px]" />
-      </div>
+    <div className="relative min-h-screen bg-slate-50 work">
       {/* Top bar */}
-      <div className="relative z-10">
-        <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 pt-6 sm:pt-10">
+      <div className="relative z-10 border-b border-slate-200 bg-white">
+        <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-3.5">
           <div className="flex items-center justify-between gap-3">
             <button
               type="button"
@@ -257,10 +253,10 @@ export default function CheckoutPage() {
 
           {/* Page Title */}
           <div className="mb-6">
-            <h1 className={`text-2xl sm:text-3xl font-extrabold outfit text-[#0b1b4a] ${bengaliClass}`}>
+            <h1 className={`border-l-4 border-[#e5251f] pl-3 text-2xl sm:text-3xl font-bold outfit text-[#0b1b4a] ${bengaliClass}`}>
               {language === "bn" ? "চেকআউট" : "Checkout"}
             </h1>
-            <p className={`text-slate-500 mt-1 text-sm ${bengaliClass}`}>
+            <p className={`text-slate-500 mt-1 pl-4 text-sm ${bengaliClass}`}>
               {language === "bn" ? "একবার পুরো পেমেন্ট করে কোর্সে এনরোল করুন" : "One-time full payment — access opens once your payment is verified"}
             </p>
           </div>
@@ -271,15 +267,15 @@ export default function CheckoutPage() {
             <div className="lg:col-span-8 space-y-5">
 
               {/* Course Summary Card */}
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="rounded-md border border-slate-200 bg-white p-5">
                 <div className="flex gap-4">
-                  <div className="w-28 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-slate-100 bg-slate-50">
+                  <div className="w-28 h-20 rounded overflow-hidden flex-shrink-0 border border-slate-100 bg-slate-50">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-[#0142b2]">
+                      <span className="rounded-sm bg-[#0142b2] px-2 py-0.5 text-[10px] font-bold text-white">
                         {course.type}
                       </span>
                       {Number(course.totalRating) > 0 && (
@@ -296,14 +292,14 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                   <div className="hidden sm:block text-right flex-shrink-0">
-                    <p className="text-xl font-extrabold text-[#0b1b4a] outfit">{course.fee}</p>
+                    <p className="text-xl font-bold text-[#0b1b4a] outfit">{course.fee}</p>
                   </div>
                 </div>
               </div>
 
               {/* ═══ Payment Method Selection ═══ */}
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <h3 className={`text-sm font-bold text-[#0b1b4a] mb-4 uppercase tracking-wide ${bengaliClass}`}>
+              <div className="rounded-md border border-slate-200 bg-white p-5">
+                <h3 className={`border-l-4 border-[#e5251f] pl-3 text-base font-bold text-[#0b1b4a] mb-4 outfit ${bengaliClass}`}>
                   {language === "bn" ? "পেমেন্ট মেথড নির্বাচন করুন" : "Select Payment Method"}
                 </h3>
 
@@ -320,7 +316,7 @@ export default function CheckoutPage() {
                         type="button"
                         disabled={method.disabled}
                         onClick={() => !method.disabled && setPaymentMethod(method.id)}
-                        className={`relative flex-1 flex items-center gap-3 p-4 rounded-xl border-2 transition-all duration-200 ${
+                        className={`relative flex-1 flex items-center gap-3 p-4 rounded-md border-2 transition-all duration-200 ${
                           method.disabled
                             ? "border-slate-100 bg-slate-50 opacity-60 cursor-not-allowed"
                             : active
@@ -353,7 +349,7 @@ export default function CheckoutPage() {
 
                 {/* bKash Payment Content */}
                 {paymentMethod === "bkash" && (
-                  <div className="rounded-xl border border-pink-100 bg-gradient-to-br from-pink-50/50 to-white p-5">
+                  <div className="rounded-md border border-pink-100 bg-pink-50/40 p-5">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-lg">🫰</span>
                       <h4 className="font-bold text-slate-800 text-sm">bKash Payment</h4>
@@ -363,7 +359,7 @@ export default function CheckoutPage() {
                         ? "bKash এর মাধ্যমে নিরাপদে পেমেন্ট করুন। বাটনে ক্লিক করলে bKash পেমেন্ট পেজে নিয়ে যাবে।"
                         : "You will be redirected to bKash secure payment page. Complete the payment there and you'll get instant course access."}
                     </p>
-                    <div className="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-100">
+                    <div className="flex items-center gap-3 p-3 rounded bg-white border border-slate-200">
                       <FiCheck className="text-green-500" size={16} />
                       <span className="text-xs text-slate-600">Instant enrollment after successful payment</span>
                     </div>
@@ -372,7 +368,7 @@ export default function CheckoutPage() {
 
                 {/* Manual Payment Content */}
                 {paymentMethod === "manual" && (
-                  <div className="rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50/40 to-white p-5 space-y-5">
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-5 space-y-5">
                     {/* Step 1: Send Money */}
                     <div>
                       <div className="flex items-center gap-2 mb-3">
@@ -394,7 +390,7 @@ export default function CheckoutPage() {
                           { label: "Nagad (Personal)", number: PAYMENT_NUMBERS.nagad },
                           { label: "Rocket (Personal)", number: PAYMENT_NUMBERS.rocket },
                         ].filter((acc) => acc.number).map((acc) => (
-                          <div key={acc.label} className="p-3 rounded-xl bg-white border border-slate-200">
+                          <div key={acc.label} className="p-3 rounded-md bg-white border border-slate-200">
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{acc.label}</p>
                             <div className="flex items-center justify-between">
                               <span className="text-base font-bold text-slate-800 font-mono">{acc.number}</span>
@@ -441,7 +437,7 @@ export default function CheckoutPage() {
                               <button
                                 key={type}
                                 onClick={() => setManualForm({ ...manualForm, paymentType: type })}
-                                className={`px-4 py-2 rounded-full text-xs font-bold capitalize border transition ${
+                                className={`px-4 py-2 rounded-md text-xs font-bold capitalize border transition ${
                                   manualForm.paymentType === type
                                     ? "border-[#0142b2] bg-blue-50 text-[#0142b2]"
                                     : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
@@ -463,7 +459,7 @@ export default function CheckoutPage() {
                             placeholder="01XXXXXXXXX"
                             value={manualForm.senderNumber}
                             onChange={(e) => setManualForm({ ...manualForm, senderNumber: e.target.value })}
-                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/10 outline-none transition"
+                            className="w-full px-4 py-2.5 rounded-md border border-slate-300 bg-white text-sm focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/10 outline-none transition"
                           />
                         </div>
 
@@ -477,7 +473,7 @@ export default function CheckoutPage() {
                             placeholder="e.g. TXN8K4F2J9D"
                             value={manualForm.transactionId}
                             onChange={(e) => setManualForm({ ...manualForm, transactionId: e.target.value })}
-                            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/10 outline-none transition font-mono"
+                            className="w-full px-4 py-2.5 rounded-md border border-slate-300 bg-white text-sm focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/10 outline-none transition font-mono"
                           />
                         </div>
                       </div>
@@ -489,8 +485,8 @@ export default function CheckoutPage() {
 
             {/* ═══════ RIGHT COLUMN — Order Summary ═══════ */}
             <div className="lg:col-span-4">
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
-                <h3 className={`text-sm font-bold text-[#0b1b4a] mb-4 uppercase tracking-wide ${bengaliClass}`}>
+              <div className="rounded-md border border-slate-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
+                <h3 className={`border-l-4 border-[#e5251f] pl-3 text-base font-bold text-[#0b1b4a] mb-4 outfit ${bengaliClass}`}>
                   {language === "bn" ? "অর্ডার সারাংশ" : "Order Summary"}
                 </h3>
 
@@ -503,7 +499,7 @@ export default function CheckoutPage() {
                 {/* Coupon (applied once at checkout) */}
                 <div className="py-4 border-b border-slate-100">
                   {appliedCoupon ? (
-                    <div className="flex items-center justify-between rounded-xl border border-green-200 bg-green-50/60 px-3 py-2.5">
+                    <div className="flex items-center justify-between rounded-md border border-green-200 bg-green-50/60 px-3 py-2.5">
                       <div className="flex items-center gap-2 min-w-0">
                         <FiTag className="text-green-600 shrink-0" size={14} />
                         <span className="font-mono font-bold text-sm text-green-700 truncate">{appliedCoupon.code}</span>
@@ -520,12 +516,12 @@ export default function CheckoutPage() {
                         onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
                         onKeyDown={(e) => e.key === "Enter" && applyCoupon()}
                         placeholder={language === "bn" ? "কুপন কোড থাকলে দিন" : "Coupon code"}
-                        className="flex-1 min-w-0 px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm font-mono uppercase focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/10 outline-none transition"
+                        className="flex-1 min-w-0 px-3 py-2 rounded-md border border-slate-300 bg-white text-sm font-mono uppercase focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/10 outline-none transition"
                       />
                       <button
                         onClick={applyCoupon}
                         disabled={couponChecking || !couponInput.trim()}
-                        className="px-4 py-2 rounded-full bg-[#0b1b4a] text-white text-xs font-bold hover:bg-[#0142b2] disabled:opacity-40 disabled:cursor-not-allowed transition shrink-0 flex items-center justify-center"
+                        className="px-4 py-2 rounded-md bg-[#0b1b4a] text-white text-xs font-bold hover:bg-[#0142b2] disabled:opacity-40 disabled:cursor-not-allowed transition shrink-0 flex items-center justify-center"
                       >
                         {couponChecking ? <FiLoader className="animate-spin" size={14} /> : (language === "bn" ? "প্রয়োগ" : "Apply")}
                       </button>
@@ -570,7 +566,7 @@ export default function CheckoutPage() {
                     <span className={`text-base font-bold text-[#0b1b4a] ${bengaliClass}`}>
                       {language === "bn" ? "মোট (একবারেই পুরো পেমেন্ট)" : "Total (one-time full payment)"}
                     </span>
-                    <span className="text-2xl font-extrabold text-[#0142b2] outfit">
+                    <span className="text-2xl font-bold text-[#0142b2] outfit">
                       ৳{payNow.toLocaleString("en-IN")}
                     </span>
                   </div>
@@ -600,10 +596,10 @@ export default function CheckoutPage() {
                 <button
                   onClick={handleCheckout}
                   disabled={!agreed || processing}
-                  className={`w-full mt-5 py-3.5 rounded-full font-semibold text-sm flex items-center justify-center gap-2.5 transition-all ${
+                  className={`w-full mt-5 py-3.5 rounded-md font-semibold text-sm flex items-center justify-center gap-2.5 transition-all ${
                     !agreed || processing
                       ? "bg-slate-200 text-slate-400 cursor-not-allowed"
-                      : "bg-[#0142b2] text-white shadow-lg shadow-blue-900/25 hover:bg-[#01368f] active:scale-[0.98]"
+                      : "bg-gradient-to-r from-[#e5251f] to-[#0142b2] text-white shadow-sm hover:shadow-md hover:brightness-105"
                   } ${bengaliClass}`}
                 >
                   {processing ? (
@@ -664,7 +660,7 @@ export default function CheckoutPage() {
       {/* ═══ Success Popup — auto (paid) vs manual (order placed) ═══ */}
       {successModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden animate-[fadeIn_0.25s_ease]">
+          <div className="relative w-full max-w-md bg-white rounded-md shadow-xl overflow-hidden animate-[fadeIn_0.25s_ease]">
             <div className="h-[3px] w-full bg-gradient-to-r from-[#0142b2] via-[#e5251f] to-[#027a1e]"></div>
             <div className="p-7 text-center">
               {successModal === "auto" ? (
@@ -688,7 +684,7 @@ export default function CheckoutPage() {
                       ["📚", language === "bn" ? "অ্যাক্সেস" : "Course Activated"],
                       ["🚀", language === "bn" ? "শুরু করুন" : "Start Learning"],
                     ].map(([emoji, label]) => (
-                      <div key={label} className="p-3 rounded-xl bg-blue-50/60 border border-blue-100">
+                      <div key={label} className="p-3 rounded-md bg-blue-50/60 border border-blue-100">
                         <p className="text-xl">{emoji}</p>
                         <p className={`text-[10px] text-slate-500 mt-1 work ${bengaliClass}`}>{label}</p>
                       </div>
@@ -707,7 +703,7 @@ export default function CheckoutPage() {
                     {language === "bn" ? "পেমেন্ট তথ্য জমা হয়েছে" : "Your payment info is submitted for"}
                   </p>
                   <p className="text-base font-bold text-[#0142b2] outfit mb-4">{course.title}</p>
-                  <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 mb-6">
+                  <div className="p-3.5 rounded-md bg-amber-50 border border-amber-200 mb-6">
                     <p className={`text-xs text-amber-700 leading-relaxed ${bengaliClass}`}>
                       {language === "bn"
                         ? "অ্যাডমিন আপনার পেমেন্ট যাচাই ও কনফার্ম করলেই কোর্সের অ্যাক্সেস পাবেন।"
@@ -720,13 +716,13 @@ export default function CheckoutPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/dashboard/user"
-                  className={`flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#0142b2] text-white font-semibold text-sm rounded-full shadow-lg shadow-blue-900/25 hover:bg-[#01368f] transition ${bengaliClass}`}
+                  className={`flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#0142b2] text-white font-semibold text-sm rounded-md hover:bg-[#01368f] transition ${bengaliClass}`}
                 >
                   <FiBookOpen size={15} /> {language === "bn" ? "ড্যাশবোর্ডে যান" : "Go to Dashboard"}
                 </Link>
                 <Link
                   href={`/courses/${course.id}`}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 border border-slate-200 text-[#0b1b4a] font-semibold text-sm rounded-full hover:border-[#0142b2]/40 hover:text-[#0142b2] transition ${bengaliClass}`}
+                  className={`flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 border border-slate-200 text-[#0b1b4a] font-semibold text-sm rounded-md hover:border-[#0142b2]/40 hover:text-[#0142b2] transition ${bengaliClass}`}
                 >
                   <FiArrowLeft size={15} /> {language === "bn" ? "কোর্স পেজে যান" : "Go to Course"}
                 </Link>

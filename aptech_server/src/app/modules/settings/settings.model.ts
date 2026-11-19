@@ -37,6 +37,10 @@ const settingsSchema = new Schema<ISiteSettings>(
         facebookUrl: { type: String, default: '' },
         youtubeUrl: { type: String, default: '' },
         linkedinUrl: { type: String, default: '' },
+        instagramUrl: { type: String, default: '' },
+
+        // Admin-uploaded photos for the public pages (see ISiteSettings.siteImages)
+        siteImages: { type: Map, of: String, default: {} },
     },
     { timestamps: true }
 );

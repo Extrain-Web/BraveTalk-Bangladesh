@@ -7,7 +7,7 @@ import { fetchBlogsData } from "@/redux/blogSlice";
 import Link from "next/link";
 import {
     LuArrowLeft, LuArrowRight, LuCalendar, LuClock, LuNewspaper, LuShare2, LuLink, LuCheck,
-    LuCircleAlert, LuSparkles,
+    LuCircleAlert, LuSparkles, LuHouse, LuChevronRight,
 } from "react-icons/lu";
 import { FaFacebookF, FaLinkedinIn, FaWhatsapp, FaXTwitter } from "react-icons/fa6";
 import { useLanguage } from "@/context/LanguageContext";
@@ -22,7 +22,7 @@ function ArticleSkeleton() {
             <div className="h-3 w-20 rounded bg-slate-100" />
             <div className="mt-3 h-9 w-4/5 rounded bg-slate-200" />
             <div className="mt-3 h-4 w-2/3 rounded bg-slate-100" />
-            <div className="mt-8 aspect-video rounded-3xl bg-slate-100" />
+            <div className="mt-8 aspect-video rounded-md bg-slate-100" />
             <div className="mt-8 space-y-3">
                 {Array.from({ length: 6 }).map((_, i) => <div key={i} className="h-3 rounded bg-slate-100" />)}
             </div>
@@ -82,11 +82,11 @@ const SingleBlog = () => {
         if (!fetched) return <ArticleSkeleton />;
         return (
             <div className="mx-auto flex min-h-[60vh] max-w-md flex-col items-center justify-center px-4 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-2xl text-[#e5251f]">
+                <div className="flex h-14 w-14 items-center justify-center rounded-md bg-red-50 text-2xl text-[#e5251f]">
                     <LuCircleAlert />
                 </div>
                 <h1 className={`mt-4 text-2xl font-bold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "আর্টিকেলটি পাওয়া যায়নি" : "Article not found"}</h1>
-                <Link href="/blogs" className={`mt-5 inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#01368f] work ${bn}`}>
+                <Link href="/blogs" className={`mt-5 inline-flex items-center gap-2 rounded-md bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#01368f] work ${bn}`}>
                     <LuArrowLeft /> {isBn ? "সব আর্টিকেল" : "All articles"}
                 </Link>
             </div>
@@ -109,26 +109,25 @@ const SingleBlog = () => {
     return (
         <div className="bg-white">
             {/* ---------- Header ---------- */}
-            <section className="relative overflow-hidden">
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px]">
-                    <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-blue-100/70 blur-[120px]" />
-                    <div className="absolute top-20 right-[-100px] h-[380px] w-[380px] rounded-full bg-red-100/50 blur-[120px]" />
-                </div>
-
-                <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 pt-6 sm:pt-10">
-                    <Link href="/blogs" className={`mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-[#0142b2] work ${bn}`}>
-                        <LuArrowLeft /> {isBn ? "সব আর্টিকেল" : "All articles"}
-                    </Link>
+            <section className="border-b border-slate-200 bg-slate-50 pb-10">
+                <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-6 sm:pt-8">
+                    <nav aria-label="Breadcrumb" className={`mb-6 flex min-w-0 items-center gap-1.5 text-xs text-slate-500 work ${bn}`}>
+                        <Link href="/" className="inline-flex shrink-0 items-center gap-1 transition hover:text-[#0142b2]"><LuHouse /> {isBn ? "হোম" : "Home"}</Link>
+                        <LuChevronRight className="shrink-0 text-slate-300" />
+                        <Link href="/blogs" className="shrink-0 transition hover:text-[#0142b2]">{isBn ? "ব্লগ" : "Blog"}</Link>
+                        <LuChevronRight className="shrink-0 text-slate-300" />
+                        <span className="truncate font-medium text-[#0b1b4a]">{title}</span>
+                    </nav>
 
                     <div className="flex flex-wrap items-center gap-2">
-                        {blog.category && <span className="text-xs font-semibold uppercase tracking-wider text-[#e5251f] work">{blog.category}</span>}
+                        {blog.category && <span className="rounded-sm bg-[#0142b2] px-2 py-0.5 text-[11px] font-semibold text-white work">{blog.category}</span>}
                         {blog.featured && (
-                            <span className={`inline-flex items-center gap-1 rounded-full bg-red-50 px-2.5 py-0.5 text-[11px] font-bold text-[#e5251f] work ${bn}`}>
+                            <span className={`inline-flex items-center gap-1 rounded-sm bg-[#e5251f] px-2 py-0.5 text-[11px] font-bold text-white work ${bn}`}>
                                 <LuSparkles /> {isBn ? "ফিচার্ড" : "Featured"}
                             </span>
                         )}
                     </div>
-                    <h1 className={`mt-3 text-[28px] sm:text-4xl lg:text-[44px] font-extrabold leading-tight tracking-tight text-[#0b1b4a] outfit ${bn}`}>{title}</h1>
+                    <h1 className={`mt-3 text-[28px] sm:text-4xl lg:text-[42px] font-bold leading-tight text-[#0b1b4a] outfit ${bn}`}>{title}</h1>
                     {excerpt && <p className={`mt-4 text-base sm:text-lg leading-relaxed text-slate-600 work ${bn}`}>{excerpt}</p>}
 
                     <div className={`mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-500 work ${bn}`}>
@@ -141,13 +140,13 @@ const SingleBlog = () => {
                     </div>
                 </div>
 
-                <div className="relative z-10 mx-auto mt-8 max-w-4xl px-4 sm:px-6">
-                    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-xl shadow-slate-900/10">
+                <div className="mx-auto mt-8 max-w-4xl px-4 sm:px-6">
+                    <div className="overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
                         {blog.image ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img src={blog.image} alt={title} className="aspect-video w-full object-cover" />
                         ) : (
-                            <div className="flex aspect-video w-full items-center justify-center bg-gradient-to-br from-blue-50 via-white to-red-50">
+                            <div className="flex aspect-video w-full items-center justify-center bg-slate-100">
                                 <LuNewspaper className="text-6xl text-[#0142b2]/30" />
                             </div>
                         )}
@@ -156,7 +155,7 @@ const SingleBlog = () => {
             </section>
 
             {/* ---------- Article ---------- */}
-            <article className="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-14">
+            <article className="mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-12">
                 <div className={`space-y-5 text-[15px] sm:text-base leading-relaxed sm:leading-8 text-slate-700 work ${bn}`}>
                     {content?.split("\n").map((paragraph, idx) => (
                         paragraph.trim() && <p key={idx}>{paragraph}</p>
@@ -164,14 +163,14 @@ const SingleBlog = () => {
                 </div>
 
                 {blog.tags?.length > 0 && (
-                    <div className="mt-10 flex flex-wrap gap-2 border-t border-slate-100 pt-8">
+                    <div className="mt-10 flex flex-wrap gap-2 border-t border-slate-200 pt-8">
                         {blog.tags.map((tag, idx) => (
-                            <span key={idx} className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600">#{tag}</span>
+                            <span key={idx} className="rounded-sm border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-600">#{tag}</span>
                         ))}
                     </div>
                 )}
 
-                <div className={`mt-8 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-8 work ${bn}`}>
+                <div className={`mt-8 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-8 work ${bn}`}>
                     <span className="flex items-center gap-2 text-sm font-semibold text-[#0b1b4a]"><LuShare2 className="text-[#0142b2]" /> {isBn ? "শেয়ার করুন" : "Share"}</span>
                     {shareLinks.map(({ key, href, Icon, label }) => (
                         <a
@@ -188,7 +187,7 @@ const SingleBlog = () => {
                     <button
                         type="button"
                         onClick={copyToClipboard}
-                        className="inline-flex h-10 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-600 transition hover:border-[#0142b2]/40 hover:text-[#0142b2]"
+                        className="inline-flex h-10 items-center gap-2 rounded-md border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-600 transition hover:border-[#0142b2]/40 hover:text-[#0142b2]"
                     >
                         {copied ? <LuCheck className="text-[#027a1e]" /> : <LuLink />}
                         {copied ? (isBn ? "কপি হয়েছে" : "Copied") : (isBn ? "লিংক কপি" : "Copy link")}
@@ -196,14 +195,14 @@ const SingleBlog = () => {
                 </div>
 
                 {/* Course CTA */}
-                <div className="mt-10 rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-50 via-white to-emerald-50 p-6 sm:p-8">
-                    <h2 className={`text-xl sm:text-2xl font-extrabold text-[#0b1b4a] outfit ${bn}`}>
+                <div className="mt-10 rounded-md border border-slate-200 border-l-4 border-l-[#e5251f] bg-slate-50 p-6 sm:p-8">
+                    <h2 className={`text-xl sm:text-2xl font-bold text-[#0b1b4a] outfit ${bn}`}>
                         {isBn ? "আত্মবিশ্বাসের সাথে কথা বলতে চান?" : "Ready to speak with confidence?"}
                     </h2>
                     <p className={`mt-2 text-sm text-slate-500 work ${bn}`}>
                         {isBn ? "স্পোকেন ইংলিশ ও পাবলিক স্পিকিং কোর্সে মেন্টরের সাথে প্র্যাকটিস করুন। বক্তা হও, নেতা হও!" : "Practise with a mentor in our spoken English and public speaking courses. Be a Speaker, Be a Leader!"}
                     </p>
-                    <Link href="/courses" className={`mt-5 inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] work ${bn}`}>
+                    <Link href="/courses" className={`mt-5 inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-[#e5251f] to-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-sm hover:shadow-md transition hover:bg-[#01368f] work ${bn}`}>
                         {isBn ? "কোর্স দেখুন" : "Explore courses"} <LuArrowRight />
                     </Link>
                 </div>
@@ -211,10 +210,10 @@ const SingleBlog = () => {
 
             {/* ---------- Related ---------- */}
             {relatedBlogs.length > 0 && (
-                <section className="border-t border-slate-100 bg-slate-50/60">
-                    <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-12 sm:py-16">
-                        <h2 className={`text-2xl sm:text-3xl font-extrabold text-[#0b1b4a] outfit ${bn}`}>
-                            {isBn ? <>আরও <span className="text-[#e5251f]">পড়ুন</span></> : <>Keep <span className="text-[#e5251f]">reading</span></>}
+                <section className="border-t border-slate-200 bg-slate-50">
+                    <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6 py-12 lg:py-16">
+                        <h2 className={`border-l-4 border-[#e5251f] pl-3 text-2xl sm:text-[28px] font-bold text-[#0b1b4a] outfit ${bn}`}>
+                            {isBn ? "আরও পড়ুন" : "Keep reading"}
                         </h2>
                         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                             {relatedBlogs.map((rb) => {
@@ -223,14 +222,14 @@ const SingleBlog = () => {
                                     <Link
                                         key={rb._id || rb.id}
                                         href={`/blogs/${rb._id || rb.id}`}
-                                        className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl work ${bn}`}
+                                        className={`group flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md work ${bn}`}
                                     >
                                         <div className="aspect-[16/9] overflow-hidden bg-slate-50">
                                             {rb.image ? (
                                                 // eslint-disable-next-line @next/next/no-img-element
-                                                <img src={rb.image} alt={rTitle} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                                                <img src={rb.image} alt={rTitle} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
                                             ) : (
-                                                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-50 via-white to-red-50">
+                                                <div className="flex h-full w-full items-center justify-center bg-slate-100">
                                                     <LuNewspaper className="text-4xl text-[#0142b2]/30" />
                                                 </div>
                                             )}

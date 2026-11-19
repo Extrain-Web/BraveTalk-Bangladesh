@@ -6,6 +6,7 @@ import { MdOutlineRemoveRedEye, MdOutlineVisibilityOff } from "react-icons/md";
 import { FiMail, FiLock, FiCheck, FiShield, FiClock, FiHeadphones } from "react-icons/fi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import AuthPhotoPanel from "@/components/Shared/AuthPhotoPanel";
 
 const Login = () => {
   const router = useRouter();
@@ -75,62 +76,27 @@ const Login = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#faf8f4] via-white to-[#fdf3e2] py-12">
+    <div className="min-h-screen bg-slate-50 py-10 lg:py-14">
       <div className="container mx-auto px-4 lg:px-16">
         <div className="max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-5 gap-0 bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+          <div className="grid lg:grid-cols-5 gap-0 bg-white rounded-md shadow-md overflow-hidden border border-slate-200">
 
-            {/* Left Side - Premium Dark Info Panel */}
-            <div className="lg:col-span-2 bg-[#0d0a06] p-8 lg:p-12 text-white relative overflow-hidden">
-              <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: "radial-gradient(rgba(243,165,34,0.14) 1px, transparent 1px)", backgroundSize: "20px 20px" }}></div>
-              <div className="absolute -top-20 -right-10 w-64 h-64 bg-[#0142b2]/20 rounded-full blur-[100px]"></div>
-              <div className="absolute -bottom-16 -left-10 w-56 h-56 bg-[#01368f]/15 rounded-full blur-[90px]"></div>
-
-              <div className="relative z-10 h-full flex flex-col justify-center">
-                {/* Logo/Brand */}
-                <div className="mb-8">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/logo.png" alt="Brave Talk Bangladesh" className="h-14 w-auto mb-5" />
-                  <h2 className={`text-3xl font-bold mb-2 outfit ${bengaliClass}`}>
-                    {language === "bn" ? "স্বাগতম!" : "Welcome Back!"}
-                  </h2>
-                  <p className={`text-white/60 text-sm ${bengaliClass}`}>
-                    {language === "bn" ? "আপনার অ্যাকাউন্টে লগইন করুন" : "Sign in to continue your learning"}
-                  </p>
-                </div>
-
-                {/* Features */}
-                <div className="space-y-4 mb-10">
-                  {features.map((feature, index) => {
-                    const Icon = feature.icon;
-                    return (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#0142b2]/15 border border-[#0142b2]/20 rounded-xl flex items-center justify-center">
-                          <Icon size={18} className="text-[#0142b2]" />
-                        </div>
-                        <span className={`text-sm font-medium text-white/80 ${bengaliClass}`}>{feature.text}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Quote */}
-                <div className="mt-auto pt-6 border-t border-white/10">
-                  <p className={`text-sm text-white/60 italic ${bengaliClass}`}>
-                    {language === "bn"
-                      ? "\"শিক্ষা হলো সবচেয়ে শক্তিশালী অস্ত্র যা দিয়ে আপনি বিশ্বকে বদলাতে পারেন।\""
-                      : "\"Education is the most powerful weapon you can use to change the world.\""}
-                  </p>
-                  <p className="text-xs text-[#0142b2]/70 mt-2">— Nelson Mandela</p>
-                </div>
-              </div>
-            </div>
+            {/* Left Side - Photo panel (admin-uploadable "Classroom photo" slot) */}
+            <AuthPhotoPanel
+              slot="aboutClass"
+              bn={bengaliClass}
+              title={language === "bn" ? "স্বাগতম!" : "Welcome back!"}
+              subtitle={language === "bn" ? "আপনার অ্যাকাউন্টে লগইন করে শেখা চালিয়ে যান" : "Sign in to continue your learning"}
+              features={features}
+              tagline={language === "bn" ? "বক্তা হও, নেতা হও!" : "Be a Speaker, Be a Leader!"}
+              taglineNote={language === "bn" ? "ব্রেভটক বাংলাদেশ" : "BraveTalk Bangladesh"}
+            />
 
             {/* Right Side - Form Section */}
             <div className="lg:col-span-3 p-8 lg:p-12 flex items-center">
               <div className="w-full max-w-md mx-auto">
                 <div className="mb-8">
-                  <h3 className={`text-2xl font-bold text-gray-800 mb-2 outfit ${bengaliClass}`}>
+                  <h3 className={`text-2xl font-bold text-[#0b1b4a] mb-2 outfit border-l-4 border-[#e5251f] pl-3 ${bengaliClass}`}>
                     {language === "bn" ? "সাইন ইন করুন" : "Sign In"}
                   </h3>
                   <p className={`text-gray-500 text-sm ${bengaliClass}`}>
@@ -143,7 +109,7 @@ const Login = () => {
 
                 {/* Session Expired Alert */}
                 {searchParams.get('reason') === 'session_expired' && (
-                  <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-2">
+                  <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-md flex items-center gap-2">
                     <FiClock className="text-amber-500 flex-shrink-0" size={16} />
                     <p className={`text-sm text-amber-700 ${bengaliClass}`}>
                       {language === "bn" ? "আপনার সেশন শেষ হয়ে গেছে। আবার লগইন করুন।" : "Your session has expired. Please log in again."}
@@ -165,7 +131,7 @@ const Login = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         placeholder={language === "bn" ? "আপনার ইমেইল" : "you@example.com"}
-                        className={`w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                        className={`w-full pl-11 pr-4 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
                       />
                     </div>
                   </div>
@@ -183,7 +149,7 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         placeholder={language === "bn" ? "পাসওয়ার্ড দিন" : "Enter password"}
-                        className={`w-full pl-11 pr-12 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                        className={`w-full pl-11 pr-12 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
                       />
                       <button
                         type="button"
@@ -218,7 +184,7 @@ const Login = () => {
 
                   {/* Error Message */}
                   {error && (
-                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-md">
                       <p className="text-red-600 text-sm text-center">{error}</p>
                     </div>
                   )}
@@ -227,9 +193,9 @@ const Login = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full py-3.5 rounded-xl text-white font-semibold shadow-lg transition text-base ${loading
+                    className={`w-full py-3.5 rounded-md text-white font-semibold shadow-sm transition text-base ${loading
                       ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-gradient-to-r from-[#0142b2] to-[#01368f] hover:shadow-xl hover:-translate-y-0.5"
+                      : "bg-gradient-to-r from-[#e5251f] to-[#0142b2] hover:shadow-md"
                       } ${bengaliClass}`}
                   >
                     {loading ? (
@@ -256,7 +222,7 @@ const Login = () => {
                     type="button"
                     onClick={handleGoogleLogin}
                     disabled={loading}
-                    className="w-full py-3.5 rounded-xl border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 font-medium text-gray-700 shadow-sm transition flex items-center justify-center gap-3 hover:-translate-y-0.5"
+                    className="w-full py-3.5 rounded-md border border-slate-300 bg-white hover:bg-slate-50 hover:border-slate-400 font-medium text-gray-700 shadow-sm transition flex items-center justify-center gap-3"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>

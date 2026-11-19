@@ -40,6 +40,10 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler';
 
 const app: Application = express();
 
+// Behind Coolify's reverse proxy: trust X-Forwarded-* so req.protocol is https and
+// uploaded-file URLs / rate limiting use the real client info.
+app.set('trust proxy', 1);
+
 // ✅ Security: Helmet (HTTP headers)
 app.use(helmet());
 

@@ -13,7 +13,7 @@ const MAX_CARDS = 8;
 
 function CardSkeleton() {
     return (
-        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm animate-pulse">
+        <div className="flex h-full flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm animate-pulse">
             <div className="aspect-[16/10] bg-slate-100" />
             <div className="space-y-2.5 p-4">
                 <div className="h-2.5 w-16 rounded bg-slate-100" />
@@ -54,7 +54,7 @@ const PopularCourse = () => {
     const shown = filtered.slice(0, MAX_CARDS);
 
     return (
-        <section className="relative bg-slate-50/60 py-14 lg:py-20 border-y border-slate-100">
+        <section className="relative bg-slate-50 py-12 lg:py-16 border-y border-slate-200">
             <div ref={sectionRef} className="relative mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
                 <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <SectionHeader
@@ -74,7 +74,7 @@ const PopularCourse = () => {
                     />
                     <Link
                         href="/courses"
-                        className={`hidden shrink-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-[#0142b2]/40 hover:text-[#0142b2] lg:inline-flex work ${bn}`}
+                        className={`hidden shrink-0 items-center gap-2 rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-[#0142b2]/40 hover:text-[#0142b2] lg:inline-flex work ${bn}`}
                     >
                         {isBn ? "সব কোর্স দেখুন" : "View all courses"} <LuArrowRight />
                     </Link>
@@ -90,9 +90,9 @@ const PopularCourse = () => {
                                     key={id}
                                     type="button"
                                     onClick={() => setSelected(id)}
-                                    className={`shrink-0 rounded-full border px-4 py-2 text-xs sm:text-[13px] font-semibold transition work ${id === "all" ? bn : ""} ${
+                                    className={`shrink-0 rounded-md border px-4 py-2 text-xs sm:text-[13px] font-semibold transition work ${id === "all" ? bn : ""} ${
                                         active
-                                            ? "border-[#0142b2] bg-[#0142b2] text-white shadow-md shadow-blue-900/20"
+                                            ? "border-[#0142b2] bg-[#0142b2] text-white shadow-sm"
                                             : "border-slate-200 bg-white text-slate-600 hover:border-[#0142b2]/40 hover:text-[#0142b2]"
                                     }`}
                                 >
@@ -113,15 +113,15 @@ const PopularCourse = () => {
                             {Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)}
                         </div>
                     ) : error && list.length === 0 ? (
-                        <div className="rounded-3xl border border-red-100 bg-red-50/50 px-6 py-12 text-center">
+                        <div className="rounded-md border border-red-100 bg-red-50/50 px-6 py-12 text-center">
                             <p className={`text-sm font-semibold text-[#e5251f] work ${bn}`}>
                                 {isBn ? "কোর্স লোড করা যায়নি" : "Could not load courses"}
                             </p>
                             <p className="mt-1 text-xs text-slate-500 work">{String(error)}</p>
                         </div>
                     ) : shown.length === 0 ? (
-                        <div className="rounded-3xl border border-dashed border-slate-200 bg-white px-6 py-14 text-center">
-                            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-2xl text-[#0142b2]">
+                        <div className="rounded-md border border-dashed border-slate-200 bg-white px-6 py-14 text-center">
+                            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-md bg-blue-50 text-2xl text-[#0142b2]">
                                 <LuGraduationCap />
                             </div>
                             <h3 className={`mt-4 text-lg font-bold text-[#0b1b4a] outfit ${bn}`}>
@@ -143,7 +143,7 @@ const PopularCourse = () => {
                 <div className="mt-8 flex justify-center lg:hidden">
                     <Link
                         href="/courses"
-                        className={`inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] work ${bn}`}
+                        className={`inline-flex items-center gap-2 rounded-md bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] work ${bn}`}
                     >
                         {isBn ? "সব কোর্স দেখুন" : "View all courses"} <LuArrowRight />
                     </Link>

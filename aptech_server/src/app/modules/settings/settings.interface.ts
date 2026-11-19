@@ -32,6 +32,12 @@ export interface ISiteSettings {
     facebookUrl: string;
     youtubeUrl: string;
     linkedinUrl: string;
+    instagramUrl?: string;
+
+    // Admin-uploaded photos used across the public pages (key → image URL).
+    // Keys: heroImage, aboutHero, aboutStory, aboutClass, coursesBanner, booksBanner,
+    // mentorsBanner, contactBanner, ctaImage, galleryN …  Empty/missing = page default.
+    siteImages?: Record<string, string>;
 
     createdAt?: Date;
     updatedAt?: Date;

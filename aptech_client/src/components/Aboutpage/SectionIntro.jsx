@@ -1,17 +1,19 @@
 "use client";
 
-/** Shared section header for the About page: eyebrow pill + heading + optional text. */
-export default function SectionIntro({ eyebrow, title, accent, text, dot = "bg-[#0142b2]", center = true, bn = "" }) {
+/** Shared section header for the About page: small eyebrow + heading (red accent bar) + optional text. */
+export default function SectionIntro({ eyebrow, title, accent, text, center = true, bn = "" }) {
     return (
         <div className={`${center ? "mx-auto text-center" : ""} max-w-2xl`}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 shadow-sm">
-                <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
-                <span className={`text-xs font-medium text-slate-600 work ${bn}`}>{eyebrow}</span>
-            </div>
-            <h2 className={`mt-4 text-3xl sm:text-4xl font-extrabold leading-tight tracking-tight text-[#0b1b4a] outfit ${bn}`}>
-                {title} {accent && <span className="text-[#e5251f]">{accent}</span>}
+            <p className={`text-xs font-semibold uppercase tracking-wider text-[#e5251f] work ${bn}`}>{eyebrow}</p>
+            <h2
+                className={`mt-2 text-2xl sm:text-3xl font-bold leading-tight text-[#0b1b4a] outfit ${bn} ${
+                    center ? "" : "border-l-4 border-[#e5251f] pl-3"
+                }`}
+            >
+                {title} {accent && <span className="text-[#0142b2]">{accent}</span>}
             </h2>
-            {text && <p className={`mt-3 text-sm sm:text-[15px] leading-relaxed text-slate-500 work ${bn}`}>{text}</p>}
+            {center && <span className="mx-auto mt-3 block h-[3px] w-12 bg-[#e5251f]" />}
+            {text && <p className={`mt-3 text-sm sm:text-[15px] leading-relaxed text-slate-600 work ${bn}`}>{text}</p>}
         </div>
     );
 }

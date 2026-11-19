@@ -6,6 +6,7 @@ import { MdOutlineRemoveRedEye, MdOutlineVisibilityOff } from "react-icons/md";
 import { FiUser, FiMail, FiPhone, FiLock, FiCheck, FiAward, FiUsers, FiBookOpen, FiMapPin } from "react-icons/fi";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import AuthPhotoPanel from "@/components/Shared/AuthPhotoPanel";
 
 const Register = () => {
   const router = useRouter();
@@ -100,74 +101,29 @@ const Register = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#faf8f4] via-white to-[#fdf3e2] py-12">
+    <div className="min-h-screen bg-slate-50 py-10 lg:py-14">
       <div className="container mx-auto px-4 lg:px-16">
         <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-5 gap-0 bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+          <div className="grid lg:grid-cols-5 gap-0 bg-white rounded-md shadow-md overflow-hidden border border-slate-200">
 
-            {/* Left Side - Premium Dark Info Panel */}
-            <div className="lg:col-span-2 bg-[#0d0a06] p-8 lg:p-12 text-white relative overflow-hidden">
-              <div className="absolute inset-0 opacity-[0.4]" style={{ backgroundImage: "radial-gradient(rgba(243,165,34,0.14) 1px, transparent 1px)", backgroundSize: "20px 20px" }}></div>
-              <div className="absolute -top-20 -right-10 w-64 h-64 bg-[#0142b2]/20 rounded-full blur-[100px]"></div>
-              <div className="absolute -bottom-16 -left-10 w-56 h-56 bg-[#01368f]/15 rounded-full blur-[90px]"></div>
-
-              <div className="relative z-10">
-                {/* Logo/Brand */}
-                <div className="mb-8">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/images/logo.png" alt="Brave Talk Bangladesh" className="h-14 w-auto mb-5" />
-                  <h2 className={`text-3xl font-bold mb-2 outfit ${bengaliClass}`}>
-                    {language === "bn" ? "ব্রেভটক বাংলাদেশ" : "BraveTalk Bangladesh"}
-                  </h2>
-                  <p className={`text-white/60 text-sm ${bengaliClass}`}>
-                    {language === "bn" ? "বাংলাদেশের অগ্রণী আইটি প্রশিক্ষণ প্রতিষ্ঠান" : "Bangladesh's Leading IT Training Institute"}
-                  </p>
-                </div>
-
-                {/* Welcome Message */}
-                <div className="mb-10">
-                  <h3 className={`text-xl font-semibold mb-3 ${bengaliClass}`}>
-                    {language === "bn" ? "আপনার ক্যারিয়ার যাত্রা শুরু করুন" : "Start Your Career Journey"}
-                  </h3>
-                  <p className={`text-white/60 text-sm leading-relaxed ${bengaliClass}`}>
-                    {language === "bn"
-                      ? "একটি অ্যাকাউন্ট তৈরি করুন এবং প্রিমিয়াম কোর্স, লাইভ ক্লাস ও ক্যারিয়ার সাপোর্টে অ্যাক্সেস পান।"
-                      : "Create an account and get access to premium courses, live classes, and career support."}
-                  </p>
-                </div>
-
-                {/* Features */}
-                <div className="space-y-4">
-                  {features.map((feature, index) => {
-                    const Icon = feature.icon;
-                    return (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#0142b2]/15 border border-[#0142b2]/20 rounded-xl flex items-center justify-center">
-                          <Icon size={18} className="text-[#0142b2]" />
-                        </div>
-                        <span className={`text-sm font-medium text-white/80 ${bengaliClass}`}>{feature.text}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Tagline */}
-                <div className="mt-10 pt-8 border-t border-white/10">
-                  <p className={`text-xl font-bold outfit text-white ${bengaliClass}`}>
-                    {language === "bn" ? "বক্তা হও, নেতা হও!" : "Be a Speaker, Be a Leader!"}
-                  </p>
-                  <p className={`mt-1 text-xs text-white/60 ${bengaliClass}`}>
-                    {language === "bn" ? "ফ্রি অ্যাকাউন্ট খুলে আজই শুরু করুন।" : "Create your free account and start today."}
-                  </p>
-                </div>
-              </div>
-            </div>
+            {/* Left Side - Photo panel (admin-uploadable "Home hero photo" slot) */}
+            <AuthPhotoPanel
+              slot="heroImage"
+              bn={bengaliClass}
+              title={language === "bn" ? "ব্রেভটক বাংলাদেশে যোগ দিন" : "Join BraveTalk Bangladesh"}
+              subtitle={language === "bn"
+                ? "একটি অ্যাকাউন্ট তৈরি করুন এবং কোর্স, লাইভ ক্লাস ও মেন্টরের সাপোর্টে অ্যাক্সেস পান।"
+                : "Create an account and get access to courses, live classes and mentor support."}
+              features={features}
+              tagline={language === "bn" ? "বক্তা হও, নেতা হও!" : "Be a Speaker, Be a Leader!"}
+              taglineNote={language === "bn" ? "ফ্রি অ্যাকাউন্ট খুলে আজই শুরু করুন।" : "Create your free account and start today."}
+            />
 
             {/* Right Side - Form Section */}
             <div className="lg:col-span-3 p-8 lg:p-12">
               <div className="max-w-md mx-auto">
                 <div className="mb-8">
-                  <h3 className={`text-2xl font-bold text-gray-800 mb-2 outfit ${bengaliClass}`}>
+                  <h3 className={`text-2xl font-bold text-[#0b1b4a] mb-2 outfit border-l-4 border-[#e5251f] pl-3 ${bengaliClass}`}>
                     {language === "bn" ? "অ্যাকাউন্ট তৈরি করুন" : "Create Account"}
                   </h3>
                   <p className={`text-gray-500 text-sm ${bengaliClass}`}>
@@ -186,7 +142,7 @@ const Register = () => {
                         value={formData.firstName}
                         onChange={handleChange}
                         required
-                        className={`w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                        className={`w-full pl-11 pr-4 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
                       />
                     </div>
                     <div className="relative">
@@ -197,7 +153,7 @@ const Register = () => {
                         value={formData.lastName}
                         onChange={handleChange}
                         required
-                        className={`w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                        className={`w-full pl-11 pr-4 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
                       />
                     </div>
                   </div>
@@ -212,7 +168,7 @@ const Register = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className={`w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                      className={`w-full pl-11 pr-4 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
                     />
                   </div>
 
@@ -225,7 +181,7 @@ const Register = () => {
                       value={formData.phoneNumber}
                       onChange={handleChange}
                       required
-                      className={`w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                      className={`w-full pl-11 pr-4 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
                     />
                   </div>
 
@@ -239,7 +195,7 @@ const Register = () => {
                         value={formData.location}
                         onChange={handleChange}
                         required
-                        className={`w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                        className={`w-full pl-11 pr-4 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
                       />
                     </div>
                     <div className="relative">
@@ -249,7 +205,7 @@ const Register = () => {
                         value={formData.gender}
                         onChange={handleChange}
                         required
-                        className={`w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition appearance-none ${!formData.gender ? "text-gray-400" : "text-gray-800"} ${bengaliClass}`}
+                        className={`w-full pl-11 pr-4 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition appearance-none ${!formData.gender ? "text-gray-400" : "text-gray-800"} ${bengaliClass}`}
                       >
                         <option value="">{language === "bn" ? "লিঙ্গ নির্বাচন করুন" : "Select gender"}</option>
                         <option value="male">{language === "bn" ? "পুরুষ" : "Male"}</option>
@@ -271,7 +227,7 @@ const Register = () => {
                           value={formData.password}
                           onChange={handleChange}
                           required
-                          className={`w-full pl-11 pr-10 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                          className={`w-full pl-11 pr-10 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
                         />
                         <button
                           type="button"
@@ -303,7 +259,7 @@ const Register = () => {
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         required
-                        className={`w-full pl-11 pr-10 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
+                        className={`w-full pl-11 pr-10 py-3 rounded-md border border-slate-300 bg-white focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/20 outline-none transition ${bengaliClass}`}
                       />
                       <button
                         type="button"
@@ -317,7 +273,7 @@ const Register = () => {
 
                   {/* Error Message */}
                   {error && (
-                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-md">
                       <p className="text-red-600 text-sm text-center">{error}</p>
                     </div>
                   )}
@@ -350,9 +306,9 @@ const Register = () => {
                   <button
                     type="submit"
                     disabled={loading || !termsAccepted}
-                    className={`w-full py-3.5 rounded-xl text-white font-semibold shadow-lg transition text-base ${loading || !termsAccepted
+                    className={`w-full py-3.5 rounded-md text-white font-semibold shadow-sm transition text-base ${loading || !termsAccepted
                       ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-gradient-to-r from-[#0142b2] to-[#01368f] hover:shadow-xl hover:-translate-y-0.5"
+                      : "bg-gradient-to-r from-[#e5251f] to-[#0142b2] hover:shadow-md"
                       } ${bengaliClass}`}
                   >
                     {loading ? (
@@ -385,7 +341,7 @@ const Register = () => {
                       window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}`;
                     }}
                     disabled={loading}
-                    className="w-full py-3.5 rounded-xl border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 font-medium text-gray-700 shadow-sm transition flex items-center justify-center gap-3 hover:-translate-y-0.5"
+                    className="w-full py-3.5 rounded-md border border-slate-300 bg-white hover:bg-slate-50 hover:border-slate-400 font-medium text-gray-700 shadow-sm transition flex items-center justify-center gap-3"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>

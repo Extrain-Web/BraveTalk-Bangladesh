@@ -6,6 +6,7 @@ import { LuMic, LuMessagesSquare, LuQrCode, LuBookOpen, LuLanguages, LuSmartphon
 import { useLanguage } from "@/context/LanguageContext";
 import SectionHeader from "./SectionHeader";
 import CounterSection from "./CounterSection";
+import { useSiteImage } from "@/lib/siteImages";
 
 const BENEFITS = [
     {
@@ -53,53 +54,78 @@ const WhatWeProvide = () => {
 
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
+    const whyImage = useSiteImage("whyImage");
 
     return (
-        <section className="relative overflow-hidden bg-slate-50/60 py-14 lg:py-20 border-y border-slate-100">
-            <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -top-24 left-1/4 h-[380px] w-[380px] rounded-full bg-blue-100/60 blur-[120px]" />
-                <div className="absolute bottom-[-120px] right-[10%] h-[360px] w-[360px] rounded-full bg-emerald-100/50 blur-[120px]" />
-            </div>
-
+        <section className="relative bg-slate-50 py-12 lg:py-16 border-y border-slate-200">
             <div ref={sectionRef} className="relative mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
-                <SectionHeader
-                    badge={isBn ? "কেন ব্রেভটক" : "Why BraveTalk"}
-                    title={isBn ? "শুধু শেখা নয়," : "More than lessons —"}
-                    titleAccent={isBn ? "বলতে শেখা" : "you actually speak"}
-                    description={
-                        isBn
-                            ? "পাবলিক স্পিকিং, লিডারশিপ ও সোশ্যাল অ্যাডভোকেসির মাধ্যমে আমরা শিক্ষার্থীদের আত্মবিশ্বাসী করে তুলি।"
-                            : "We empower students through public speaking, leadership and social advocacy. Here's what you get."
-                    }
-                    isInView={isInView}
-                    bengaliClass={bn}
-                />
+                <div className="grid items-stretch gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
+                    {/* Photo */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                        transition={{ duration: 0.5 }}
+                        className="relative min-h-[260px] overflow-hidden rounded-md border border-slate-200 bg-slate-200 shadow-sm sm:min-h-[340px]"
+                    >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src={whyImage}
+                            alt={isBn ? "ব্রেভটক বাংলাদেশের ক্লাস" : "A BraveTalk Bangladesh class"}
+                            loading="lazy"
+                            className="absolute inset-0 h-full w-full object-cover"
+                        />
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0b1b4a]/85 to-transparent p-5 pt-16">
+                            <p className={`text-lg font-bold text-white outfit ${bn}`}>{isBn ? "বক্তা হও, নেতা হও!" : "Be a Speaker, Be a Leader!"}</p>
+                            <p className={`mt-0.5 text-xs text-white/80 work ${bn}`}>
+                                {isBn ? "পাবলিক স্পিকিং · লিডারশিপ · সোশ্যাল অ্যাডভোকেসি" : "Public speaking · Leadership · Social advocacy"}
+                            </p>
+                        </div>
+                    </motion.div>
 
-                <motion.div
-                    initial="hidden"
-                    animate={isInView ? "visible" : "hidden"}
-                    variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.07, delayChildren: 0.15 } } }}
-                    className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5"
-                >
-                    {BENEFITS.map((b) => {
-                        const [title, desc] = isBn ? b.bn : b.en;
-                        return (
-                            <motion.div
-                                key={b.en[0]}
-                                variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}
-                                className="flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10"
-                            >
-                                <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${b.tile}`}>
-                                    <b.Icon className="text-xl" />
-                                </span>
-                                <div>
-                                    <h3 className={`text-[15px] font-bold leading-snug text-[#0b1b4a] outfit ${bn}`}>{title}</h3>
-                                    <p className={`mt-1 text-sm leading-relaxed text-slate-500 work ${bn}`}>{desc}</p>
-                                </div>
-                            </motion.div>
-                        );
-                    })}
-                </motion.div>
+                    {/* Benefits */}
+                    <div>
+                        <SectionHeader
+                            align="left"
+                            badge={isBn ? "কেন ব্রেভটক" : "Why BraveTalk"}
+                            title={isBn ? "শুধু শেখা নয়," : "More than lessons —"}
+                            titleAccent={isBn ? "বলতে শেখা" : "you actually speak"}
+                            description={
+                                isBn
+                                    ? "পাবলিক স্পিকিং, লিডারশিপ ও সোশ্যাল অ্যাডভোকেসির মাধ্যমে আমরা শিক্ষার্থীদের আত্মবিশ্বাসী করে তুলি।"
+                                    : "We empower students through public speaking, leadership and social advocacy. Here's what you get."
+                            }
+                            isInView={isInView}
+                            bengaliClass={bn}
+                            className="mb-6"
+                        />
+
+                        <motion.div
+                            initial="hidden"
+                            animate={isInView ? "visible" : "hidden"}
+                            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.06, delayChildren: 0.15 } } }}
+                            className="grid grid-cols-1 overflow-hidden rounded-md border border-slate-200 bg-white sm:grid-cols-2"
+                        >
+                            {BENEFITS.map((b, i) => {
+                                const [title, desc] = isBn ? b.bn : b.en;
+                                return (
+                                    <motion.div
+                                        key={b.en[0]}
+                                        variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 0.35 } } }}
+                                        className={`flex gap-3.5 border-slate-200 p-4 sm:p-5 ${i > 0 ? "border-t" : ""} ${i === 1 ? "sm:border-t-0" : ""} ${i % 2 === 1 ? "sm:border-l" : ""}`}
+                                    >
+                                        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md ${b.tile}`}>
+                                            <b.Icon className="text-lg" />
+                                        </span>
+                                        <div>
+                                            <h3 className={`text-[15px] font-bold leading-snug text-[#0b1b4a] outfit ${bn}`}>{title}</h3>
+                                            <p className={`mt-1 text-[13px] leading-relaxed text-slate-600 work ${bn}`}>{desc}</p>
+                                        </div>
+                                    </motion.div>
+                                );
+                            })}
+                        </motion.div>
+                    </div>
+                </div>
 
                 <CounterSection />
             </div>

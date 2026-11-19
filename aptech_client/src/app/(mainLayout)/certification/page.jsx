@@ -20,6 +20,7 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSettings } from "@/context/SettingsContext";
+import PhotoBanner from "@/components/Shared/PhotoBanner";
 
 const TINTS = ["bg-blue-50 text-[#0142b2]", "bg-red-50 text-[#e5251f]", "bg-emerald-50 text-[#027a1e]"];
 
@@ -92,11 +93,8 @@ const COPY = {
   },
 };
 
-const Eyebrow = ({ children, dot, bn }) => (
-  <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 shadow-sm">
-    <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
-    <span className={`text-xs font-medium text-slate-600 work ${bn}`}>{children}</span>
-  </div>
+const Eyebrow = ({ children, bn }) => (
+  <p className={`text-xs font-semibold uppercase tracking-wider text-[#e5251f] work ${bn}`}>{children}</p>
 );
 
 const CertificationPage = () => {
@@ -118,24 +116,21 @@ const CertificationPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-slate-100 bg-white">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full bg-red-100/60 blur-[120px]" />
-          <div className="absolute -top-10 right-[-80px] h-[420px] w-[420px] rounded-full bg-blue-200/60 blur-[120px]" />
-          <div className="absolute bottom-[-180px] left-1/3 h-[380px] w-[380px] rounded-full bg-emerald-100/60 blur-[120px]" />
-        </div>
-        <div className="relative z-10 mx-auto grid max-w-[1140px] 2xl:max-w-[1280px] items-center gap-10 px-4 sm:px-6 py-12 sm:py-16 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <div className="mb-4">
-              <Eyebrow dot="bg-[#027a1e]" bn={bn}>{c.badge}</Eyebrow>
-            </div>
-            <h1 className={`text-[30px] sm:text-4xl lg:text-5xl font-extrabold leading-tight tracking-tight text-[#0b1b4a] outfit ${bn}`}>
-              {c.h1a} <span className="text-[#e5251f]">{c.h1b}</span>
-            </h1>
-            <p className={`mt-4 max-w-xl text-sm sm:text-[15px] leading-relaxed text-slate-500 work ${bn}`}>{c.desc}</p>
+      <PhotoBanner
+        slot="pageBanner"
+        eyebrow={c.badge}
+        crumbs={[{ label: c.badge }]}
+        title={<>{c.h1a} <span className="text-[#ff6b63]">{c.h1b}</span></>}
+        subtitle={c.desc}
+      />
 
-            <form onSubmit={handleSearch} className="mt-6 max-w-xl">
-              <label htmlFor="certId" className={`mb-2 block text-sm font-medium text-slate-700 work ${bn}`}>{c.searchLabel}</label>
+      {/* Verify search + certificate preview */}
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto grid max-w-[1140px] 2xl:max-w-[1280px] items-center gap-10 px-4 sm:px-6 py-12 lg:py-16 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-md border border-slate-200 border-t-[3px] border-t-[#0142b2] bg-white p-5 sm:p-6 shadow-sm">
+            <h2 className={`border-l-4 border-[#e5251f] pl-3 text-xl font-bold text-[#0b1b4a] outfit ${bn}`}>{c.searchLabel}</h2>
+            <form onSubmit={handleSearch} className="mt-5">
+              <label htmlFor="certId" className={`mb-2 block text-sm font-medium text-slate-700 work ${bn}`}>{language === "bn" ? "সার্টিফিকেট আইডি" : "Certificate ID"}</label>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <div className="relative flex-1">
                   <LuSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-slate-400" />
@@ -144,13 +139,13 @@ const CertificationPage = () => {
                     value={certId}
                     onChange={(e) => setCertId(e.target.value)}
                     placeholder="e.g. BT-CERT-0001"
-                    className="w-full rounded-full border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm font-medium uppercase text-[#0b1b4a] shadow-sm outline-none transition placeholder:normal-case focus:border-[#0142b2] focus:ring-4 focus:ring-[#0142b2]/10 work"
+                    className="w-full rounded-md border border-slate-300 bg-white py-3.5 pl-11 pr-4 text-sm font-medium uppercase text-[#0b1b4a] outline-none transition placeholder:normal-case focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/10 work"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={!certId.trim()}
-                  className={`inline-flex items-center justify-center gap-2 rounded-full bg-[#0142b2] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] disabled:cursor-not-allowed disabled:opacity-60 work ${bn}`}
+                  className={`inline-flex items-center justify-center gap-2 rounded-md bg-[#0142b2] px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] disabled:cursor-not-allowed disabled:opacity-60 work ${bn}`}
                 >
                   <LuShieldCheck /> {c.searchBtn}
                 </button>
@@ -161,18 +156,18 @@ const CertificationPage = () => {
 
           {/* Certificate preview card (illustrative, no real data) */}
           <div className="mx-auto w-full max-w-[420px] lg:ml-auto">
-            <div className="relative rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-900/10">
-              <div className="rounded-2xl border border-dashed border-slate-200 p-5 text-center">
-                <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-[#0142b2]">
+            <div className="relative rounded-md border border-slate-200 bg-slate-50 p-6 shadow-md">
+              <div className="rounded-sm border-2 border-double border-[#0b1b4a]/30 bg-white p-5 text-center">
+                <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-[#0142b2]">
                   <LuAward className="text-3xl" />
                 </span>
                 <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 work">BraveTalk Bangladesh</p>
-                <p className={`mt-1 text-lg font-extrabold text-[#0b1b4a] outfit ${bn}`}>{language === "bn" ? "কোর্স সমাপনী সার্টিফিকেট" : "Certificate of Completion"}</p>
-                <div className="mx-auto mt-4 h-2 w-3/4 rounded-full bg-slate-100" />
-                <div className="mx-auto mt-2 h-2 w-1/2 rounded-full bg-slate-100" />
+                <p className={`mt-1 text-lg font-bold text-[#0b1b4a] outfit ${bn}`}>{language === "bn" ? "কোর্স সমাপনী সার্টিফিকেট" : "Certificate of Completion"}</p>
+                <div className="mx-auto mt-4 h-2 w-3/4 rounded-sm bg-slate-100" />
+                <div className="mx-auto mt-2 h-2 w-1/2 rounded-sm bg-slate-100" />
                 <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
-                  <span className="rounded-full bg-slate-50 px-3 py-1 font-mono text-[11px] font-semibold text-slate-500">BT-CERT-XXXX</span>
-                  <span className="flex h-12 w-12 items-center justify-center rounded-lg border border-slate-200 text-[#0b1b4a]">
+                  <span className="rounded-sm bg-slate-50 px-2 py-0.5 font-mono text-[11px] font-semibold text-slate-500">BT-CERT-XXXX</span>
+                  <span className="flex h-12 w-12 items-center justify-center rounded-md border border-slate-200 text-[#0b1b4a]">
                     <LuQrCode className="text-2xl" />
                   </span>
                 </div>
@@ -183,22 +178,22 @@ const CertificationPage = () => {
       </section>
 
       {/* How to earn */}
-      <section className="bg-slate-50/60 py-14 lg:py-20">
+      <section className="bg-slate-50 py-12 lg:py-16">
         <div className="mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <Eyebrow dot="bg-[#0142b2]" bn={bn}>{c.earnEyebrow}</Eyebrow>
-            <h2 className={`mt-4 text-3xl sm:text-4xl font-extrabold text-[#0b1b4a] outfit ${bn}`}>
+            <Eyebrow bn={bn}>{c.earnEyebrow}</Eyebrow>
+            <h2 className={`mt-2 text-2xl sm:text-3xl font-bold text-[#0b1b4a] outfit ${bn}`}>
               {c.earnTitle} <span className="text-[#e5251f]">{c.earnAccent}</span>
             </h2>
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {c.earn.map(({ icon: Icon, title, text }, i) => (
-              <div key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-                <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${TINTS[i % 3]}`}>
+              <div key={title} className="rounded-md border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md">
+                <span className={`flex h-11 w-11 items-center justify-center rounded-md ${TINTS[i % 3]}`}>
                   <Icon className="text-2xl" />
                 </span>
                 <h3 className={`mt-4 text-lg font-bold text-[#0b1b4a] outfit ${bn}`}>{title}</h3>
-                <p className={`mt-1.5 text-sm leading-relaxed text-slate-500 work ${bn}`}>{text}</p>
+                <p className={`mt-1.5 text-sm leading-relaxed text-slate-600 work ${bn}`}>{text}</p>
               </div>
             ))}
           </div>
@@ -206,17 +201,17 @@ const CertificationPage = () => {
       </section>
 
       {/* On every certificate + dashboard */}
-      <section className="bg-white py-14 lg:py-20">
+      <section className="bg-white py-12 lg:py-16">
         <div className="mx-auto grid max-w-[1140px] 2xl:max-w-[1280px] gap-8 px-4 sm:px-6 lg:grid-cols-2 lg:gap-12">
           <div>
-            <Eyebrow dot="bg-[#e5251f]" bn={bn}>{c.onCertEyebrow}</Eyebrow>
-            <h2 className={`mt-4 text-3xl sm:text-4xl font-extrabold text-[#0b1b4a] outfit ${bn}`}>
+            <Eyebrow bn={bn}>{c.onCertEyebrow}</Eyebrow>
+            <h2 className={`mt-2 border-l-4 border-[#e5251f] pl-3 text-2xl sm:text-3xl font-bold text-[#0b1b4a] outfit ${bn}`}>
               {c.onCertTitle} <span className="text-[#0142b2]">{c.onCertAccent}</span>
             </h2>
             <ul className="mt-6 space-y-3">
               {c.onCert.map(({ icon: Icon, text }, i) => (
-                <li key={text} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-                  <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${TINTS[i % 3]}`}>
+                <li key={text} className="flex items-center gap-3 rounded-md border border-slate-200 bg-white px-4 py-3">
+                  <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${TINTS[i % 3]}`}>
                     <Icon className="text-base" />
                   </span>
                   <span className={`text-sm font-medium text-slate-700 work ${bn}`}>{text}</span>
@@ -226,22 +221,22 @@ const CertificationPage = () => {
           </div>
 
           <div className="flex flex-col gap-6">
-            <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-blue-50 via-white to-red-50 p-6 sm:p-8">
-              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-[#0142b2] shadow-sm">
+            <div className="rounded-md border border-slate-200 border-l-4 border-l-[#0142b2] bg-slate-50 p-6 sm:p-8">
+              <span className="flex h-12 w-12 items-center justify-center rounded-md bg-white text-[#0142b2] shadow-sm">
                 <LuLayoutDashboard className="text-2xl" />
               </span>
               <h3 className={`mt-4 text-xl font-bold text-[#0b1b4a] outfit ${bn}`}>{c.dashTitle}</h3>
-              <p className={`mt-1 text-sm text-slate-500 work ${bn}`}>{c.dashText}</p>
+              <p className={`mt-1 text-sm text-slate-600 work ${bn}`}>{c.dashText}</p>
               <Link
                 href="/dashboard/user/certificates"
-                className={`mt-5 inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] hover:gap-3 work ${bn}`}
+                className={`mt-5 inline-flex items-center gap-2 rounded-md bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] work ${bn}`}
               >
                 {c.dashCta} <LuArrowRight />
               </Link>
             </div>
 
-            <div className="rounded-3xl border border-emerald-100 bg-emerald-50/70 p-6 sm:p-8">
-              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-[#25D366] shadow-sm">
+            <div className="rounded-md border border-emerald-200 border-l-4 border-l-[#027a1e] bg-emerald-50/70 p-6 sm:p-8">
+              <span className="flex h-12 w-12 items-center justify-center rounded-md bg-white text-[#25D366] shadow-sm">
                 <FaWhatsapp className="text-2xl" />
               </span>
               <h3 className={`mt-4 text-xl font-bold text-[#0b1b4a] outfit ${bn}`}>{c.helpTitle}</h3>
@@ -250,7 +245,7 @@ const CertificationPage = () => {
                 href={`https://wa.me/${whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`mt-5 inline-flex items-center gap-2 rounded-full bg-[#027a1e] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-[#026318] work ${bn}`}
+                className={`mt-5 inline-flex items-center gap-2 rounded-md bg-[#027a1e] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#026318] work ${bn}`}
               >
                 <FaWhatsapp /> {c.helpCta}
               </a>

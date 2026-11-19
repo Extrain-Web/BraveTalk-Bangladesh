@@ -37,7 +37,7 @@ const Concerns = () => {
   const mapLink = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
 
   return (
-    <section className="relative bg-white py-14 lg:py-20">
+    <section className="relative bg-white py-12 lg:py-16">
       <div ref={sectionRef} className="relative mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
         <SectionHeader
           badge={isBn ? "আমাদের অফিস" : "Visit us"}
@@ -57,13 +57,13 @@ const Concerns = () => {
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm lg:grid-cols-[0.9fr_1.1fr]"
+          className="grid overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm lg:grid-cols-[0.9fr_1.1fr]"
         >
           {/* Info */}
           <div className="flex flex-col p-6 sm:p-8">
             <ul className="space-y-5">
               <li className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-[#e5251f]">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-red-50 text-[#e5251f]">
                   <LuMapPin className="text-xl" />
                 </span>
                 <div>
@@ -72,7 +72,7 @@ const Concerns = () => {
                 </div>
               </li>
               <li className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#0142b2]">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[#0142b2]">
                   <LuPhone className="text-xl" />
                 </span>
                 <div>
@@ -87,7 +87,7 @@ const Concerns = () => {
                 </div>
               </li>
               <li className="flex items-start gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-[#027a1e]">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-emerald-50 text-[#027a1e]">
                   <LuMail className="text-xl" />
                 </span>
                 <div className="min-w-0">
@@ -104,13 +104,13 @@ const Concerns = () => {
                 href={mapLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 rounded-full bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/20 transition hover:bg-[#01368f] work ${bn}`}
+                className={`inline-flex items-center gap-2 rounded-md bg-[#0142b2] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] work ${bn}`}
               >
                 <LuNavigation /> {isBn ? "ম্যাপে দেখুন" : "Get directions"}
               </a>
               <Link
                 href="/contact"
-                className={`inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-slate-300 hover:shadow work ${bn}`}
+                className={`inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-slate-300 hover:shadow work ${bn}`}
               >
                 {isBn ? "মেসেজ পাঠান" : "Send a message"} <LuArrowRight />
               </Link>

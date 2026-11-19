@@ -9,6 +9,7 @@ import {
     FiAlignLeft, FiTag, FiUser, FiX
 } from 'react-icons/fi';
 import Link from 'next/link';
+import ImageUploadButton from '@/components/Admin/ImageUploadButton';
 
 export default function EditBlog() {
     const router = useRouter();
@@ -337,6 +338,17 @@ export default function EditBlog() {
                             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none transition-all ${errors.image ? 'border-red-400' : 'border-slate-200'
                                 }`}
                         />
+                        <div className="mt-2 flex items-center gap-2">
+                            <ImageUploadButton
+                                label={formData.image ? 'Replace image' : 'Upload image'}
+                                onUploaded={(url) => {
+                                    setFormData((prev) => ({ ...prev, image: url }));
+                                    setErrors((prev) => ({ ...prev, image: '' }));
+                                }}
+                                onError={(msg) => setErrors((prev) => ({ ...prev, image: msg }))}
+                            />
+                            <span className="text-[11px] text-slate-400">or paste an image URL above</span>
+                        </div>
                         {errors.image && <p className="text-red-500 text-xs mt-2">{errors.image}</p>}
                         {formData.image && (
                             <img
