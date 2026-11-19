@@ -9,6 +9,8 @@ const nextConfig = {
     remotePatterns: [
       // Local development (frontend public files + backend /uploads)
       { protocol: "http", hostname: "localhost" },
+      // Live site on Coolify (temporary sslip.io address) — add the real domain here later
+      { protocol: "https", hostname: "**.sslip.io" },
       {
         protocol: "https",
         hostname: "api.bdcallingacademy.com",
