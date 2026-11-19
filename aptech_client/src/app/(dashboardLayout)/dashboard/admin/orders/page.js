@@ -1,98 +1,220 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import {
-  FiLoader, FiShoppingCart, FiCheck, FiX, FiSearch,
-  FiDollarSign, FiClock, FiCheckCircle,
-  FiChevronDown, FiCalendar, FiFilter, FiGlobe, FiBookOpen, FiTrash2,
-  FiEye, FiUser, FiMail, FiPhone, FiMapPin, FiHash, FiCreditCard,
-  FiEdit2, FiSave,
+  FiLoader, FiShoppingCart, FiX, FiSearch, FiDollarSign, FiClock, FiCheckCircle,
+  FiCalendar, FiBookOpen, FiBook, FiLayers, FiTrash2, FiEye, FiUser, FiMail, FiPhone,
+  FiMapPin, FiHash, FiCreditCard, FiEdit2, FiSave, FiCheck, FiRefreshCw, FiPackage,
 } from 'react-icons/fi';
 import { SkeletonCard, SkeletonRow } from '@/components/Shared/Skeleton';
 import { useToast } from '@/components/Shared/Toast';
 import { useConfirm } from '@/components/Shared/ConfirmModal';
+import { booksApi } from '@/lib/booksApi';
 
 const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api';
 const getToken = () => localStorage.getItem('token') || '';
+const auth = () => ({ Authorization: `Bearer ${getToken()}` });
 
 const DetailRow = ({ icon: Icon, label, value, mono }) => (
   <div className="flex items-start gap-2">
-    <Icon size={13} className="text-slate-300 mt-0.5 shrink-0" />
+    <Icon size={14} className="text-slate-300 mt-0.5 shrink-0" />
     <div className="min-w-0">
-      <p className="text-[10px] text-slate-400 uppercase tracking-wider">{label}</p>
+      <p className="text-[11px] text-slate-400 uppercase tracking-wider">{label}</p>
       <p className={`text-sm text-slate-700 break-words ${mono ? 'font-mono' : ''}`}>{value || '—'}</p>
     </div>
   </div>
 );
 
-const fmtDateTime = (d) =>
-  d ? new Date(d).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }) : '—';
+const fmtDate = (d) => (d ? new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—');
+const fmtTime = (d) => (d ? new Date(d).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) : '');
+const fmtDateTime = (d) => (d ? `${fmtDate(d)}, ${fmtTime(d)}` : '—');
+const personName = (s = {}) => `${s.firstName || s.name || 'Student'} ${s.firstName ? s.lastName || '' : ''}`.trim();
+const money = (n) => `৳${(Number(n) || 0).toLocaleString('en-US')}`;
+const parseFee = (v) => parseInt(String(v ?? '').replace(/[^0-9]/g, '')) || 0;
+
+// Course enrollment status → unified order status
+const courseStatus = (s) => (s === 'active' || s === 'completed' ? 'approved' : s);
+
+const STATUS_STYLE = {
+  pending: 'bg-amber-50 text-amber-700 border-amber-200',
+  approved: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  cancelled: 'bg-red-50 text-red-600 border-red-200',
+  deleted: 'bg-slate-100 text-slate-500 border-slate-200',
+};
+const PAY_STYLE = {
+  paid: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  pending: 'bg-amber-50 text-amber-700 border-amber-200',
+  failed: 'bg-red-50 text-red-600 border-red-200',
+  refunded: 'bg-slate-100 text-slate-500 border-slate-200',
+};
+
+const toRow = {
+  course: (o) => ({
+    key: `c-${o._id}`, kind: 'course', id: o._id, raw: o,
+    title: o.courseId?.title || 'Course',
+    sub: o.courseId?.type || '',
+    student: o.studentId || {},
+    amount: Number(o.payment?.amount) || 0,
+    free: o.payment?.method === 'free',
+    method: o.payment?.gatewayData?.paymentType || o.payment?.method || '',
+    trx: o.payment?.transactionId || '',
+    sender: o.payment?.gatewayData?.senderNumber || '',
+    payStatus: o.payment?.status || 'pending',
+    status: courseStatus(o.status),
+    date: o.createdAt || o.enrolledAt,
+  }),
+  book: (o) => ({
+    key: `b-${o._id}`, kind: 'book', id: o._id, raw: o,
+    title: o.bookTitle || o.bookId?.title || 'Book',
+    sub: `${o.format === 'printed' ? 'Printed' : 'Digital'}${o.quantity > 1 ? ` ×${o.quantity}` : ''}`,
+    student: o.studentId || {},
+    amount: Number(o.amount) || 0,
+    free: o.payment?.method === 'free' || Number(o.amount) === 0,
+    method: o.payment?.paymentType || o.payment?.method || '',
+    trx: o.payment?.transactionId || '',
+    sender: o.payment?.senderNumber || '',
+    payStatus: o.payment?.status || 'pending',
+    status: o.status,
+    date: o.createdAt,
+  }),
+};
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState([]);
+  const [courseOrders, setCourseOrders] = useState([]);
+  const [bookOrders, setBookOrders] = useState([]);
+  const [batches, setBatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [filterType, setFilterType] = useState('all');
-  const [filterCourse, setFilterCourse] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('pending');
+  const [filterKind, setFilterKind] = useState('all');
   const [processing, setProcessing] = useState(null);
-  const [detailsOrder, setDetailsOrder] = useState(null);
+  const [details, setDetails] = useState(null); // a row
   const [editMode, setEditMode] = useState(false);
   const [editForm, setEditForm] = useState(null);
   const [savingEdit, setSavingEdit] = useState(false);
+  const [approveRow, setApproveRow] = useState(null); // live course → choose batch
+  const [approveBatch, setApproveBatch] = useState('');
 
   const { showToast, toastNode } = useToast();
   const { confirm, confirmNode } = useConfirm();
 
-  useEffect(() => { loadOrders(); }, []);
-
-  const loadOrders = async () => {
+  const loadOrders = useCallback(async () => {
     setLoading(true);
     try {
-      const auth = { Authorization: `Bearer ${getToken()}` };
-      // One shot: all orders (no 20-row cap)
-      const res = await fetch(`${API}/enrollments/all?includeDeleted=true&limit=10000`, { headers: auth });
-      const data = await res.json();
-      setOrders(data.data || []);
+      const [enr, books, bt] = await Promise.all([
+        fetch(`${API}/enrollments/all?includeDeleted=true&limit=10000`, { headers: auth() }).then(r => r.json()),
+        booksApi.adminOrders('all').catch(() => []),
+        fetch(`${API}/batches`).then(r => r.json()).catch(() => ({ data: [] })),
+      ]);
+      setCourseOrders(enr.data || []);
+      setBookOrders(Array.isArray(books) ? books : []);
+      setBatches(bt.data || []);
     } catch (err) {
       console.error('Error loading orders:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const handleApprove = async (enrollmentId) => {
-    if (!(await confirm({ title: 'Approve this order?', message: 'This will activate the enrollment and mark payment received.', confirmText: 'Approve', danger: false }))) return;
-    setProcessing(enrollmentId);
+  useEffect(() => { loadOrders(); }, [loadOrders]);
+
+  const rows = useMemo(() => [
+    ...courseOrders.map(toRow.course),
+    ...bookOrders.map(toRow.book),
+  ].sort((a, b) => new Date(b.date) - new Date(a.date)), [courseOrders, bookOrders]);
+
+  // Live batches for a course (self-paced REC-* batches excluded), earliest first
+  const liveBatchesFor = (courseId) => batches
+    .filter(b => (typeof b.courseId === 'object' ? b.courseId?._id : b.courseId) === courseId)
+    .filter(b => !String(b.id || '').startsWith('REC-') && b.status !== 'completed' && !b.isDeleted)
+    .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+  const seatsLeft = (b) => (b.maxStudents || 50) - (b.studentCount || 0);
+
+  // ── Actions ─────────────────────────────────────────────
+  const approveCourse = async (row, batchId) => {
+    setProcessing(row.key);
     try {
-      const res = await fetch(`${API}/enrollments/approve/${enrollmentId}`, {
+      const res = await fetch(`${API}/enrollments/approve/${row.id}`, {
         method: 'PATCH',
-        headers: { Authorization: `Bearer ${getToken()}` },
+        headers: { 'Content-Type': 'application/json', ...auth() },
+        body: JSON.stringify(batchId ? { batchId } : {}),
       });
       const data = await res.json();
-      if (data.success) { loadOrders(); showToast('success', 'Order approved'); }
+      if (data.success) { showToast('success', 'Order approved — now in Enrollments'); loadOrders(); }
       else showToast('error', data.message || 'Error');
-    } catch (err) {
+    } catch {
       showToast('error', 'Error approving');
     } finally {
       setProcessing(null);
     }
   };
 
-  // ── Admin: edit order/payment details ──────────────────────
+  const handleApprove = async (row) => {
+    if (row.kind === 'book') {
+      const ok = await confirm({ title: 'Approve this book order?', message: 'This verifies payment, unlocks the book videos and reduces stock. It will appear in Book Enrollments.', confirmText: 'Approve', danger: false });
+      if (!ok) return;
+      setProcessing(row.key);
+      try { await booksApi.approveOrder(row.id); showToast('success', 'Book order approved'); loadOrders(); }
+      catch (err) { showToast('error', err.message || 'Error approving'); }
+      finally { setProcessing(null); }
+      return;
+    }
+    const type = (row.raw.courseId?.type || '').toLowerCase();
+    if (type === 'recorded') {
+      const ok = await confirm({ title: 'Approve this order?', message: 'Recorded course — the student gets access right away (no batch needed).', confirmText: 'Approve', danger: false });
+      if (ok) approveCourse(row);
+      return;
+    }
+    // Online / Offline → admin chooses the batch
+    const list = liveBatchesFor(row.raw.courseId?._id);
+    const first = list.find(b => seatsLeft(b) > 0) || list[0];
+    setApproveBatch(first?._id || '');
+    setApproveRow(row);
+  };
+
+  const handleCancel = async (row) => {
+    const ok = await confirm({ title: 'Cancel this order?', message: 'The student will not get access. They can order again later.', confirmText: 'Cancel order', cancelText: 'Keep' });
+    if (!ok) return;
+    setProcessing(row.key);
+    try {
+      if (row.kind === 'book') await booksApi.cancelOrder(row.id);
+      else {
+        const res = await fetch(`${API}/enrollments/cancel/${row.id}`, { method: 'PATCH', headers: auth() });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Error');
+      }
+      showToast('success', 'Order cancelled');
+      loadOrders();
+    } catch (err) {
+      showToast('error', err.message || 'Error cancelling');
+    } finally {
+      setProcessing(null);
+    }
+  };
+
+  const handleDelete = async (row) => {
+    if (!(await confirm({ title: 'Delete this order?', message: 'This order will be permanently deleted. This cannot be undone.', confirmText: 'Delete' }))) return;
+    setProcessing(row.key);
+    try {
+      const res = await fetch(`${API}/enrollments/order/${row.id}`, { method: 'DELETE', headers: auth() });
+      const data = await res.json();
+      if (data.success) { loadOrders(); showToast('success', 'Order deleted'); }
+      else showToast('error', data.message || 'Error');
+    } catch {
+      showToast('error', 'Error deleting order');
+    } finally {
+      setProcessing(null);
+    }
+  };
+
+  // ── Course order edit (payment details) ─────────────────
   const startEdit = (o) => {
     const p = o.payment || {};
     const gw = p.gatewayData || {};
     setEditForm({
-      customFee: o.customFee ?? '',
-      amount: p.amount ?? '',
-      method: p.method || 'manual',
-      status: p.status || 'pending',
-      transactionId: p.transactionId || '',
-      senderNumber: gw.senderNumber || '',
-      paymentType: gw.paymentType || '',
-      notes: gw.notes || '',
+      customFee: o.customFee ?? '', amount: p.amount ?? '', method: p.method || 'manual', status: p.status || 'pending',
+      transactionId: p.transactionId || '', senderNumber: gw.senderNumber || '', paymentType: gw.paymentType || '', notes: gw.notes || '',
     });
     setEditMode(true);
   };
@@ -102,44 +224,22 @@ export default function OrdersPage() {
     try {
       const res = await fetch(`${API}/enrollments/${orderId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+        headers: { 'Content-Type': 'application/json', ...auth() },
         body: JSON.stringify({
           customFee: editForm.customFee === '' ? undefined : Number(editForm.customFee),
           payment: {
-            amount: Number(editForm.amount) || 0,
-            method: editForm.method,
-            status: editForm.status,
-            transactionId: editForm.transactionId,
-            gatewayData: {
-              senderNumber: editForm.senderNumber,
-              paymentType: editForm.paymentType,
-              notes: editForm.notes,
-            },
+            amount: Number(editForm.amount) || 0, method: editForm.method, status: editForm.status, transactionId: editForm.transactionId,
+            gatewayData: { senderNumber: editForm.senderNumber, paymentType: editForm.paymentType, notes: editForm.notes },
           },
         }),
       });
       const data = await res.json();
       if (data.success) {
-        // Reflect edits in the open modal (keep populated student/course)
-        setDetailsOrder(prev => prev ? {
-          ...prev,
-          customFee: editForm.customFee === '' ? prev.customFee : Number(editForm.customFee),
-          payment: {
-            ...prev.payment,
-            amount: Number(editForm.amount) || 0,
-            method: editForm.method,
-            status: editForm.status,
-            transactionId: editForm.transactionId,
-            paidAt: editForm.status === 'paid' ? (prev.payment?.paidAt || new Date().toISOString()) : prev.payment?.paidAt,
-            gatewayData: { ...(prev.payment?.gatewayData || {}), senderNumber: editForm.senderNumber, paymentType: editForm.paymentType, notes: editForm.notes },
-          },
-        } : prev);
         setEditMode(false);
+        setDetails(null);
         loadOrders();
         showToast('success', 'Order updated');
-      } else {
-        showToast('error', data.message || 'Failed to update');
-      }
+      } else showToast('error', data.message || 'Failed to update');
     } catch {
       showToast('error', 'Network error');
     } finally {
@@ -147,132 +247,54 @@ export default function OrdersPage() {
     }
   };
 
-  const handleStatusChange = async (enrollmentId, newStatus) => {
-    setProcessing(enrollmentId);
-    try {
-      let res;
-      if (newStatus === 'active') {
-        // Approve → activate + mark paid
-        res = await fetch(`${API}/enrollments/approve/${enrollmentId}`, {
-          method: 'PATCH',
-          headers: { Authorization: `Bearer ${getToken()}` },
-        });
-      } else if (newStatus === 'cancelled') {
-        res = await fetch(`${API}/enrollments/cancel/${enrollmentId}`, {
-          method: 'PATCH',
-          headers: { Authorization: `Bearer ${getToken()}` },
-        });
-      } else {
-        // pending / completed → generic status update (do NOT cancel)
-        res = await fetch(`${API}/enrollments/${enrollmentId}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-          body: JSON.stringify({ status: newStatus }),
-        });
-      }
-      const data = await res.json();
-      if (data.success) loadOrders();
-      else showToast('error', data.message || 'Error');
-    } catch (err) {
-      showToast('error', 'Error updating status');
-    } finally {
-      setProcessing(null);
-    }
-  };
+  // ── Stats + filters ─────────────────────────────────────
+  const live = rows.filter(r => r.status !== 'deleted' && r.status !== 'cancelled');
+  const pendingCount = rows.filter(r => r.status === 'pending').length;
+  const collected = live.filter(r => r.payStatus === 'paid').reduce((s, r) => s + r.amount, 0);
+  const approvedCount = rows.filter(r => r.status === 'approved').length;
 
-  const handleDeleteOrder = async (orderId) => {
-    if (!(await confirm({ title: 'Delete this order?', message: 'This order will be permanently deleted. This cannot be undone.', confirmText: 'Delete' }))) return;
-    setProcessing(orderId);
-    try {
-      const res = await fetch(`${API}/enrollments/order/${orderId}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
-      const data = await res.json();
-      if (data.success) { loadOrders(); showToast('success', 'Order deleted'); }
-      else showToast('error', data.message || 'Error');
-    } catch (err) {
-      showToast('error', 'Error deleting order');
-    } finally {
-      setProcessing(null);
-    }
-  };
-
-  const getStatusColor = (s) => ({
-    active: 'bg-emerald-50 text-emerald-600 border-emerald-300',
-    pending: 'bg-amber-50 text-amber-600 border-amber-300',
-    cancelled: 'bg-red-50 text-red-500 border-red-300',
-    completed: 'bg-blue-50 text-blue-600 border-blue-300',
-    deleted: 'bg-rose-100 text-rose-600 border-rose-400',
-  }[s] || 'bg-slate-100 text-slate-500 border-slate-300');
-
-  const getPaymentColor = (s) => ({
-    paid: 'bg-emerald-50 text-emerald-600 border-emerald-300',
-    pending: 'bg-amber-50 text-amber-600 border-amber-300',
-    failed: 'bg-red-50 text-red-500 border-red-300',
-  }[s] || 'bg-slate-100 text-slate-500 border-slate-300');
-
-  // One-time full payment per order — amount = what the student paid for the course
-  const parseFee = (v) => parseInt(String(v ?? '').replace(/[^0-9]/g, '')) || 0;
-  const coursePrice = (o) => {
-    const fee = parseFee(o.courseId?.fee);
-    const offer = parseFee(o.courseId?.offerPrice);
-    return Number(o.customFee) || (offer > 0 && (fee === 0 || offer < fee) ? offer : fee);
-  };
-
-  const pendingOrders = orders.filter(o => o.status === 'pending');
-  // Collected = verified payments (deleted/cancelled বাদে)
-  const isCollected = (o) => o.status !== 'deleted' && o.status !== 'cancelled' && o.payment?.status === 'paid';
-  const totalRevenue = orders
-    .filter(isCollected)
-    .reduce((s, o) => s + (Number(o.payment?.amount) || 0), 0);
-  const paidOrders = orders.filter(isCollected).length;
-
-  // Build unique course list for filter
-  const courseMap = new Map();
-  orders.forEach(o => { if (o.courseId?._id) courseMap.set(o.courseId._id, o.courseId.title); });
-  const courseList = Array.from(courseMap, ([id, title]) => ({ id, title }));
-
-  const filtered = orders.filter(o => {
-    const matchStatus = filterStatus === 'all' ||
-      (filterStatus === 'pending' && o.status === 'pending') ||
-      (filterStatus === 'active' && o.status === 'active') ||
-      (filterStatus === 'cancelled' && o.status === 'cancelled') ||
-      (filterStatus === 'deleted' && o.status === 'deleted');
-    const matchType = filterType === 'all' || (o.courseId?.type || '').toLowerCase() === filterType;
-    const matchCourse = filterCourse === 'all' || o.courseId?._id === filterCourse;
-    const term = searchTerm.toLowerCase();
-    const name = `${o.studentId?.firstName || ''} ${o.studentId?.lastName || ''} ${o.studentId?.name || ''}`.toLowerCase();
-    const course = (o.courseId?.title || '').toLowerCase();
-    const txn = (o.payment?.transactionId || '').toLowerCase();
-    return matchStatus && matchType && matchCourse && (name.includes(term) || course.includes(term) || txn.includes(term));
+  const filtered = rows.filter(r => {
+    if (filterKind !== 'all' && r.kind !== filterKind) return false;
+    if (filterStatus !== 'all' && r.status !== filterStatus) return false;
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return true;
+    return [r.title, personName(r.student), r.student.email, r.student.phoneNumber, r.trx, r.sender, r.raw.orderNo]
+      .some(v => String(v || '').toLowerCase().includes(term));
   });
 
+  const statusTabs = [
+    { id: 'pending', label: 'Pending', count: pendingCount },
+    { id: 'approved', label: 'Approved' },
+    { id: 'cancelled', label: 'Cancelled' },
+    { id: 'all', label: 'All' },
+  ];
+
   return (
-    <div className="poppins space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 outfit">Orders</h1>
-        <p className="text-sm text-slate-500 mt-1">All course purchase orders & payment tracking</p>
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-[#0b1b4a] outfit">Orders</h1>
+          <p className="text-sm text-slate-500 mt-1">Course and book orders. Approved courses go to <Link href="/dashboard/admin/enrollments" className="font-medium text-[#0142b2] hover:underline">Enrollments</Link>, approved books go to <Link href="/dashboard/admin/books/enrollments" className="font-medium text-[#0142b2] hover:underline">Book Enrollments</Link>.</p>
+        </div>
+        <button onClick={loadOrders} className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50">
+          <FiRefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Refresh
+        </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {loading ? (
-          <>{[1,2,3,4].map(i => <SkeletonCard key={i} />)}</>
-        ) : [
-          { label: 'Total Orders', value: orders.length, icon: FiShoppingCart, color: 'text-slate-700', bg: 'bg-slate-100' },
-          { label: 'Pending', value: pendingOrders.length, icon: FiClock, color: 'text-amber-600', bg: 'bg-amber-50' },
-          { label: 'Collected', value: `৳${totalRevenue.toLocaleString()}`, icon: FiDollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-          { label: 'Paid Orders', value: paidOrders, icon: FiCheckCircle, color: 'text-blue-600', bg: 'bg-blue-50' },
+        {loading ? [1, 2, 3, 4].map(i => <SkeletonCard key={i} />) : [
+          { label: 'Waiting for approval', value: pendingCount, icon: FiClock, color: 'text-amber-600', bg: 'bg-amber-50' },
+          { label: 'Approved orders', value: approvedCount, icon: FiCheckCircle, color: 'text-[#027a1e]', bg: 'bg-emerald-50' },
+          { label: 'Collected', value: money(collected), icon: FiDollarSign, color: 'text-[#0142b2]', bg: 'bg-[#eef3fc]' },
+          { label: 'Total orders', value: rows.length, icon: FiShoppingCart, color: 'text-[#0b1b4a]', bg: 'bg-slate-100' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-md border border-slate-200/60 p-4 shadow-sm">
+          <div key={s.label} className="bg-white rounded-md border border-slate-200 p-4 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-md ${s.bg} flex items-center justify-center`}>
-                <s.icon size={18} className={s.color} />
-              </div>
+              <div className={`w-10 h-10 rounded-md ${s.bg} flex items-center justify-center`}><s.icon size={18} className={s.color} /></div>
               <div>
-                <p className={`text-xl font-semibold ${s.color}`}>{s.value}</p>
-                <p className="text-sm text-slate-400">{s.label}</p>
+                <p className={`text-xl font-bold outfit ${s.color}`}>{s.value}</p>
+                <p className="text-sm text-slate-500">{s.label}</p>
               </div>
             </div>
           </div>
@@ -280,442 +302,301 @@ export default function OrdersPage() {
       </div>
 
       {/* Filters */}
-      <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <FiSearch className="absolute left-3 top-3 text-slate-400" size={16} />
-            <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by name, course, or transaction ID..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
-          </div>
-          <div className="flex gap-1 bg-slate-100 rounded-md p-1 flex-wrap">
-            {['all', 'pending', 'active', 'cancelled', 'deleted'].map(s => (
-              <button key={s} onClick={() => setFilterStatus(s)}
-                className={`px-3 py-2 rounded-md text-sm capitalize transition ${filterStatus === s ? 'bg-white text-teal-600 shadow-sm font-medium' : 'text-slate-500'}`}>
-                {s === 'deleted' ? '🗑️ Deleted' : s}
-              </button>
-            ))}
-          </div>
+      <div className="flex flex-wrap items-center gap-3 rounded-md border border-slate-200 bg-white p-3">
+        <div className="relative min-w-[220px] flex-1">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
+          <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search student, phone, course/book, TrxID…"
+            className="w-full pl-9 pr-3 py-2 rounded-md border border-slate-200 text-sm focus:border-[#0142b2] outline-none" />
         </div>
-
-        {/* Advanced Filters */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-slate-400 flex items-center gap-1"><FiFilter size={13} /> Filters:</span>
-
-          {/* Course Type */}
-          <div className="relative">
-            <FiGlobe size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
-            <select value={filterType} onChange={(e) => setFilterType(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition ${
-                filterType !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
-              }`}>
-              <option value="all">All Types</option>
-              <option value="online">Online</option>
-              <option value="offline">Offline</option>
-              <option value="recorded">Recorded</option>
-            </select>
-            <FiChevronDown size={12} className="absolute right-2 top-[9px] pointer-events-none text-slate-300" />
-          </div>
-
-          {/* Course */}
-          <div className="relative">
-            <FiBookOpen size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
-            <select value={filterCourse} onChange={(e) => setFilterCourse(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition max-w-[220px] truncate ${
-                filterCourse !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
-              }`}>
-              <option value="all">All Courses</option>
-              {courseList.map(c => (
-                <option key={c.id} value={c.id}>{c.title}</option>
-              ))}
-            </select>
-            <FiChevronDown size={12} className="absolute right-2 top-[9px] pointer-events-none text-slate-300" />
-          </div>
-
-          {/* Clear all filters */}
-          {(filterStatus !== 'all' || filterType !== 'all' || filterCourse !== 'all' || searchTerm) && (
-            <button onClick={() => { setFilterStatus('all'); setFilterType('all'); setFilterCourse('all'); setSearchTerm(''); }}
-              className="px-3 py-1.5 rounded-md text-sm text-rose-500 hover:bg-rose-50 transition border border-rose-200">
-              ✕ Clear
+        <div className="flex gap-1 rounded-md bg-slate-100 p-1">
+          {[{ id: 'all', label: 'All' }, { id: 'course', label: 'Courses', icon: FiLayers }, { id: 'book', label: 'Books', icon: FiBook }].map(k => (
+            <button key={k.id} onClick={() => setFilterKind(k.id)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition ${filterKind === k.id ? 'bg-white text-[#0142b2] font-semibold shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
+              {k.icon && <k.icon size={13} />} {k.label}
             </button>
-          )}
-
-          <span className="ml-auto text-sm text-slate-400">{filtered.length} of {orders.length} orders</span>
+          ))}
+        </div>
+        <div className="flex gap-1 rounded-md bg-slate-100 p-1">
+          {statusTabs.map(t => (
+            <button key={t.id} onClick={() => setFilterStatus(t.id)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition ${filterStatus === t.id ? 'bg-white text-[#0142b2] font-semibold shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
+              {t.label}
+              {t.count > 0 && <span className="rounded-sm bg-amber-500 px-1.5 text-[11px] font-bold text-white">{t.count}</span>}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
-        {loading ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-slate-50/80 border-b border-slate-100">
-                  {['Student','Course','Amount','TXN ID','Payment','Status','Date','Actions'].map(h => (
-                    <th key={h} className="text-left px-5 py-3 text-sm font-medium text-slate-500">{h}</th>
-                  ))}
+      <div className="bg-white rounded-md border border-slate-200 shadow-sm overflow-hidden">
+        <table className="w-full table-fixed">
+          <colgroup>
+            <col className="w-[31%]" /><col className="w-[20%]" /><col className="w-[18%]" /><col className="w-[11%]" /><col className="w-[20%]" />
+          </colgroup>
+          <thead>
+            <tr className="bg-slate-50 border-b border-slate-200 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <th className="px-4 py-3">Order</th>
+              <th className="px-4 py-3">Student</th>
+              <th className="px-4 py-3">Payment</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? [1, 2, 3, 4].map(i => <SkeletonRow key={i} />) : filtered.length === 0 ? (
+              <tr><td colSpan={5} className="py-14 text-center">
+                <FiShoppingCart className="mx-auto mb-2 text-slate-300" size={32} />
+                <p className="text-sm text-slate-500">{filterStatus === 'pending' ? 'No orders waiting for approval.' : 'No orders found.'}</p>
+              </td></tr>
+            ) : filtered.map(row => {
+              const busy = processing === row.key;
+              const name = personName(row.student);
+              return (
+                <tr key={row.key} className="border-b border-slate-100 align-top hover:bg-slate-50/60">
+                  {/* Order */}
+                  <td className="px-4 py-3">
+                    <div className="flex items-start gap-2.5">
+                      <span className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${row.kind === 'book' ? 'bg-red-50 text-[#e5251f]' : 'bg-[#eef3fc] text-[#0142b2]'}`}>
+                        {row.kind === 'book' ? <FiBook size={15} /> : <FiLayers size={15} />}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-slate-800" title={row.title}>{row.title}</p>
+                        <p className="text-xs text-slate-500">
+                          <span className="font-medium">{row.kind === 'book' ? 'Book' : 'Course'}</span>{row.sub ? ` · ${row.sub}` : ''} · {fmtDate(row.date)} {fmtTime(row.date)}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  {/* Student */}
+                  <td className="px-4 py-3">
+                    <Link href={`/dashboard/admin/user/${row.student._id || ''}`} className="block min-w-0 group">
+                      <p className="truncate text-sm font-medium text-slate-700 group-hover:text-[#0142b2]">{name}</p>
+                      <p className="truncate text-xs text-slate-400">{row.student.phoneNumber || row.student.email}</p>
+                    </Link>
+                  </td>
+                  {/* Payment */}
+                  <td className="px-4 py-3">
+                    <p className="text-sm font-semibold text-slate-800">{row.free ? 'Free' : money(row.amount)}</p>
+                    {!row.free && (
+                      <p className="truncate text-xs text-slate-500" title={`${row.sender} ${row.trx}`}>
+                        <span className="capitalize">{row.method}</span>{row.trx ? ` · ${row.trx}` : ''}
+                      </p>
+                    )}
+                  </td>
+                  {/* Status */}
+                  <td className="px-4 py-3">
+                    <span className={`inline-block rounded-sm border px-2 py-0.5 text-xs font-semibold capitalize ${STATUS_STYLE[row.status] || STATUS_STYLE.deleted}`}>{row.status}</span>
+                  </td>
+                  {/* Actions */}
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-1.5">
+                      {row.status === 'pending' && (
+                        <>
+                          <button onClick={() => handleApprove(row)} disabled={busy}
+                            className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-md bg-[#027a1e] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#026318] disabled:opacity-50">
+                            {busy ? <FiLoader className="animate-spin" size={12} /> : <FiCheck size={12} />} Approve
+                          </button>
+                          <button onClick={() => handleCancel(row)} disabled={busy} title="Cancel order"
+                            className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 hover:bg-red-50 hover:text-[#e5251f]">
+                            <FiX size={15} />
+                          </button>
+                        </>
+                      )}
+                      <button onClick={() => { setEditMode(false); setDetails(row); }} title="View details"
+                        className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 hover:bg-[#eef3fc] hover:text-[#0142b2]">
+                        <FiEye size={15} />
+                      </button>
+                      {row.kind === 'course' && (
+                        <button onClick={() => handleDelete(row)} disabled={busy} title="Delete order"
+                          className="flex h-7 w-7 items-center justify-center rounded-md text-slate-400 hover:bg-red-50 hover:text-[#e5251f]">
+                          <FiTrash2 size={14} />
+                        </button>
+                      )}
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>{[1,2,3,4,5].map(i => <SkeletonRow key={i} />)}</tbody>
-            </table>
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="p-16 text-center">
-            <FiShoppingCart className="mx-auto text-slate-300 mb-3" size={36} />
-            <h3 className="font-medium text-slate-600 text-base">No Orders Found</h3>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-slate-50/80 border-b border-slate-100">
-                  <th className="text-left px-5 py-3 text-sm font-medium text-slate-500">Student</th>
-                  <th className="text-left px-5 py-3 text-sm font-medium text-slate-500">Course</th>
-                  <th className="text-left px-5 py-3 text-sm font-medium text-slate-500">Amount</th>
-                  <th className="text-left px-5 py-3 text-sm font-medium text-slate-500">TXN ID / Method</th>
-                  <th className="text-center px-5 py-3 text-sm font-medium text-slate-500">Payment</th>
-                  <th className="text-center px-5 py-3 text-sm font-medium text-slate-500">Status</th>
-                  <th className="text-left px-5 py-3 text-sm font-medium text-slate-500">Date & Time</th>
-                  <th className="text-right px-5 py-3 text-sm font-medium text-slate-500">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map(order => {
-                  const student = order.studentId || {};
-                  const course = order.courseId || {};
-                  const payment = order.payment || {};
-                  const orderDate = new Date(order.createdAt || order.enrolledAt);
-                  const studentName = `${student.firstName || student.name || 'Student'} ${student.lastName || ''}`.trim();
-
-                  return (
-                    <React.Fragment key={order._id}>
-                      <tr className="border-b border-slate-100 hover:bg-slate-50/50 transition">
-                        {/* Student */}
-                        <td className="px-5 py-3.5">
-                          <Link href={`/dashboard/admin/user/${student._id || ''}`} className="flex items-center gap-2.5 group">
-                            <div className="w-9 h-9 rounded-md bg-[#027a1e] flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
-                              {studentName.charAt(0).toUpperCase()}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-sm text-slate-700 group-hover:text-teal-600 transition truncate max-w-[140px]">
-                                {studentName}
-                              </p>
-                              <p className="text-xs text-slate-400 truncate max-w-[140px]">{student.email}</p>
-                            </div>
-                          </Link>
-                        </td>
-
-                        {/* Course */}
-                        <td className="px-5 py-3.5">
-                          <p className="text-sm text-slate-700 truncate max-w-[160px]">{course.title || 'Course'}</p>
-                        </td>
-
-                        {/* Amount — one-time full payment */}
-                        <td className="px-5 py-3.5">
-                          <span className="text-sm font-medium text-slate-700">
-                            {payment.method === 'free' ? 'Free' : `৳${(Number(payment.amount) || 0).toLocaleString()}`}
-                          </span>
-                        </td>
-
-                        {/* TXN */}
-                        <td className="px-5 py-3.5">
-                          {payment.transactionId ? (
-                            <div>
-                              <p className="font-mono text-sm text-slate-600">{payment.transactionId}</p>
-                              <p className="text-xs text-slate-400 capitalize">
-                                {payment.method}{payment.gatewayData?.paymentType ? ` · ${payment.gatewayData.paymentType}` : ''}
-                              </p>
-                            </div>
-                          ) : (
-                            <span className="text-sm text-slate-400 capitalize">{payment.method || '—'}</span>
-                          )}
-                        </td>
-
-                        {/* Payment Status */}
-                        <td className="px-5 py-3.5 text-center">
-                          <span className={`inline-block px-2.5 py-1 rounded-md text-xs font-medium border ${getPaymentColor(payment.status)}`}>
-                            {payment.status || '—'}
-                          </span>
-                        </td>
-
-                        {/* Order Status — Editable */}
-                        <td className="px-5 py-3.5 text-center">
-                          <div className="relative inline-block">
-                            <select
-                              value={order.status}
-                              onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                              disabled={processing === order._id || order.status === 'deleted'}
-                              className={`appearance-none px-3 py-1.5 pr-7 rounded-md text-xs font-medium border cursor-pointer outline-none disabled:opacity-50 ${getStatusColor(order.status)}`}
-                            >
-                              <option value="pending">Pending</option>
-                              <option value="active">Approved</option>
-                              <option value="cancelled">Cancelled</option>
-                              <option value="completed">Completed</option>
-                              {order.status === 'deleted' && <option value="deleted">🗑️ Deleted</option>}
-                            </select>
-                            <FiChevronDown size={10} className="absolute right-2 top-2.5 pointer-events-none opacity-40" />
-                          </div>
-                        </td>
-
-                        {/* Date + Time */}
-                        <td className="px-5 py-3.5">
-                          <p className="text-sm text-slate-600">{orderDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
-                          <p className="text-xs text-slate-400">{orderDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
-                        </td>
-
-                        {/* Actions */}
-                        <td className="px-5 py-3.5 text-right">
-                          <div className="flex items-center gap-1.5 justify-end">
-                            <button
-                              onClick={() => { setEditMode(false); setDetailsOrder(order); }}
-                              title="View order details"
-                              className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-[#0142b2] hover:bg-[#eef3fc] transition border border-transparent hover:border-[#c9d8f5]"
-                            >
-                              <FiEye size={15} />
-                            </button>
-                            {order.status === 'pending' && (
-                              <>
-                                <button onClick={() => handleApprove(order._id)} disabled={processing === order._id}
-                                  className="px-4 py-2 bg-emerald-500 text-white text-sm rounded-md hover:bg-emerald-600 disabled:opacity-50 transition">
-                                  ✓ Approve
-                                </button>
-                                <button onClick={() => handleStatusChange(order._id, 'cancelled')} disabled={processing === order._id}
-                                  className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition">
-                                  <FiX size={16} />
-                                </button>
-                              </>
-                            )}
-                            {order.status === 'active' && <span className="text-sm text-emerald-500">✓ Approved</span>}
-                            {order.status === 'cancelled' && <span className="text-sm text-red-400">Cancelled</span>}
-                            {order.status === 'deleted' && <span className="text-sm text-rose-500 font-medium">🗑️ Enrollment Deleted</span>}
-                            {/* Delete button - always visible for admin */}
-                            <button
-                              onClick={() => handleDeleteOrder(order._id)}
-                              disabled={processing === order._id}
-                              title="Permanently delete this order"
-                              className="w-8 h-8 rounded-md flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 transition border border-transparent hover:border-red-200 disabled:opacity-50"
-                            >
-                              <FiTrash2 size={15} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-
-                    </React.Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+              );
+            })}
+          </tbody>
+        </table>
       </div>
 
-      {/* ═══ Order Details Modal ═══ */}
-      {detailsOrder && (() => {
-        const o = detailsOrder;
-        const s = o.studentId || {};
+      {/* ═══ Approve live course: choose batch ═══ */}
+      {approveRow && (() => {
+        const list = liveBatchesFor(approveRow.raw.courseId?._id);
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setApproveRow(null)}>
+            <div className="w-full max-w-md rounded-md bg-white shadow-xl" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+                <h3 className="text-lg font-bold text-[#0b1b4a] outfit">Approve & choose batch</h3>
+                <button onClick={() => setApproveRow(null)} className="text-slate-400 hover:text-slate-600"><FiX size={18} /></button>
+              </div>
+              <div className="space-y-4 px-5 py-4">
+                <div className="rounded-md bg-slate-50 p-3 text-sm">
+                  <p className="font-semibold text-slate-800">{approveRow.title}</p>
+                  <p className="text-slate-500">{personName(approveRow.student)} · {approveRow.free ? 'Free' : money(approveRow.amount)}</p>
+                </div>
+                {list.length === 0 ? (
+                  <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm text-amber-700">
+                    This course has no batch yet. Create one in <Link href="/dashboard/admin/batch/create" className="font-semibold underline">Batches → Add Batch</Link>, or approve now and assign the batch later from Enrollments.
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold text-slate-700">Batch</p>
+                    {list.map(b => {
+                      const left = seatsLeft(b);
+                      return (
+                        <label key={b._id} className={`flex cursor-pointer items-center gap-3 rounded-md border px-3 py-2.5 ${approveBatch === b._id ? 'border-[#0142b2] bg-[#eef3fc]' : 'border-slate-200 hover:border-slate-300'}`}>
+                          <input type="radio" name="batch" checked={approveBatch === b._id} onChange={() => setApproveBatch(b._id)} className="accent-[#0142b2]" />
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-semibold text-slate-800">{b.name || b.id}</p>
+                            <p className="text-xs text-slate-500">Starts {fmtDate(b.startDate)} · {left > 0 ? `${left} seats left` : 'Full'}</p>
+                          </div>
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-end gap-2 border-t border-slate-200 px-5 py-3">
+                <button onClick={() => setApproveRow(null)} className="rounded-md px-4 py-2 text-sm text-slate-600 hover:bg-slate-100">Cancel</button>
+                <button
+                  onClick={() => { const r = approveRow; setApproveRow(null); approveCourse(r, approveBatch || undefined); }}
+                  className="inline-flex items-center gap-1.5 rounded-md bg-[#027a1e] px-4 py-2 text-sm font-semibold text-white hover:bg-[#026318]">
+                  <FiCheck size={14} /> {list.length && approveBatch ? 'Approve & add to batch' : 'Approve without batch'}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ═══ Details modal ═══ */}
+      {details && (() => {
+        const row = details;
+        const o = row.raw;
+        const s = row.student;
+        const name = personName(s);
+        const close = () => { setEditMode(false); setDetails(null); };
+        const isCourse = row.kind === 'course';
         const c = o.courseId || {};
-        const p = o.payment || {};
-        // Course price = customFee, else valid OFFER price, else base fee
-        const total = coursePrice(o);
-        const paid = Number(p.amount) || 0;
-        const name = `${s.firstName || s.name || 'Student'} ${s.lastName || ''}`.trim();
+        const coursePrice = isCourse ? (Number(o.customFee) || ((parseFee(c.offerPrice) > 0 && (parseFee(c.fee) === 0 || parseFee(c.offerPrice) < parseFee(c.fee))) ? parseFee(c.offerPrice) : parseFee(c.fee))) : row.amount;
 
         return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => { setEditMode(false); setDetailsOrder(null); }}>
-            <div className="bg-white rounded-md shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
-              {/* Header */}
-              <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#0142b2] to-[#01368f] shrink-0">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" onClick={close}>
+            <div className="bg-white rounded-md shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between px-5 py-4 bg-[#0b1b4a] shrink-0">
                 <div>
-                  <h3 className="text-white font-bold text-lg outfit">Order Details</h3>
-                  <p className="text-white/80 text-xs font-mono">#{String(o._id).slice(-8).toUpperCase()}</p>
+                  <h3 className="text-white font-bold text-lg outfit">{isCourse ? 'Course order' : 'Book order'}</h3>
+                  <p className="text-white/70 text-xs font-mono">#{o.orderNo || String(o._id).slice(-8).toUpperCase()}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  {!editMode && (
-                    <button onClick={() => startEdit(o)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-bold rounded-md transition">
-                      <FiEdit2 size={13} /> Edit
+                  {isCourse && !editMode && (
+                    <button onClick={() => startEdit(o)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-md">
+                      <FiEdit2 size={13} /> Edit payment
                     </button>
                   )}
-                  <button onClick={() => { setEditMode(false); setDetailsOrder(null); }} className="text-white/70 hover:text-white transition"><FiX size={20} /></button>
+                  <button onClick={close} className="text-white/70 hover:text-white"><FiX size={20} /></button>
                 </div>
               </div>
 
-              {/* Body */}
-              <div className="p-6 space-y-5 overflow-y-auto">
-                {/* Status badges */}
+              <div className="p-5 space-y-4 overflow-y-auto">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase border ${getStatusColor(o.status)}`}>{o.status}</span>
-                  <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase border ${getPaymentColor(p.status)}`}>Payment: {p.status || '—'}</span>
-                  {c.type && <span className="px-2.5 py-1 rounded-md text-[11px] font-bold uppercase bg-[#eef3fc] text-[#0142b2] border border-[#c9d8f5]">{c.type}</span>}
+                  <span className={`px-2 py-0.5 rounded-sm text-xs font-semibold capitalize border ${STATUS_STYLE[row.status] || STATUS_STYLE.deleted}`}>Order: {row.status}</span>
+                  <span className={`px-2 py-0.5 rounded-sm text-xs font-semibold capitalize border ${PAY_STYLE[row.payStatus] || PAY_STYLE.refunded}`}>Payment: {row.payStatus}</span>
+                  {row.sub && <span className="px-2 py-0.5 rounded-sm text-xs font-semibold bg-[#eef3fc] text-[#0142b2] border border-[#c9d8f5]">{row.sub}</span>}
                 </div>
 
-                {/* Student */}
-                <div className="rounded-md border border-slate-100 p-4">
-                  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5"><FiUser size={12} /> Student</h4>
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-11 h-11 rounded-md bg-gradient-to-br from-[#0142b2] to-[#01368f] flex items-center justify-center text-white font-bold text-lg outfit shrink-0">{name.charAt(0).toUpperCase()}</div>
-                    <div>
-                      <p className="font-bold text-slate-800">{name}</p>
-                      <p className="text-xs text-slate-400 capitalize">{s.gender || '—'}</p>
-                    </div>
-                  </div>
+                <div className="rounded-md border border-slate-200 p-4">
+                  <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5"><FiUser size={12} /> Student</h4>
+                  <p className="font-semibold text-slate-800 mb-2">{name}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <DetailRow icon={FiMail} label="Email" value={s.email} />
                     <DetailRow icon={FiPhone} label="Phone" value={s.phoneNumber} />
-                    <DetailRow icon={FiMapPin} label="Location" value={s.location} />
                   </div>
                 </div>
 
-                {/* Course */}
-                <div className="rounded-md border border-slate-100 p-4">
-                  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5"><FiBookOpen size={12} /> Course</h4>
-                  <div className="flex items-center gap-3">
-                    <div className="w-16 h-11 rounded-md overflow-hidden bg-slate-100 shrink-0">
-                      {c.image && <img src={c.image} alt="" className="w-full h-full object-cover" />}
+                <div className="rounded-md border border-slate-200 p-4">
+                  <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">{isCourse ? <FiBookOpen size={12} /> : <FiBook size={12} />} {isCourse ? 'Course' : 'Book'}</h4>
+                  <p className="font-semibold text-slate-800">{row.title}</p>
+                  <p className="text-xs text-slate-500 flex items-center gap-1 mt-1"><FiCalendar size={11} /> Ordered: {fmtDateTime(row.date)}</p>
+                  {!isCourse && o.format === 'printed' && o.shipping && (
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <DetailRow icon={FiUser} label="Ship to" value={o.shipping.name} />
+                      <DetailRow icon={FiPhone} label="Phone" value={o.shipping.phone} />
+                      <DetailRow icon={FiMapPin} label="Address" value={[o.shipping.address, o.shipping.city].filter(Boolean).join(', ')} />
+                      <DetailRow icon={FiPackage} label="Delivery" value={o.deliveryStatus} />
                     </div>
-                    <div className="min-w-0">
-                      <p className="font-bold text-slate-800 truncate">{c.title || 'Course'}</p>
-                      <p className="text-xs text-slate-400 flex items-center gap-1"><FiCalendar size={11} /> Ordered: {fmtDateTime(o.createdAt || o.enrolledAt)}</p>
-                    </div>
-                  </div>
+                  )}
                 </div>
 
-                {/* Payment — edit form (admin) vs read-only view */}
-                {editMode && editForm ? (
+                {isCourse && editMode && editForm ? (
                   <div className="rounded-md border border-[#c9d8f5] bg-[#eef3fc]/40 p-4 space-y-3">
-                    <h4 className="text-[11px] font-bold text-[#0142b2] uppercase tracking-wider flex items-center gap-1.5"><FiEdit2 size={12} /> Edit Payment</h4>
+                    <h4 className="text-xs font-semibold text-[#0142b2] uppercase tracking-wider flex items-center gap-1.5"><FiEdit2 size={12} /> Edit payment</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {[
+                        ['customFee', 'Course price (৳)', 'number', `Default: ${coursePrice}`],
+                        ['amount', 'Amount paid (৳)', 'number'],
+                        ['transactionId', 'Transaction ID', 'text'],
+                        ['senderNumber', 'Paid from (number)', 'text', '01XXXXXXXXX'],
+                        ['notes', 'Notes', 'text'],
+                      ].map(([k, label, type, ph]) => (
+                        <div key={k}>
+                          <label className="text-[11px] font-semibold text-slate-500 uppercase">{label}</label>
+                          <input type={type} value={editForm[k]} placeholder={ph} onChange={e => setEditForm({ ...editForm, [k]: e.target.value })}
+                            className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md outline-none focus:border-[#0142b2]" />
+                        </div>
+                      ))}
                       <div>
-                        <label className="text-[10px] font-bold text-slate-500 uppercase">Course Price (৳)</label>
-                        <input type="number" min="0" value={editForm.customFee}
-                          onChange={e => setEditForm({ ...editForm, customFee: e.target.value })}
-                          placeholder={`Default: ${total}`}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2]" />
-                      </div>
-                      <div>
-                        <label className="text-[10px] font-bold text-slate-500 uppercase">Amount Paid (৳)</label>
-                        <input type="number" min="0" value={editForm.amount}
-                          onChange={e => setEditForm({ ...editForm, amount: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0142b2]/20 focus:border-[#0142b2]" />
-                      </div>
-                      <div>
-                        <label className="text-[10px] font-bold text-slate-500 uppercase">Method</label>
-                        <select value={editForm.method} onChange={e => setEditForm({ ...editForm, method: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none bg-white">
-                          <option value="manual">Manual (bank/mobile)</option>
-                          <option value="cash">Hand Cash</option>
-                          <option value="bkash">bKash</option>
-                          <option value="sslcommerz">Card/Bank (SSL)</option>
-                          <option value="free">Free</option>
+                        <label className="text-[11px] font-semibold text-slate-500 uppercase">Method</label>
+                        <select value={editForm.method} onChange={e => setEditForm({ ...editForm, method: e.target.value })} className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md bg-white">
+                          <option value="manual">Manual (bank/mobile)</option><option value="cash">Hand Cash</option><option value="bkash">bKash</option><option value="sslcommerz">Card/Bank (SSL)</option><option value="free">Free</option>
                         </select>
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-slate-500 uppercase">Payment Status</label>
-                        <select value={editForm.status} onChange={e => setEditForm({ ...editForm, status: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none bg-white">
-                          <option value="pending">Pending</option>
-                          <option value="paid">Paid</option>
-                          <option value="failed">Failed</option>
-                          <option value="refunded">Refunded</option>
+                        <label className="text-[11px] font-semibold text-slate-500 uppercase">Payment status</label>
+                        <select value={editForm.status} onChange={e => setEditForm({ ...editForm, status: e.target.value })} className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md bg-white">
+                          <option value="pending">Pending</option><option value="paid">Paid</option><option value="failed">Failed</option><option value="refunded">Refunded</option>
                         </select>
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-slate-500 uppercase">Transaction ID</label>
-                        <input type="text" value={editForm.transactionId}
-                          onChange={e => setEditForm({ ...editForm, transactionId: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none font-mono" />
-                      </div>
-                      <div>
-                        <label className="text-[10px] font-bold text-slate-500 uppercase">Paid From (number)</label>
-                        <input type="text" value={editForm.senderNumber}
-                          onChange={e => setEditForm({ ...editForm, senderNumber: e.target.value })}
-                          placeholder="01XXXXXXXXX"
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none" />
-                      </div>
-                      <div>
-                        <label className="text-[10px] font-bold text-slate-500 uppercase">Payment Via</label>
-                        <select value={editForm.paymentType} onChange={e => setEditForm({ ...editForm, paymentType: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none bg-white">
-                          <option value="">—</option>
-                          <option value="bkash">bKash</option>
-                          <option value="nagad">Nagad</option>
-                          <option value="rocket">Rocket</option>
-                          <option value="cash">Hand Cash</option>
+                        <label className="text-[11px] font-semibold text-slate-500 uppercase">Payment via</label>
+                        <select value={editForm.paymentType} onChange={e => setEditForm({ ...editForm, paymentType: e.target.value })} className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md bg-white">
+                          <option value="">—</option><option value="bkash">bKash</option><option value="nagad">Nagad</option><option value="rocket">Rocket</option><option value="cash">Hand Cash</option>
                         </select>
-                      </div>
-                      <div>
-                        <label className="text-[10px] font-bold text-slate-500 uppercase">Notes</label>
-                        <input type="text" value={editForm.notes}
-                          onChange={e => setEditForm({ ...editForm, notes: e.target.value })}
-                          className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none" />
                       </div>
                     </div>
                     <div className="flex items-center gap-2 pt-1">
-                      <button onClick={() => saveEdit(o._id)} disabled={savingEdit}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-md hover:bg-emerald-700 disabled:opacity-50 transition">
-                        {savingEdit ? <FiLoader className="animate-spin" size={14} /> : <FiSave size={14} />} Save Changes
+                      <button onClick={() => saveEdit(o._id)} disabled={savingEdit} className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#0142b2] text-white text-sm font-semibold rounded-md hover:bg-[#01368f] disabled:opacity-50">
+                        {savingEdit ? <FiLoader className="animate-spin" size={14} /> : <FiSave size={14} />} Save changes
                       </button>
-                      <button onClick={() => setEditMode(false)} disabled={savingEdit}
-                        className="px-4 py-2 border border-slate-200 text-slate-600 text-sm font-semibold rounded-md hover:bg-slate-50 transition">
-                        Cancel
-                      </button>
+                      <button onClick={() => setEditMode(false)} className="px-4 py-2 border border-slate-200 text-slate-600 text-sm rounded-md hover:bg-slate-50">Cancel</button>
                     </div>
                   </div>
                 ) : (
-                  <>
-                    {/* Payment */}
-                    <div className="rounded-md border border-slate-100 p-4">
-                      <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5"><FiCreditCard size={12} /> Payment</h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <DetailRow icon={FiCreditCard} label="Method" value={`${p.method || '—'}${p.gatewayData?.paymentType ? ` · ${p.gatewayData.paymentType}` : ''}`} />
-                        <DetailRow icon={FiPhone} label="Paid from (number)" value={p.gatewayData?.senderNumber} />
-                        <DetailRow icon={FiHash} label="Transaction ID" value={p.transactionId} mono />
-                        <DetailRow icon={FiClock} label="Paid at" value={p.paidAt ? fmtDateTime(p.paidAt) : 'Not paid yet'} />
-                      </div>
+                  <div className="rounded-md border border-slate-200 p-4">
+                    <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-1.5"><FiCreditCard size={12} /> Payment</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <DetailRow icon={FiDollarSign} label="Amount" value={row.free ? 'Free' : `${money(row.amount)}${isCourse && coursePrice && coursePrice !== row.amount ? ` (price ${money(coursePrice)})` : ''}`} />
+                      <DetailRow icon={FiCreditCard} label="Method" value={row.method} />
+                      <DetailRow icon={FiPhone} label="Paid from (number)" value={row.sender} />
+                      <DetailRow icon={FiHash} label="Transaction ID" value={row.trx} mono />
+                      <DetailRow icon={FiClock} label="Paid at" value={o.payment?.paidAt ? fmtDateTime(o.payment.paidAt) : 'Not approved yet'} />
                     </div>
-
-                    {/* Amount summary */}
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="rounded-md bg-slate-50 border border-slate-100 p-3 text-center">
-                        <p className="text-lg font-bold text-slate-800 outfit">৳{total.toLocaleString()}</p>
-                        <p className="text-[11px] text-slate-400">Course Price</p>
-                      </div>
-                      <div className="rounded-md bg-emerald-50 border border-emerald-100 p-3 text-center">
-                        <p className="text-lg font-bold text-emerald-600 outfit">৳{paid.toLocaleString()}</p>
-                        <p className="text-[11px] text-emerald-500">{p.status === 'paid' ? 'Paid' : 'Submitted (pending)'}</p>
-                      </div>
-                    </div>
-                  </>
+                  </div>
                 )}
-
               </div>
 
-              {/* Footer actions */}
-              {!editMode && (
-              <div className="flex items-center gap-2 px-6 py-4 border-t border-slate-100 shrink-0">
-                {o.status === 'pending' && (
-                  <>
-                    <button
-                      onClick={() => { handleApprove(o._id); setDetailsOrder(null); }}
-                      className="px-5 py-2.5 bg-emerald-500 text-white text-sm font-bold rounded-md hover:bg-emerald-600 transition"
-                    >
-                      ✓ Approve Order
-                    </button>
-                    <button
-                      onClick={() => { handleStatusChange(o._id, 'cancelled'); setDetailsOrder(null); }}
-                      className="px-4 py-2.5 border border-slate-200 text-slate-600 text-sm font-semibold rounded-md hover:bg-slate-50 transition"
-                    >
-                      Cancel Order
-                    </button>
-                  </>
-                )}
-                <button
-                  onClick={() => { handleDeleteOrder(o._id); setDetailsOrder(null); }}
-                  className="ml-auto inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-semibold text-red-500 border border-red-200 rounded-md hover:bg-red-50 transition"
-                >
-                  <FiTrash2 size={14} /> Delete
-                </button>
-              </div>
+              {!editMode && row.status === 'pending' && (
+                <div className="flex items-center gap-2 px-5 py-3 border-t border-slate-200 shrink-0">
+                  <button onClick={() => { setDetails(null); handleApprove(row); }} className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#027a1e] text-white text-sm font-semibold rounded-md hover:bg-[#026318]">
+                    <FiCheck size={14} /> Approve
+                  </button>
+                  <button onClick={() => { setDetails(null); handleCancel(row); }} className="px-4 py-2 border border-slate-200 text-slate-600 text-sm rounded-md hover:bg-slate-50">
+                    Cancel order
+                  </button>
+                </div>
               )}
             </div>
           </div>

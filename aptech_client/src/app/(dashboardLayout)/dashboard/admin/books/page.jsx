@@ -103,7 +103,7 @@ export default function AdminBooksPage() {
   const lowStock = stats?.lowStock || [];
   const statCards = [
     { label: 'Total Books', value: stats?.totalBooks ?? books.length, icon: FiBook, color: 'text-slate-700', bg: 'bg-slate-100' },
-    { label: 'Pending Orders', value: stats?.pendingOrders ?? 0, icon: FiClock, color: 'text-amber-600', bg: 'bg-amber-50', href: '/dashboard/admin/books/orders' },
+    { label: 'Pending Orders', value: stats?.pendingOrders ?? 0, icon: FiClock, color: 'text-amber-600', bg: 'bg-amber-50', href: '/dashboard/admin/orders' },
     { label: 'Approved Orders', value: stats?.approvedOrders ?? 0, icon: FiCheckCircle, color: 'text-emerald-600', bg: 'bg-emerald-50' },
     { label: 'Book Revenue', value: formatTaka(stats?.revenue), icon: FiDollarSign, color: 'text-[#0142b2]', bg: 'bg-[#eef3fc]' },
   ];
@@ -140,7 +140,7 @@ export default function AdminBooksPage() {
           <p className="text-sm text-slate-500 mt-1">Manage printed & digital books and their video lessons</p>
         </div>
         <div className="flex items-center gap-2">
-          <Link href="/dashboard/admin/books/orders"
+          <Link href="/dashboard/admin/orders"
             className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-600 text-sm font-semibold rounded-md hover:border-[#c9d8f5] hover:text-[#0142b2] transition">
             <FiShoppingBag size={15} /> Orders
             {stats?.pendingOrders > 0 && <span className="px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-700 text-[10px] font-bold">{stats.pendingOrders}</span>}

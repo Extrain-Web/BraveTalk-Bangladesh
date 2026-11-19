@@ -188,10 +188,10 @@ export default function EnrollmentsPage() {
 
 
   return (
-    <div className="poppins space-y-6">
+    <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 outfit">Enrollments</h1>
-        <p className="text-sm text-slate-500 mt-1">Active students — manage batches & track progress</p>
+        <h1 className="text-2xl font-bold text-[#0b1b4a] outfit">Course Enrollments</h1>
+        <p className="text-sm text-slate-500 mt-1">Approved course students. Online/offline students can be moved to another batch here; recorded courses are self-paced.</p>
       </div>
 
       {/* Stats */}
@@ -199,7 +199,7 @@ export default function EnrollmentsPage() {
         {loading ? (
           <>{[1, 2, 3, 4].map(i => <SkeletonCard key={i} />)}</>
         ) : [
-          { label: 'Total Enrolled', value: totalEnrolled, icon: FiUsers, color: 'text-teal-600', bg: 'bg-teal-50' },
+          { label: 'Total Enrolled', value: totalEnrolled, icon: FiUsers, color: 'text-[#0142b2]', bg: 'bg-[#eef3fc]' },
           { label: 'Batch Assigned', value: withBatch, icon: FiCheck, color: 'text-emerald-600', bg: 'bg-emerald-50' },
           { label: 'No Batch', value: withoutBatch, icon: FiHash, color: 'text-amber-600', bg: 'bg-amber-50' },
           { label: 'Courses', value: courseSet.size, icon: FiBook, color: 'text-blue-600', bg: 'bg-blue-50' },
@@ -225,12 +225,12 @@ export default function EnrollmentsPage() {
             <FiSearch className="absolute left-3 top-3 text-slate-400" size={16} />
             <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by student or course..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200/60 text-sm focus:border-teal-400 outline-none bg-white shadow-sm" />
+              className="w-full pl-10 pr-4 py-2.5 rounded-md border border-slate-200/60 text-sm focus:border-[#0142b2] outline-none bg-white shadow-sm" />
           </div>
           <div className="flex gap-1 bg-slate-100 rounded-md p-1">
             {['all', 'unassigned', 'assigned'].map(s => (
               <button key={s} onClick={() => setFilterBatch(s)}
-                className={`px-3 py-2 rounded-md text-sm capitalize transition ${filterBatch === s ? 'bg-white text-teal-600 shadow-sm font-medium' : 'text-slate-500'}`}>
+                className={`px-3 py-2 rounded-md text-sm capitalize transition ${filterBatch === s ? 'bg-white text-[#0142b2] shadow-sm font-medium' : 'text-slate-500'}`}>
                 {s}
               </button>
             ))}
@@ -245,7 +245,7 @@ export default function EnrollmentsPage() {
           <div className="relative">
             <FiGlobe size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
             <select value={filterType} onChange={(e) => setFilterType(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition ${filterType !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
+              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition ${filterType !== 'all' ? 'bg-[#eef3fc] text-[#0142b2] border-[#c9d8f5]' : 'bg-white text-slate-600 border-slate-200'
                 }`}>
               <option value="all">All Types</option>
               <option value="online">Online</option>
@@ -259,7 +259,7 @@ export default function EnrollmentsPage() {
           <div className="relative">
             <FiBookOpen size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
             <select value={filterCourse} onChange={(e) => setFilterCourse(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition max-w-[220px] truncate ${filterCourse !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
+              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition max-w-[220px] truncate ${filterCourse !== 'all' ? 'bg-[#eef3fc] text-[#0142b2] border-[#c9d8f5]' : 'bg-white text-slate-600 border-slate-200'
                 }`}>
               <option value="all">All Courses</option>
               {courseList.map(c => (
@@ -273,7 +273,7 @@ export default function EnrollmentsPage() {
           <div className="relative">
             <FiUserCheck size={13} className="absolute left-2.5 top-[8px] pointer-events-none text-slate-400" />
             <select value={filterStudentStatus} onChange={(e) => setFilterStudentStatus(e.target.value)}
-              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition ${filterStudentStatus !== 'all' ? 'bg-teal-50 text-teal-600 border-teal-200' : 'bg-white text-slate-600 border-slate-200'
+              className={`appearance-none pl-8 pr-7 py-1.5 rounded-md border text-sm cursor-pointer outline-none transition ${filterStudentStatus !== 'all' ? 'bg-[#eef3fc] text-[#0142b2] border-[#c9d8f5]' : 'bg-white text-slate-600 border-slate-200'
                 }`}>
               <option value="all">All Status</option>
               <option value="active">Active</option>
@@ -304,7 +304,7 @@ export default function EnrollmentsPage() {
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-100">
                   {['Student', 'Course', 'Enrolled', 'Progress', 'Status', 'Batch'].map(h => (
-                    <th key={h} className="text-left px-5 py-3 text-sm font-medium text-slate-500">{h}</th>
+                    <th key={h} className="text-left px-3 py-3 text-sm font-medium text-slate-500">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -320,17 +320,20 @@ export default function EnrollmentsPage() {
         </div>
       ) : (
         <div className="bg-white rounded-md border border-slate-200/60 shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div>
+            <table className="w-full table-fixed">
+              <colgroup>
+                <col className="w-[19%]" /><col className="w-[19%]" /><col className="w-[10%]" /><col className="w-[10%]" /><col className="w-[11%]" /><col className="w-[23%]" /><col className="w-[8%]" />
+              </colgroup>
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-100">
-                  <th className="text-left px-5 py-3 text-sm font-medium text-slate-500">Student</th>
-                  <th className="text-left px-5 py-3 text-sm font-medium text-slate-500">Course</th>
-                  <th className="text-left px-5 py-3 text-sm font-medium text-slate-500">Enrolled</th>
-                  <th className="text-center px-5 py-3 text-sm font-medium text-slate-500">Progress</th>
-                  <th className="text-center px-5 py-3 text-sm font-medium text-slate-500">Status</th>
-                  <th className="text-left px-5 py-3 text-sm font-medium text-slate-500">Batch</th>
-                  <th className="text-center px-5 py-3 text-sm font-medium text-slate-500">Action</th>
+                  <th className="text-left px-3 py-3 text-sm font-medium text-slate-500">Student</th>
+                  <th className="text-left px-3 py-3 text-sm font-medium text-slate-500">Course</th>
+                  <th className="text-left px-3 py-3 text-sm font-medium text-slate-500">Enrolled</th>
+                  <th className="text-center px-3 py-3 text-sm font-medium text-slate-500">Progress</th>
+                  <th className="text-center px-3 py-3 text-sm font-medium text-slate-500">Status</th>
+                  <th className="text-left px-3 py-3 text-sm font-medium text-slate-500">Batch</th>
+                  <th className="text-center px-3 py-3 text-sm font-medium text-slate-500">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -364,38 +367,39 @@ export default function EnrollmentsPage() {
                   return (
                     <tr key={enrollment._id} className="border-b border-slate-100 hover:bg-slate-50/40 transition h-[56px]">
                       {/* Student */}
-                      <td className="px-5 py-3">
+                      <td className="px-3 py-3">
                         <Link href={`/dashboard/admin/user/${student._id || ''}`} className="flex items-center gap-2.5 group">
                           <div className="w-9 h-9 rounded-md bg-[#027a1e] flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
                             {studentName.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm text-slate-700 group-hover:text-teal-600 transition truncate max-w-[150px]">
+                            <p className="text-sm text-slate-700 group-hover:text-[#0142b2] transition truncate">
                               {studentName}
                             </p>
-                            <p className="text-xs text-slate-400 truncate max-w-[150px]">{student.email}</p>
+                            <p className="text-xs text-slate-400 truncate">{student.phoneNumber || student.email}</p>
                           </div>
                         </Link>
                       </td>
 
                       {/* Course */}
-                      <td className="px-5 py-3">
-                        <p className="text-sm text-slate-700 truncate max-w-[180px]">{course.title || 'Course'}</p>
+                      <td className="px-3 py-3">
+                        <p className="text-sm text-slate-700 truncate" title={course.title}>{course.title || 'Course'}</p>
+                        <p className="text-xs text-slate-400">{course.type || ''}</p>
                       </td>
 
                       {/* Enrolled */}
-                      <td className="px-5 py-3">
+                      <td className="px-3 py-3">
                         <span className="text-sm text-slate-500">
                           {new Date(enrollment.enrolledAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                         </span>
                       </td>
 
                       {/* Progress */}
-                      <td className="px-5 py-3 text-center">
+                      <td className="px-3 py-3 text-center">
                         <div className="flex items-center justify-center gap-2">
-                          <div className="w-20 h-2 rounded-full bg-slate-100 overflow-hidden">
+                          <div className="w-12 h-2 rounded-full bg-slate-100 overflow-hidden">
                             <div
-                              className={`h-full rounded-full transition-all ${pct >= 80 ? 'bg-emerald-500' : pct >= 40 ? 'bg-teal-500' : 'bg-amber-400'}`}
+                              className={`h-full rounded-full transition-all ${pct >= 80 ? 'bg-emerald-500' : pct >= 40 ? 'bg-[#eef3fc]0' : 'bg-amber-400'}`}
                               style={{ width: `${pct}%` }}
                             />
                           </div>
@@ -404,7 +408,7 @@ export default function EnrollmentsPage() {
                       </td>
 
                       {/* Student Status */}
-                      <td className="px-5 py-3 text-center">
+                      <td className="px-3 py-3 text-center">
                         <div className="relative inline-block">
                           <select
                             value={studentStatus}
@@ -421,20 +425,20 @@ export default function EnrollmentsPage() {
                       </td>
 
                       {/* Batch — Online/Offline only; Recorded needs no batch */}
-                      <td className="px-5 py-3">
+                      <td className="px-3 py-3">
                         {isRecorded ? (
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-teal-50 text-teal-600 border border-teal-200">
-                            <FiVideo size={12} /> Recorded — auto access
+                          <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-emerald-50 text-[#027a1e] border border-emerald-200">
+                            <FiVideo size={12} /> Self-paced (auto)
                           </span>
                         ) : (
-                          <div className="relative inline-block">
+                          <div className="relative block w-full">
                             <select
                               value={currentBatchId}
                               onChange={onBatchChange}
                               disabled={assigning === enrollment._id}
-                              className={`appearance-none px-3 py-1.5 pr-7 rounded-md text-sm cursor-pointer outline-none transition disabled:opacity-50 border ${currentBatchId
+                              className={`appearance-none w-full truncate px-2.5 py-1.5 pr-7 rounded-md text-sm cursor-pointer outline-none transition disabled:opacity-50 border ${currentBatchId
                                   ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
-                                  : 'bg-slate-50 text-slate-500 border-slate-200 hover:border-teal-300'
+                                  : 'bg-slate-50 text-slate-500 border-slate-200 hover:border-[#0142b2]'
                                 }`}
                             >
                               <option value="">— Select Batch —</option>
@@ -442,34 +446,33 @@ export default function EnrollmentsPage() {
                                 <option disabled>No batch for this course</option>
                               ) : availableBatches.map(b => (
                                 <option key={b._id} value={b._id}>
-                                  {b.name || b.id} — {b.courseName || ''}
+                                  {b.name || b.id}
                                 </option>
                               ))}
                             </select>
                             <FiChevronDown size={10} className="absolute right-2 top-2.5 pointer-events-none opacity-40" />
                             {assigning === enrollment._id && (
-                              <FiLoader size={14} className="absolute -right-6 top-1.5 text-teal-500 animate-spin" />
+                              <FiLoader size={14} className="absolute right-6 top-2 text-[#0142b2] animate-spin" />
                             )}
                           </div>
                         )}
                       </td>
 
                       {/* Actions */}
-                      <td className="px-5 py-3 text-center">
+                      <td className="px-3 py-3 text-center">
                         <div className="flex items-center justify-center gap-1.5">
                           <button onClick={() => openTransfer(enrollment)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-violet-600 bg-violet-50 hover:bg-violet-100 rounded-md border border-violet-200 transition"
+                            className="flex h-8 w-8 items-center justify-center rounded-md text-slate-400 hover:bg-[#eef3fc] hover:text-[#0142b2] transition"
                             title="Transfer to another course">
-                            <FiRefreshCw size={11} /> Transfer
+                            <FiRefreshCw size={14} />
                           </button>
                           <button
                             onClick={() => handleDeleteEnrollment(enrollment._id)}
                             disabled={deleting === enrollment._id}
                             title="Delete this enrollment"
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-red-500 bg-red-50 hover:bg-red-100 rounded-md border border-red-200 transition disabled:opacity-50"
+                            className="flex h-8 w-8 items-center justify-center rounded-md text-slate-400 hover:bg-red-50 hover:text-[#e5251f] transition disabled:opacity-50"
                           >
-                            {deleting === enrollment._id ? <FiLoader size={11} className="animate-spin" /> : <FiTrash2 size={11} />}
-                            Delete
+                            {deleting === enrollment._id ? <FiLoader size={14} className="animate-spin" /> : <FiTrash2 size={14} />}
                           </button>
                         </div>
                       </td>
@@ -499,7 +502,7 @@ export default function EnrollmentsPage() {
               <div>
                 <label className="text-xs font-bold text-slate-500 mb-1 block">New Course *</label>
                 <select value={transferCourseId} onChange={e => { setTransferCourseId(e.target.value); setTransferBatchId(''); }}
-                  className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm outline-none focus:border-teal-400">
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm outline-none focus:border-[#0142b2]">
                   <option value="">— Select Course —</option>
                   {allCourses.filter(c => c._id !== transferModal.courseId?._id).map(c => (
                     <option key={c._id} value={c._id}>{c.title}</option>
@@ -510,7 +513,7 @@ export default function EnrollmentsPage() {
                 <div>
                   <label className="text-xs font-bold text-slate-500 mb-1 block">New Batch (optional)</label>
                   <select value={transferBatchId} onChange={e => setTransferBatchId(e.target.value)}
-                    className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm outline-none focus:border-teal-400">
+                    className="w-full px-3 py-2.5 border border-slate-200 rounded-md text-sm outline-none focus:border-[#0142b2]">
                     <option value="">— Select Batch —</option>
                     {getBatchesForTransferCourse(transferCourseId).map(b => (
                       <option key={b._id} value={b._id}>{b.name || b.id} — {b.courseName}</option>

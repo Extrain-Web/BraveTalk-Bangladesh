@@ -217,7 +217,7 @@ const getStats = async (req: Request, res: Response) => {
 const approveEnrollment = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const result = await EnrollmentService.approveEnrollment(id);
+    const result = await EnrollmentService.approveEnrollment(id, req.body?.batchId || undefined);
 
     res.status(200).json({
       success: true,

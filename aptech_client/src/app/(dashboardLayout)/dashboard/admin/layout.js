@@ -66,12 +66,12 @@ const AdminLayout = ({ children }) => {
         <AdminSidebar />
 
         {/* Main Content */}
-        <main className="min-h-screen transition-all duration-300 lg:ml-[240px]">
+        <main className="min-h-screen min-w-0 transition-all duration-300 lg:ml-[250px]">
           {/* Top bar */}
           <header className="sticky top-0 z-30 border-b border-slate-200 bg-white">
             <div className="flex h-14 items-center justify-between pl-14 pr-4 lg:px-6">
               <div className="min-w-0">
-                <nav className="flex items-center gap-1 text-[11px] text-slate-400">
+                <nav className="flex items-center gap-1 text-[12px] text-slate-400">
                   <Link href="/dashboard/admin" className="hover:text-[#0142b2]">Admin</Link>
                   {crumbs.map((c) => (
                     <React.Fragment key={c.href}>
@@ -80,7 +80,7 @@ const AdminLayout = ({ children }) => {
                     </React.Fragment>
                   ))}
                 </nav>
-                <h2 className="truncate text-[15px] font-bold leading-tight text-[#0b1b4a] outfit">{pageTitle}</h2>
+                <h2 className="truncate text-[17px] font-bold leading-tight text-[#0b1b4a] outfit">{pageTitle}</h2>
               </div>
 
               {/* Right Side — Search, Notification, Profile */}
@@ -165,11 +165,20 @@ const AdminLayout = ({ children }) => {
           </header>
 
           {/* Page Content */}
-          <div className="mx-auto max-w-[1440px] p-4 lg:p-6">
+          <div className="admin-content mx-auto max-w-[1440px] min-w-0 p-4 lg:p-6">
             {children}
           </div>
         </main>
       </div>
+      <style jsx global>{`
+        /* Admin readability: lift the tiny text sizes used across admin pages */
+        .admin-content [class~="text-[9px]"], .admin-content [class~="text-[10px]"] { font-size: 11.5px; }
+        .admin-content [class~="text-[11px]"] { font-size: 12.5px; }
+        .admin-content .text-xs { font-size: 13px; line-height: 1.15rem; }
+        .admin-content .text-sm { font-size: 14.5px; }
+        /* Wide tables wrap instead of pushing the page sideways */
+        .admin-content table { max-width: 100%; }
+      `}</style>
     </ProtectedRoute>
   );
 };

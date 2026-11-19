@@ -121,7 +121,7 @@ export default function PaymentHistoryPage() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 outfit">Payment History</h1>
-          <p className="text-sm text-slate-500 work">Every course and book payment in one place. Approve pending ones from <Link href="/dashboard/admin/orders" className="text-[#0142b2] font-medium hover:underline">Orders</Link> or <Link href="/dashboard/admin/books/orders" className="text-[#0142b2] font-medium hover:underline">Book Orders</Link>.</p>
+          <p className="text-sm text-slate-500 work">Every course and book payment in one place. Approve pending ones from <Link href="/dashboard/admin/orders" className="text-[#0142b2] font-medium hover:underline">Orders</Link>.</p>
         </div>
         <div className="flex gap-2">
           <button onClick={load} className="inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50">

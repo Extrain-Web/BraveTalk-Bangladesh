@@ -371,10 +371,28 @@ const getStats = async () => {
 };
 
 // ─── Approve Enrollment (Admin) ─────────────────────────────
-const approveEnrollment = async (enrollmentId: string) => {
+const approveEnrollment = async (enrollmentId: string, batchId?: string) => {
   const enrollment = await Enrollment.findById(enrollmentId);
   if (!enrollment) throw new Error('Enrollment not found');
   if (enrollment.status === 'active') throw new Error('Already active');
+
+  // Admin picked a batch while approving (Online/Offline courses)
+  if (batchId) {
+    const batch: any = await Batch.findById(batchId).lean();
+    if (!batch || batch.isDeleted) throw new Error('Selected batch not found');
+    if (String(batch.courseId) !== String(enrollment.courseId)) throw new Error('This batch belongs to another course');
+    (enrollment as any).batchId = batch._id;
+    try {
+      const when = batch.startDate ? new Date(batch.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+      await NotificationService.create(
+        String(enrollment.studentId),
+        'class',
+        '🎓 You have been added to a batch',
+        `Your batch: ${batch.name || batch.id}${batch.classTime ? ` · class ${batch.classTime}` : ''}${when ? ` · starts ${when}` : ''}`,
+        '/dashboard/user/schedule'
+      );
+    } catch { /* notification is best-effort */ }
+  }
 
   enrollment.status = 'active';
   enrollment.payment.status = 'paid';
