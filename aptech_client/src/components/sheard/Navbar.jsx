@@ -66,6 +66,7 @@ const Navbar = () => {
 
     { href: "/mentors", label: t("navbar.mentors") },
     // { href: "/blogs", label: t("navbar.blogs") },
+    { href: "/notice-board", label: language === "bn" ? "নোটিশ" : "Notices" },
     { href: "/about", label: t("navbar.about") },
 
     { href: "/contact", label: t("navbar.contact") },

@@ -8,7 +8,7 @@ import {
   FiShoppingCart, FiCheck, FiArrowLeft, FiClock, FiVideo,
   FiBookOpen, FiAward, FiShield, FiLoader, FiCopy, FiTag, FiX
 } from "react-icons/fi";
-import { FaWhatsapp, FaStar } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
 import { LuBookOpen, LuUsers, LuClock } from "react-icons/lu";
 import LoginRequiredModal from "@/components/sheard/LoginRequiredModal";
 import { PAYMENT_NUMBERS, PAYMENT_CONTACT_PHONE, hasPaymentNumbers } from "@/lib/paymentNumbers";
@@ -278,11 +278,6 @@ export default function CheckoutPage() {
                       <span className="rounded-sm bg-[#0142b2] px-2 py-0.5 text-[10px] font-bold text-white">
                         {course.type}
                       </span>
-                      {Number(course.totalRating) > 0 && (
-                        <span className="flex items-center gap-1 text-xs text-slate-400">
-                          <FaStar className="text-amber-400" size={10} /> {course.rating}
-                        </span>
-                      )}
                     </div>
                     <h3 className="text-base font-bold text-[#0b1b4a] outfit line-clamp-2 leading-snug">{course.title}</h3>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-xs text-slate-400">

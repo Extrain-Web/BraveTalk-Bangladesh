@@ -53,9 +53,6 @@ const TMSidebar = () => {
       items: [
         { title: 'Dashboard', href: TM, icon: FiHome, exact: true },
         { title: 'Analytics', href: `${TM}/analytics`, icon: FiBarChart2 },
-        { title: 'Batch Analytics', href: `${TM}/batch-analytics`, icon: FiCalendar },
-        { title: 'Student Progress', href: `${TM}/student-progress`, icon: FiTrendingUp },
-        { title: 'Batch Payments', href: `${TM}/payment-progress`, icon: FiDollarSign },
         { title: 'Orders', href: `${TM}/orders`, icon: FiShoppingCart },
         { title: 'Enrollments', href: `${TM}/enrollments`, icon: FiDollarSign },
         { title: 'Reports', href: `${TM}/reports`, icon: FiFileText },

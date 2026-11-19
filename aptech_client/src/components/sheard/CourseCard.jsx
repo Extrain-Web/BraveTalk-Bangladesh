@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React from "react";
 import { useSelector } from "react-redux";
-import { LuClock, LuUsers, LuCirclePlay, LuWifi, LuMapPin, LuStar, LuArrowRight, LuGift } from "react-icons/lu";
+import { LuClock, LuUsers, LuCirclePlay, LuWifi, LuMapPin, LuArrowRight, LuGift } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import { getCoursePricing } from "@/lib/coursePrice";
 
@@ -120,9 +120,6 @@ const CourseCard = ({ course }) => {
           )}
           {students > 0 && (
             <span className="flex items-center gap-1"><LuUsers className="text-[#0142b2]" /> {students.toLocaleString("en-US")} {isBn ? "শিক্ষার্থী" : students === 1 ? "student" : "students"}</span>
-          )}
-          {Number(course.totalRating) > 0 && Number(course.rating) > 0 && (
-            <span className="flex items-center gap-1"><LuStar className="fill-amber-400 text-amber-400" /> {Number(course.rating).toFixed(1)}</span>
           )}
         </div>
 

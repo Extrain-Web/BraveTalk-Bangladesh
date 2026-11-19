@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchCoursesData } from "@/redux/CourseSlice";
 import { fetchMentorsData } from "@/redux/mentorSlice";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaStar, FaWhatsapp, FaCheckCircle, FaStarHalfAlt } from "react-icons/fa";
+import { FaWhatsapp, FaCheckCircle } from "react-icons/fa";
 import { MdVerified, MdOutlineQuiz, MdOutlineAssignment } from "react-icons/md";
 import {
   LuVideo, LuTarget, LuFileText, LuMonitor, LuCalendarDays, LuInfinity, LuClock, LuUsers,
@@ -305,23 +305,6 @@ const SingleCourse = () => {
   const totalLessons = Object.values(moduleLessons).flat().length;
   const totalDuration = Object.values(moduleLessons).flat().reduce((acc, l) => acc + (l.videoDuration || 0), 0);
 
-  const renderStars = (rating) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-
-    for (let i = 1; i <= 5; i++) {
-      if (i <= fullStars) {
-        stars.push(<FaStar key={i} className="text-amber-400" />);
-      } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(<FaStarHalfAlt key={i} className="text-amber-400" />);
-      } else {
-        stars.push(<FaStar key={i} className="text-gray-200" />);
-      }
-    }
-    return stars;
-  };
-
   const renderIcon = (iconName) => {
     const iconClass = "text-xl";
     switch (iconName) {
@@ -390,7 +373,6 @@ const SingleCourse = () => {
 
   const categoryName = course.category && typeof course.category === "object" ? course.category.name : "";
   const students = Number(course.totalStudentsEnroll || 0);
-  const showRating = Number(course.totalRating) > 0 && Number(course.rating) > 0;
   const lessonCount = totalLessons || Number(course.lectures || 0);
 
   // Course facts — pattern-aware (Live vs Recorded); zero values are hidden
@@ -418,12 +400,10 @@ const SingleCourse = () => {
   const waNumber = String(settings?.whatsappNumber || rawWhatsappNumber).replace(/[^0-9]/g, "") || whatsappNumber;
   const waText = encodeURIComponent(isBn ? `হ্যালো, "${course.title}" কোর্স সম্পর্কে জানতে চাই।` : `Hi, I'd like to know more about the course "${course.title}".`);
 
-  const reviews = Array.isArray(course.reviews) ? course.reviews.filter(Boolean) : [];
   const tabs = [
     { key: "overview", label: isBn ? "ওভারভিউ" : "Overview" },
     { key: "curriculum", label: isBn ? "কারিকুলাম" : "Curriculum" },
     { key: "mentor", label: isBn ? "মেন্টর" : "Mentor" },
-    reviews.length > 0 && { key: "reviews", label: isBn ? `রিভিউ (${reviews.length})` : `Reviews (${reviews.length})` },
   ].filter(Boolean);
   const currentTab = tabs.some((tb) => tb.key === activeTab) ? activeTab : "overview";
 
@@ -448,12 +428,6 @@ const SingleCourse = () => {
   );
 
   const statBoxes = [
-    showRating && {
-      key: "rating",
-      icon: <FaStar className="text-amber-400" />,
-      value: Number(course.rating).toFixed(1),
-      label: isBn ? `${course.totalRating} রেটিং` : `${course.totalRating} ${Number(course.totalRating) === 1 ? "rating" : "ratings"}`,
-    },
     students > 0 && {
       key: "students",
       icon: <LuUsers className="text-[#0142b2]" />,
@@ -917,39 +891,6 @@ const SingleCourse = () => {
                   </div>
                 )}
 
-                {/* ===== Reviews (only when the course record carries review data) ===== */}
-                {currentTab === "reviews" && reviews.length > 0 && (
-                  <div className={panel}>
-                    <SectionTitle
-                      bn={bn}
-                      right={showRating ? (
-                        <span className="flex items-center gap-1.5 text-sm">
-                          <span className="flex text-xs">{renderStars(Number(course.rating))}</span>
-                          <span className="font-bold text-[#0b1b4a]">{Number(course.rating).toFixed(1)}</span>
-                        </span>
-                      ) : null}
-                    >
-                      {isBn ? "শিক্ষার্থীদের রিভিউ" : "Student reviews"}
-                    </SectionTitle>
-                    <ul className="divide-y divide-slate-200">
-                      {reviews.map((r, idx) => {
-                        const name = r.name || r.user?.name || r.userName || (isBn ? "শিক্ষার্থী" : "Student");
-                        const text = r.comment || r.review || r.text || r.message || "";
-                        const stars = Number(r.rating) || 0;
-                        return (
-                          <li key={r._id || idx} className="flex gap-3 py-4 first:pt-0 last:pb-0">
-                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-50 text-sm font-bold text-[#0142b2]">{String(name).charAt(0)}</span>
-                            <div className="min-w-0">
-                              <p className="text-sm font-semibold text-[#0b1b4a]">{name}</p>
-                              {stars > 0 && <span className="mt-0.5 flex text-[11px]">{renderStars(stars)}</span>}
-                              {text && <p className={`mt-1.5 text-sm leading-relaxed text-slate-600 work ${bn}`}>{text}</p>}
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                )}
               </div>
             </div>
           </div>

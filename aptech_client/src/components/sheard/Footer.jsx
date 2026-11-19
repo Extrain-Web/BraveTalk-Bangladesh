@@ -31,7 +31,6 @@ const Footer = () => {
     { to: "/about", label: t("navbar.about") },
     { to: "/courses", label: t("navbar.courses") },
     { to: "/books", label: isBn ? "বই" : "Books" },
-    { to: "/success-story", label: t("navbar.successHistory") },
     { to: "/mentors", label: t("navbar.mentors") },
     { to: "/notice-board", label: isBn ? "নোটিশ বোর্ড" : "Notice Board" },
     { to: "/verify-certificate", label: isBn ? "সার্টিফিকেট যাচাই" : "Verify Certificate" },

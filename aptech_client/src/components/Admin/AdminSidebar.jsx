@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  FiHome, FiUsers, FiAward, FiMessageSquare,
+  FiHome, FiUsers, FiAward, FiFileText, FiUserCheck,
   FiMenu, FiX, FiLogOut, FiChevronDown, FiArrowLeft,
   FiSettings, FiLayers, FiShoppingCart, FiDollarSign, FiPlus,
-  FiBarChart2, FiBell, FiChevronLeft, FiHeadphones, FiTag, FiGlobe, FiClipboard, FiLink, FiBook, FiImage,
+  FiBarChart2, FiBell, FiChevronLeft, FiHeadphones, FiTag, FiGlobe, FiClipboard, FiBook,
 } from 'react-icons/fi';
 
 const AdminSidebar = () => {
@@ -65,23 +65,21 @@ const AdminSidebar = () => {
       label: 'Overview',
       items: [
         { title: 'Dashboard', href: '/dashboard/admin', icon: FiHome, exact: true },
-        { title: 'Analytics', href: '/dashboard/admin/analytics', icon: FiBarChart2, deny: ['trainingManager'] },
       ],
     },
     {
-      label: 'Course Management',
+      label: 'Payments & Reports',
       items: [
-        {
-          title: 'Management', icon: FiLayers,
-          submenu: [
-            { title: 'Batch Analytics', href: '/dashboard/admin/batch-analytics' },
-            { title: 'Student Progress', href: '/dashboard/admin/student-progress' },
-            { title: 'Batch Payments', href: '/dashboard/admin/payment-progress' },
-            { title: 'Reports', href: '/dashboard/admin/reports' },
-          ],
-        },
+        { title: 'Payment History', href: '/dashboard/admin/payments', icon: FiDollarSign, deny: ['trainingManager'] },
+        { title: 'Income Analytics', href: '/dashboard/admin/analytics', icon: FiBarChart2, deny: ['trainingManager'] },
+        { title: 'Reports', href: '/dashboard/admin/reports', icon: FiFileText },
+      ],
+    },
+    {
+      label: 'Courses & Sales',
+      items: [
         { title: 'Orders', href: '/dashboard/admin/orders', icon: FiShoppingCart },
-        { title: 'Enrollments', href: '/dashboard/admin/enrollments', icon: FiDollarSign },
+        { title: 'Enrollments', href: '/dashboard/admin/enrollments', icon: FiUserCheck },
         { title: 'Coupons', href: '/dashboard/admin/coupons', icon: FiTag },
         {
           title: 'Create New', icon: FiPlus,
@@ -144,21 +142,18 @@ const AdminSidebar = () => {
       items: [
         { title: 'Notice Board', href: '/dashboard/admin/notice-board', icon: FiClipboard },
         { title: 'Notifications', href: '/dashboard/admin/notifications', icon: FiBell },
-        { title: 'Feedback', href: '/dashboard/admin/feedback', icon: FiMessageSquare },
-        { title: 'Reviews', href: '/dashboard/admin/reviews', icon: FiAward },
       ],
     },
     {
-      label: 'Others',
+      label: 'Website & Users',
       items: [
         {
           title: 'Site Content', icon: FiGlobe,
           submenu: [
             { title: 'Contact Page', href: '/dashboard/admin/site-content/contact' },
+            { title: 'Site Photos', href: '/dashboard/admin/site-content/images' },
           ],
         },
-        { title: 'Site Images', href: '/dashboard/admin/site-images', icon: FiImage },
-        { title: 'Partners', href: '/dashboard/admin/partners', icon: FiLink },
         {
           title: 'Users', icon: FiUsers,
           submenu: [

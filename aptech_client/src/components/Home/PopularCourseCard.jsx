@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LuCirclePlay, LuStar, LuUsers, LuMonitorPlay, LuBuilding2 } from "react-icons/lu";
+import { LuCirclePlay, LuUsers, LuMonitorPlay, LuBuilding2 } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import { getCoursePricing } from "@/lib/coursePrice";
 
@@ -23,7 +23,6 @@ export default function PopularCourseCard({ course, categoryName }) {
     const type = TYPE_LABEL[course.type];
     const TypeIcon = type?.Icon;
     const summary = course.courseOverview || course.details || "";
-    const hasRating = Number(course.totalRating) > 0 && Number(course.rating) > 0;
     const students = Number(course.totalStudentsEnroll) || 0;
     const lectures = Number(course.lectures) || 0;
 
@@ -81,11 +80,6 @@ export default function PopularCourseCard({ course, categoryName }) {
                     {students > 0 && (
                         <span className="flex items-center gap-1">
                             <LuUsers className="text-[#0142b2]" /> {students} {isBn ? "শিক্ষার্থী" : students === 1 ? "student" : "students"}
-                        </span>
-                    )}
-                    {hasRating && (
-                        <span className="flex items-center gap-1">
-                            <LuStar className="fill-amber-400 text-amber-400" /> {Number(course.rating).toFixed(1)}
                         </span>
                     )}
                 </div>

@@ -31,11 +31,9 @@ import { AssignmentRoutes } from './app/modules/assignment/assignment.routes';
 import { AnalyticsRoutes } from './app/modules/analytics/analytics.routes';
 import { NotificationRoutes } from './app/modules/notification/notification.routes';
 import { ChatbotRoutes } from './app/modules/chatbot/chatbot.routes';
-import { ReviewRoutes } from './app/modules/review/review.routes';
 import { UploadRoutes } from './app/modules/upload/upload.routes';
 import { CourseCouponRoutes } from './app/modules/coupon/coupon.route';
 import { NoticeRoutes } from './app/modules/notice/notice.route';
-import { PartnerRoutes } from './app/modules/partner/partner.route';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 
 const app: Application = express();
@@ -126,11 +124,9 @@ app.use('/api/assignments', AssignmentRoutes);
 app.use('/api/analytics', AnalyticsRoutes);
 app.use('/api/notifications', NotificationRoutes);
 app.use('/api/chatbot', ChatbotRoutes);
-app.use('/api/reviews', ReviewRoutes);
 app.use('/api/upload', UploadRoutes);
 app.use('/api/coupon', CourseCouponRoutes);
 app.use('/api/notices', NoticeRoutes);
-app.use('/api/partners', PartnerRoutes);
 
 // Health check
 app.get('/', (req: Request, res: Response) => {

@@ -62,8 +62,6 @@ const RightCoursesDetalis = ({ searchQuery, setSearchQuery, selectedType = "All"
 
   const sortedCourses = [...filteredCourses].sort((a, b) => {
     switch (sortBy) {
-      case "rating":
-        return (b.rating || 0) - (a.rating || 0);
       case "price-low":
         return getCoursePricing(a).price - getCoursePricing(b).price;
       case "price-high":
@@ -120,7 +118,6 @@ const RightCoursesDetalis = ({ searchQuery, setSearchQuery, selectedType = "All"
               className="cursor-pointer appearance-none rounded-md border border-slate-200 bg-white py-2 pl-8 pr-4 text-xs sm:text-[13px] font-medium text-slate-600 outline-none transition focus:border-[#0142b2]"
             >
               <option value="default">{isBn ? "ডিফল্ট ক্রম" : "Sort: Default"}</option>
-              <option value="rating">{isBn ? "সেরা রেটিং" : "Top rated"}</option>
               <option value="students">{isBn ? "সবচেয়ে জনপ্রিয়" : "Most popular"}</option>
               <option value="price-low">{isBn ? "দাম: কম থেকে বেশি" : "Price: low to high"}</option>
               <option value="price-high">{isBn ? "দাম: বেশি থেকে কম" : "Price: high to low"}</option>
