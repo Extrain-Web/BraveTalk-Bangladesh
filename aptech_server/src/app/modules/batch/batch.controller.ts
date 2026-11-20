@@ -99,7 +99,9 @@ export const getBatchesByMentorController = async (req: Request, res: Response) 
     try {
         const userId = (req as any).user?._id;
         if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
-        const batches = await BatchService.getBatchesByMentor(userId);
+        const role = (req as any).user?.role;
+        const isStaff = ['admin', 'superAdmin', 'trainingManager'].includes(role);
+        const batches = await BatchService.getBatchesByMentor(userId, isStaff);
         res.status(200).json({ success: true, data: batches });
     } catch (error: any) {
         res.status(500).json({ success: false, message: error.message });

@@ -102,7 +102,7 @@ router.patch(
 router.get(
   '/mentor-students',
   authMiddleware,
-  authorize('mentor', 'admin', 'superAdmin'),
+  authorize('mentor', 'admin', 'superAdmin', 'trainingManager'),
   EnrollmentController.getMentorStudents
 );
 

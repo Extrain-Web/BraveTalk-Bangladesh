@@ -49,6 +49,7 @@ const UserLayout = ({ children }) => {
         const segments = pathname.split('/').filter(Boolean);
         const last = segments[segments.length - 1];
         if (last === 'user') return 'Dashboard';
+        if (/^[a-f0-9]{24}$/i.test(last || '')) return segments.includes('materials') ? 'Batch Materials' : 'Details';
         return last?.charAt(0).toUpperCase() + last?.slice(1).replace(/-/g, ' ') || 'Dashboard';
     };
 

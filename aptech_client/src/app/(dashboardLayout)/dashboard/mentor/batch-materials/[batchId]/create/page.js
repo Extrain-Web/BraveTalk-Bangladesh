@@ -3,6 +3,7 @@
 import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useBatchToolPaths } from '@/lib/batchToolPaths';
 import {
   FiArrowLeft, FiSave, FiLoader, FiFolder, FiClock, FiLink, FiVideo,
   FiFileText, FiPlus, FiTrash2, FiExternalLink, FiUpload, FiMapPin,
@@ -42,6 +43,7 @@ function parseTimeRange(range) {
 }
 
 export default function CreateClassPage({ params }) {
+  const paths = useBatchToolPaths();
   const { batchId } = use(params);
   const router = useRouter();
   const [batch, setBatch] = useState(null);
@@ -195,7 +197,7 @@ export default function CreateClassPage({ params }) {
       });
       const data = await res.json();
       if (data.success) {
-        router.push(`/dashboard/mentor/batch-materials/${batchId}`);
+        router.push(`${paths.classes}/${batchId}`);
       } else {
         setError(data.message || 'Failed to create');
       }
@@ -209,7 +211,7 @@ export default function CreateClassPage({ params }) {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href={`/dashboard/mentor/batch-materials/${batchId}`}
+        <Link href={`${paths.classes}/${batchId}`}
           className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition">
           <FiArrowLeft size={16} />
         </Link>
@@ -437,7 +439,7 @@ export default function CreateClassPage({ params }) {
 
         {/* Footer Actions */}
         <div className="flex items-center justify-between p-6 bg-slate-50">
-          <Link href={`/dashboard/mentor/batch-materials/${batchId}`}
+          <Link href={`${paths.classes}/${batchId}`}
             className="px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition">
             Cancel
           </Link>

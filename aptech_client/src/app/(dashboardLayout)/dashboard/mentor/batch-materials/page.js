@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useBatchToolPaths } from '@/lib/batchToolPaths';
 import { FiBook, FiFolder, FiArrowRight, FiLoader, FiCalendar, FiClock, FiUsers } from 'react-icons/fi';
 
 const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api';
 
 export default function BatchMaterialsPage() {
+  const paths = useBatchToolPaths();
   const [loading, setLoading] = useState(true);
   const [batches, setBatches] = useState([]);
   const [classCounts, setClassCounts] = useState({});
@@ -71,7 +73,7 @@ export default function BatchMaterialsPage() {
               : batch.status === 'upcoming' ? 'from-blue-500 to-indigo-600' : 'from-slate-400 to-slate-500';
 
             return (
-              <Link key={batch._id} href={`/dashboard/mentor/batch-materials/${batch._id}`}
+              <Link key={batch._id} href={`${paths.classes}/${batch._id}`}
                 className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 {/* Top Banner */}
                 <div className={`bg-gradient-to-r ${statusColor} px-5 py-4 relative overflow-hidden`}>

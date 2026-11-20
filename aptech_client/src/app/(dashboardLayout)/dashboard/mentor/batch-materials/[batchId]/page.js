@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, use } from 'react';
 import Link from 'next/link';
+import { useBatchToolPaths } from '@/lib/batchToolPaths';
 import {
   FiPlus, FiEdit3, FiVideo, FiLink, FiFileText, FiTrash2, FiLoader,
   FiClock, FiSave, FiX, FiExternalLink, FiUpload, FiSend, FiCheck,
@@ -68,6 +69,7 @@ const getHeaders = () => {
 };
 
 export default function BatchMaterialDetailPage({ params }) {
+  const paths = useBatchToolPaths();
   const { batchId } = use(params);
   const [loading, setLoading] = useState(true);
   const [batch, setBatch] = useState(null);
@@ -356,7 +358,7 @@ export default function BatchMaterialDetailPage({ params }) {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard/mentor/batch-materials"
+          <Link href={paths.classes}
             className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition">
             <FiArrowLeft size={16} />
           </Link>
@@ -368,7 +370,7 @@ export default function BatchMaterialDetailPage({ params }) {
             <p className="text-sm text-slate-500">{batch?.courseId?.title || batch?.courseName} • {classes.length} class folders</p>
           </div>
         </div>
-        <Link href={`/dashboard/mentor/batch-materials/${batchId}/create`}
+        <Link href={`${paths.classes}/${batchId}/create`}
           className="flex items-center gap-2 px-5 py-2.5 bg-teal-500 text-white rounded-lg text-sm font-semibold hover:bg-teal-600 transition shadow-sm shadow-teal-500/20">
           <FiPlus size={14} /> Create Class Folder
         </Link>
@@ -396,7 +398,7 @@ export default function BatchMaterialDetailPage({ params }) {
           <FiFolder className="mx-auto text-slate-300 mb-4" size={40} />
           <h3 className="text-lg font-bold text-slate-700 mb-1">No Class Folders Yet</h3>
           <p className="text-sm text-slate-500 mb-4">Create your first class folder to add materials, links & recordings.</p>
-          <Link href={`/dashboard/mentor/batch-materials/${batchId}/create`} className="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm font-bold hover:bg-teal-600 transition">
+          <Link href={`${paths.classes}/${batchId}/create`} className="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm font-bold hover:bg-teal-600 transition">
             <FiPlus className="inline mr-1" /> Create Class Folder
           </Link>
         </div>

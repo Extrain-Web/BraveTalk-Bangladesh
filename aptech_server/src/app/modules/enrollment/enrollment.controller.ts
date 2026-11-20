@@ -346,7 +346,8 @@ const getMentorStudents = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user?._id;
     if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
-    const result = await EnrollmentService.getMentorStudents(userId);
+    const isStaff = ['admin', 'superAdmin', 'trainingManager'].includes((req as any).user?.role);
+    const result = await EnrollmentService.getMentorStudents(userId, isStaff);
     res.status(200).json({
       success: true,
       data: result.students,

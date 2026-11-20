@@ -5,7 +5,21 @@ import { ClassScheduleService } from './classSchedule.service';
 const create = async (req: Request, res: Response) => {
   try {
     const user = (req as any).user;
-    // Auto-set mentorId from authenticated user
+    // Fill batch-derived fields when the client could not (e.g. an admin creating a class):
+    // courseId from the batch, mentorId = the batch mentor's user account (so it shows in their schedule).
+    if (req.body.batchId && (!req.body.courseId || user?.role !== 'mentor')) {
+      const { Batch } = await import('../batch/batch.model');
+      const { Mentor } = await import('../mentor/mentor.model');
+      const batch: any = await Batch.findById(req.body.batchId).lean();
+      if (batch) {
+        if (!req.body.courseId) req.body.courseId = batch.courseId;
+        if (user?.role !== 'mentor' && batch.mentorId) {
+          const mentor: any = await Mentor.findById(batch.mentorId).select('userId').lean();
+          if (mentor?.userId) req.body.mentorId = mentor.userId;
+        }
+      }
+    }
+    // Otherwise the creator is the mentor
     if (!req.body.mentorId && user?._id) {
       req.body.mentorId = user._id;
     }

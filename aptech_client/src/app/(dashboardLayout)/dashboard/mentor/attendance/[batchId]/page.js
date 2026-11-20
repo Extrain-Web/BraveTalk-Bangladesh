@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, use, useRef } from 'react';
 import Link from 'next/link';
+import { useBatchToolPaths } from '@/lib/batchToolPaths';
 import {
   FiArrowLeft, FiLoader, FiCheck, FiX, FiClock, FiSave,
   FiCalendar, FiUsers, FiCheckSquare, FiAlertCircle,
@@ -12,14 +13,19 @@ import { useToast } from '@/components/Shared/Toast';
 
 const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api';
 
+// Calendar date in the user's own timezone (toISOString() would give the UTC date —
+// wrong between 12 AM and 6 AM in Bangladesh).
+const localDay = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
 export default function AttendanceSheetPage({ params }) {
+  const paths = useBatchToolPaths();
   const { batchId } = use(params);
   const { showToast, toastNode } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [batch, setBatch] = useState(null);
   const [enrolledStudents, setEnrolledStudents] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(() => localDay(new Date()));
   const [classTitle, setClassTitle] = useState('');
   const [records, setRecords] = useState([]);
   const [existingAttendance, setExistingAttendance] = useState(null);
@@ -125,7 +131,7 @@ export default function AttendanceSheetPage({ params }) {
     setSaving(false);
   };
 
-  const changeDate = (d) => { const dt = new Date(selectedDate); dt.setDate(dt.getDate() + d); setSelectedDate(dt.toISOString().split('T')[0]); };
+  const changeDate = (d) => { const dt = new Date(`${selectedDate}T00:00:00`); dt.setDate(dt.getDate() + d); setSelectedDate(localDay(dt)); };
 
   const statusCell = (status) => {
     if (!status) return <span className="text-slate-300 text-[10px]">—</span>;
@@ -151,7 +157,7 @@ export default function AttendanceSheetPage({ params }) {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard/mentor/attendance" className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition"><FiArrowLeft size={16} /></Link>
+          <Link href={paths.attendance} className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition"><FiArrowLeft size={16} /></Link>
           <div>
             <h1 className="text-xl font-bold text-slate-800 outfit flex items-center gap-2"><FiCheckSquare size={18} className="text-[#F3A522]" /> Attendance</h1>
             <p className="text-sm text-slate-500">{batch?.name || batch?.courseName} <code className="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded ml-1">{batch?.id}</code> • <span className="text-[#c9871a] font-medium">{studentList.length} students</span> • <span className="text-blue-600 font-medium">{history.length} classes</span></p>
@@ -280,7 +286,7 @@ export default function AttendanceSheetPage({ params }) {
                 <button onClick={() => changeDate(-1)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition"><FiChevronLeft size={16} /></button>
                 <div className="flex-1 text-center">
                   <input type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)} className="text-base font-bold text-slate-800 outline-none bg-transparent text-center cursor-pointer w-full" />
-                  <p className="text-[11px] text-slate-400 mt-0.5">{new Date(selectedDate).toLocaleDateString('bn-BD', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">{new Date(`${selectedDate}T00:00:00`).toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}</p>
                 </div>
                 <button onClick={() => changeDate(1)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition"><FiChevronRight size={16} /></button>
               </div>

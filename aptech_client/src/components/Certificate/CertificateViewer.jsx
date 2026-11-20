@@ -52,7 +52,7 @@ export default function CertificateViewer({ certificate, onClose }) {
             const canvas = await capture();
             const { jsPDF } = await import('jspdf');
             const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1120, 790] });
-            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 1120, 790);
+            pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 1120, 790); // JPEG keeps the PDF small
             pdf.save(`${certificate.id || 'certificate'}.pdf`);
         } catch (e) { console.error(e); alert('PDF download failed'); }
         setDownloading(null);

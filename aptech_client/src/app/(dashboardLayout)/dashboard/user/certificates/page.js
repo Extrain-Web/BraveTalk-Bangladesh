@@ -60,15 +60,17 @@ export default function UserCertificatesPage() {
             )));
 
             const html2canvas = (await import('html2canvas')).default;
-            const canvas = await html2canvas(tempDiv.firstChild, {
+            // firstElementChild — the HTML string starts with whitespace, so firstChild is a text node
+            const canvas = await html2canvas(tempDiv.firstElementChild, {
                 scale: 3, useCORS: true, backgroundColor: '#ffffff',
                 width: 1120, height: 790,
             });
 
             const { jsPDF } = await import('jspdf');
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1120, 790] });
-            pdf.addImage(imgData, 'PNG', 0, 0, 1120, 790);
+            // High-quality JPEG keeps the PDF around 1–2 MB (PNG at this size is ~24 MB)
+            const imgData = canvas.toDataURL('image/jpeg', 0.92);
+            const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1120, 790], compress: true });
+            pdf.addImage(imgData, 'JPEG', 0, 0, 1120, 790);
             pdf.save(`${cert.id || 'certificate'}.pdf`);
 
             document.body.removeChild(tempDiv);

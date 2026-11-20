@@ -95,7 +95,11 @@ export default function StudentSchedulePage() {
     return enrollments.map(e => {
       const b = typeof e.batchId === 'object' ? e.batchId : null;
       if (!b) return null;
-      const next = nextOccurrences(b.classDays || [], 5);
+      // Sessions start on the batch start date (not before) and stop at its end date
+      const start = b.startDate ? new Date(b.startDate) : null;
+      const end = b.endDate ? new Date(b.endDate) : null;
+      const from = start && start > new Date() ? start : new Date();
+      const next = nextOccurrences(b.classDays || [], 5, from).filter(d => !end || d <= end);
       return {
         enrollmentId: e._id,
         batch: b,

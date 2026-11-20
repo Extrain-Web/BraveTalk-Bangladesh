@@ -408,6 +408,19 @@ const approveEnrollment = async (enrollmentId: string, batchId?: string) => {
     $inc: { totalStudentsEnroll: 1 },
   });
 
+  // Tell the student their order is approved (best-effort)
+  try {
+    const co: any = await Course.findById(enrollment.courseId).select('title type').lean();
+    const recorded = co?.type === 'Recorded';
+    await NotificationService.create(
+      String(enrollment.studentId),
+      'payment',
+      '✅ Payment approved — course unlocked',
+      `"${co?.title || 'Your course'}" is now active.${recorded ? ' You can start watching the lessons now.' : ' Check your batch schedule.'}`,
+      '/dashboard/user/courses'
+    );
+  } catch { /* never block approval */ }
+
   // Fire-and-forget admission/full money-receipt email (never blocks approval)
   void (async () => {
     try {
@@ -465,15 +478,18 @@ const getStudentPayments = async (studentId: string) => {
 
 
 // ─── Mentor: Get students in mentor's batches ──────────────
-const getMentorStudents = async (userId: string) => {
-  // Find mentor by userId
+const getMentorStudents = async (userId: string, allBatches = false) => {
+  // Staff (admin / superAdmin / trainingManager) get every batch; a mentor gets their own
   const { Mentor } = await import('../mentor/mentor.model');
   const { Batch } = await import('../batch/batch.model');
-  const mentor = await Mentor.findOne({ userId });
-  if (!mentor) return { students: [], batches: [] };
+  let batchFilter: any = { isDeleted: false };
+  if (!allBatches) {
+    const mentor = await Mentor.findOne({ userId });
+    if (!mentor) return { students: [], batches: [] };
+    batchFilter = { mentorId: mentor._id, isDeleted: false };
+  }
 
-  // Find all batches assigned to this mentor
-  const mentorBatches = await Batch.find({ mentorId: mentor._id, isDeleted: false })
+  const mentorBatches = await Batch.find(batchFilter)
     .populate('courseId', 'title image type')
     .lean();
 

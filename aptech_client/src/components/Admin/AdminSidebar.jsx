@@ -50,6 +50,8 @@ const MENU = [
         submenu: [
           { title: 'All Batches', href: '/dashboard/admin/batch', exact: true },
           { title: 'Add Batch', href: '/dashboard/admin/batch/create' },
+          { title: 'Classes & Materials', href: '/dashboard/admin/classes' },
+          { title: 'Attendance', href: '/dashboard/admin/attendance' },
         ],
       },
       {

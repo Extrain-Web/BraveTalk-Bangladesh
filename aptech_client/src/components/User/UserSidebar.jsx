@@ -91,7 +91,6 @@ const UserSidebar = () => {
                         {!collapsed && (
                             <Link href="/" className="flex items-center gap-2.5 group">
                                 <img src="/images/logo.png" alt="Brave Talk Bangladesh" className="h-9 w-auto" />
-                                <span className="text-[11px] text-slate-400 -mt-0.5 !mt-0 self-end pb-0.5">Academy</span>
                             </Link>
                         )}
                         {collapsed && (

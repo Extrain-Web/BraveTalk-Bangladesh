@@ -165,10 +165,15 @@ const deleteBatch = async (id: string): Promise<IBatch | null> => {
 };
 
 // Get batches by mentor (via userId)
-const getBatchesByMentor = async (userId: string): Promise<any[]> => {
-    const mentor = await Mentor.findOne({ userId });
-    if (!mentor) return [];
-    const batches = await Batch.find({ mentorId: mentor._id, isDeleted: false })
+// Staff (admin / superAdmin / trainingManager) see every batch; a mentor sees their own.
+const getBatchesByMentor = async (userId: string, allBatches = false): Promise<any[]> => {
+    let filter: any = { isDeleted: false };
+    if (!allBatches) {
+        const mentor = await Mentor.findOne({ userId });
+        if (!mentor) return [];
+        filter = { mentorId: mentor._id, isDeleted: false };
+    }
+    const batches = await Batch.find(filter)
         .populate('courseId', 'title image type fee')
         .populate('mentorId', 'name image designation')
         .sort({ startDate: -1 })
