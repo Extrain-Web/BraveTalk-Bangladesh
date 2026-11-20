@@ -11,7 +11,8 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 import { LuBookOpen, LuUsers, LuClock } from "react-icons/lu";
 import LoginRequiredModal from "@/components/sheard/LoginRequiredModal";
-import { PAYMENT_NUMBERS, PAYMENT_CONTACT_PHONE, hasPaymentNumbers } from "@/lib/paymentNumbers";
+import { usePaymentInfo } from "@/lib/paymentNumbers";
+import ManualPaymentAccounts from "@/components/Shared/ManualPaymentAccounts";
 import { isFreeCourse } from "@/lib/coursePrice";
 
 const API = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000") + "/api";
@@ -45,6 +46,16 @@ export default function CheckoutPage() {
     transactionId: "",
     paymentType: "bkash",
   });
+
+  // Enabled accounts from Admin → Payment Info; default "Payment via" to the first one
+  const payInfo = usePaymentInfo();
+  const firstPayVia = payInfo.payVia[0]?.key;
+  useEffect(() => {
+    if (firstPayVia && !payInfo.payVia.some((p) => p.key === manualForm.paymentType)) {
+      setManualForm((f) => ({ ...f, paymentType: firstPayVia }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [firstPayVia]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -372,38 +383,7 @@ export default function CheckoutPage() {
                           {language === "bn" ? "টাকা পাঠান" : "Send Money"}
                         </h4>
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        {!hasPaymentNumbers() && (
-                          <p className={`sm:col-span-3 text-sm text-slate-600 ${bengaliClass}`}>
-                            {language === "bn"
-                              ? `পেমেন্ট নম্বর জানতে কল করুন: ${PAYMENT_CONTACT_PHONE}`
-                              : `Call ${PAYMENT_CONTACT_PHONE} to get our payment number.`}
-                          </p>
-                        )}
-                        {[
-                          { label: "bKash (Personal)", number: PAYMENT_NUMBERS.bkash },
-                          { label: "Nagad (Personal)", number: PAYMENT_NUMBERS.nagad },
-                          { label: "Rocket (Personal)", number: PAYMENT_NUMBERS.rocket },
-                        ].filter((acc) => acc.number).map((acc) => (
-                          <div key={acc.label} className="p-3 rounded-md bg-white border border-slate-200">
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">{acc.label}</p>
-                            <div className="flex items-center justify-between">
-                              <span className="text-base font-bold text-slate-800 font-mono">{acc.number}</span>
-                              <button
-                                onClick={() => copyToClipboard(acc.number.replace(/[^0-9]/g, ""))}
-                                className="p-1.5 hover:bg-slate-100 rounded transition text-slate-400 hover:text-slate-600"
-                              >
-                                {copied ? <FiCheck size={14} className="text-green-500" /> : <FiCopy size={14} />}
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <p className={`text-[11px] text-slate-400 mt-2 ${bengaliClass}`}>
-                        {language === "bn"
-                          ? `উপরের যেকোনো নম্বরে ৳${payNow.toLocaleString("en-IN")} "Send Money" করুন`
-                          : `Send ৳${payNow.toLocaleString("en-IN")} to any of the above numbers via "Send Money"`}
-                      </p>
+                      <ManualPaymentAccounts amount={payNow} isBn={language === "bn"} bn={bengaliClass} />
                     </div>
 
                     {/* Divider */}
@@ -428,17 +408,18 @@ export default function CheckoutPage() {
                             {language === "bn" ? "পেমেন্ট মাধ্যম" : "Payment Via"}
                           </label>
                           <div className="flex gap-2">
-                            {["bkash", "nagad", "rocket"].map((type) => (
+                            {(payInfo.payVia.length ? payInfo.payVia : [{ key: "bkash", label: "bKash" }, { key: "nagad", label: "Nagad" }, { key: "rocket", label: "Rocket" }]).map(({ key: type, label }) => (
                               <button
                                 key={type}
+                                type="button"
                                 onClick={() => setManualForm({ ...manualForm, paymentType: type })}
-                                className={`px-4 py-2 rounded-md text-xs font-bold capitalize border transition ${
+                                className={`px-4 py-2 rounded-md text-xs font-bold border transition ${
                                   manualForm.paymentType === type
                                     ? "border-[#0142b2] bg-blue-50 text-[#0142b2]"
                                     : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
                                 }`}
                               >
-                                {type}
+                                {label}
                               </button>
                             ))}
                           </div>

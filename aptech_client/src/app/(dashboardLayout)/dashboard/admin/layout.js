@@ -47,7 +47,7 @@ const AdminLayout = ({ children }) => {
     admin: 'Dashboard', payments: 'Payment History', analytics: 'Income Analytics', course: 'Courses',
     category: 'Categories', batch: 'Batches', mentor: 'Mentors', blog: 'Blog', books: 'Books',
     certification: 'Certifications', 'notice-board': 'Notice Board', 'site-content': 'Site Content',
-    images: 'Site Photos', contact: 'Contact Page', user: 'Users', create: 'Create', orders: 'Orders', classes: 'Classes & Materials', attendance: 'Attendance', enrollments: 'Enrollments',
+    images: 'Site Photos', contact: 'Contact Page', user: 'Users', create: 'Create', orders: 'Orders', 'payment-info': 'Payment Info', classes: 'Classes & Materials', attendance: 'Attendance', enrollments: 'Enrollments',
   };
   const nice = (seg) => TITLES[seg] || (/^[a-f0-9]{24}$/i.test(seg) ? 'Details' : seg.charAt(0).toUpperCase() + seg.slice(1).replace(/-/g, ' '));
   const segs = pathname.split('/').filter(Boolean).slice(2); // after /dashboard/admin

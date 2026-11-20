@@ -41,6 +41,12 @@ const settingsSchema = new Schema<ISiteSettings>(
 
         // Admin-uploaded photos for the public pages (see ISiteSettings.siteImages)
         siteImages: { type: Map, of: String, default: {} },
+
+        // Manual payment accounts shown at checkout (managed from Admin → Payment Info).
+        // { mobile: { bkash|nagad|rocket|upay: { number, accountType, enabled } },
+        //   banks: [{ bankName, accountName, accountNumber, branch, routingNumber, enabled }],
+        //   note: string }
+        paymentInfo: { type: Schema.Types.Mixed, default: {} },
     },
     { timestamps: true }
 );

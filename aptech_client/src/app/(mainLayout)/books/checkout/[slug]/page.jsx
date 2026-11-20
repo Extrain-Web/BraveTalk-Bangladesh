@@ -9,7 +9,8 @@ import {
 } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import { booksApi, formatTaka, isLoggedIn, FORMAT_LABEL } from "@/lib/booksApi";
-import { PAYMENT_NUMBERS, PAYMENT_CONTACT_PHONE, hasPaymentNumbers } from "@/lib/paymentNumbers";
+import { usePaymentInfo } from "@/lib/paymentNumbers";
+import ManualPaymentAccounts from "@/components/Shared/ManualPaymentAccounts";
 
 const inputCls =
     "w-full rounded-md border border-slate-200 bg-white px-4 py-2.5 text-sm text-[#0b1b4a] outline-none transition focus:border-[#0142b2] focus:ring-2 focus:ring-[#0142b2]/15";
@@ -36,6 +37,15 @@ export default function BookCheckoutPage() {
     const [quantity, setQuantity] = useState(1);
     const [shipping, setShipping] = useState({ name: "", phone: "", address: "", city: "", note: "" });
     const [payment, setPayment] = useState({ paymentType: "bkash", senderNumber: "", transactionId: "" });
+    // Enabled accounts from Admin → Payment Info; default "Payment via" to the first one
+    const payInfo = usePaymentInfo();
+    const firstPayVia = payInfo.payVia[0]?.key;
+    useEffect(() => {
+        if (firstPayVia && !payInfo.payVia.some((p) => p.key === payment.paymentType)) {
+            setPayment((p) => ({ ...p, paymentType: firstPayVia }));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [firstPayVia]);
     const [agreed, setAgreed] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
@@ -108,12 +118,6 @@ export default function BookCheckoutPage() {
     const total = unitPrice * qty;
     const printedOut = (book.format === "printed" || book.format === "both") && stock <= 0;
     const blocked = isPrinted && printedOut;
-
-    const accounts = [
-        { key: "bkash", label: "bKash (Personal)", number: PAYMENT_NUMBERS.bkash },
-        { key: "nagad", label: "Nagad (Personal)", number: PAYMENT_NUMBERS.nagad },
-        { key: "rocket", label: "Rocket (Personal)", number: PAYMENT_NUMBERS.rocket },
-    ].filter((a) => a.number);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -327,29 +331,7 @@ export default function BookCheckoutPage() {
                                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#0142b2] text-xs font-bold text-white">1</span>
                                     <h3 className={`text-sm font-bold text-[#0b1b4a] work ${bn}`}>{isBn ? "টাকা পাঠান" : "Send Money"}</h3>
                                 </div>
-                                {!hasPaymentNumbers() && (
-                                    <p className={`rounded-md border border-blue-100 bg-blue-50/60 px-4 py-3 text-sm text-slate-600 work ${bn}`}>
-                                        {isBn ? `পেমেন্ট নম্বর জানতে কল করুন: ${PAYMENT_CONTACT_PHONE}` : `Call ${PAYMENT_CONTACT_PHONE} to get our payment number.`}
-                                    </p>
-                                )}
-                                {accounts.length > 0 && (
-                                    <div className="grid gap-3 sm:grid-cols-3">
-                                        {accounts.map((acc) => (
-                                            <div key={acc.key} className="rounded-md border border-slate-200 bg-slate-50/60 p-3">
-                                                <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">{acc.label}</p>
-                                                <div className="flex items-center justify-between">
-                                                    <span className="font-mono text-base font-bold text-[#0b1b4a]">{acc.number}</span>
-                                                    <button type="button" onClick={() => copy(acc.key, acc.number)} className="rounded p-1.5 text-slate-400 transition hover:bg-white hover:text-slate-600" aria-label="Copy number">
-                                                        {copied === acc.key ? <LuCheck className="text-[#027a1e]" /> : <LuCopy />}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                                <p className={`mt-2 text-[11px] text-slate-500 work ${bn}`}>
-                                    {isBn ? `"Send Money" করে ${formatTaka(total)} পাঠান` : `Send ${formatTaka(total)} via "Send Money"`}
-                                </p>
+                                <ManualPaymentAccounts amount={total} isBn={isBn} bn={bn} />
                             </div>
 
                             <div className="flex items-center gap-3">
@@ -368,7 +350,7 @@ export default function BookCheckoutPage() {
                                     <div>
                                         <label className={`mb-1 block text-xs font-semibold text-slate-600 work ${bn}`}>{isBn ? "পেমেন্ট মাধ্যম" : "Payment via"}</label>
                                         <div className="flex flex-wrap gap-2">
-                                            {[{ k: "bkash", l: "bKash" }, { k: "nagad", l: "Nagad" }, { k: "rocket", l: "Rocket" }].map((t) => (
+                                            {(payInfo.payVia.length ? payInfo.payVia : [{ key: "bkash", label: "bKash" }, { key: "nagad", label: "Nagad" }, { key: "rocket", label: "Rocket" }]).map(({ key, label }) => ({ k: key, l: label })).map((t) => (
                                                 <button
                                                     key={t.k}
                                                     type="button"

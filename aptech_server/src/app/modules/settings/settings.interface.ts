@@ -39,6 +39,13 @@ export interface ISiteSettings {
     // mentorsBanner, contactBanner, ctaImage, galleryN …  Empty/missing = page default.
     siteImages?: Record<string, string>;
 
+    // Manual payment accounts for checkout (see settings.model.ts)
+    paymentInfo?: {
+        mobile?: Record<string, { number?: string; accountType?: string; enabled?: boolean }>;
+        banks?: { bankName?: string; accountName?: string; accountNumber?: string; branch?: string; routingNumber?: string; enabled?: boolean }[];
+        note?: string;
+    };
+
     createdAt?: Date;
     updatedAt?: Date;
 }

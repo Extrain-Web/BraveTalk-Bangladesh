@@ -5,13 +5,8 @@ import { LuCopy, LuCheck, LuShieldCheck, LuPhoneCall, LuCircleCheck } from "reac
 import { useLanguage } from "@/context/LanguageContext";
 import { motion, useInView } from "framer-motion";
 import SectionHeader from "@/components/Home/SectionHeader";
-import { PAYMENT_NUMBERS, PAYMENT_CONTACT_PHONE } from "@/lib/paymentNumbers";
-
-const METHODS = [
-  { key: "bkash", name: "bKash", logo: "/images/bkash.webp", color: "#E2136E" },
-  { key: "nagad", name: "Nagad", logo: "/images/nagad.png", color: "#F6921E" },
-  { key: "rocket", name: "Rocket", logo: "/images/rocket.png", color: "#8C3494" },
-];
+import { LuLandmark } from "react-icons/lu";
+import { PAYMENT_CONTACT_PHONE, MOBILE_METHODS, usePaymentInfo } from "@/lib/paymentNumbers";
 
 const PaymentMethod = () => {
   const [copiedKey, setCopiedKey] = useState(null);
@@ -22,9 +17,10 @@ const PaymentMethod = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
-  const withNumbers = METHODS.filter((m) => PAYMENT_NUMBERS[m.key]);
+  // Accounts switched ON in Admin → Payment Info
+  const { mobile: withNumbers, banks } = usePaymentInfo();
   // Until real numbers are configured, show the two wallets we take payments through
-  const logos = withNumbers.length ? withNumbers : METHODS.slice(0, 2);
+  const logos = (withNumbers.length ? withNumbers : MOBILE_METHODS.slice(0, 2)).filter((m) => m.logo);
 
   const copyToClipboard = async (key, number) => {
     try {
@@ -50,8 +46,8 @@ const PaymentMethod = () => {
           titleAccent={isBn ? "পেমেন্ট" : "payment"}
           description={
             isBn
-              ? "বিকাশ বা নগদে Send Money করে ভর্তি সম্পন্ন করুন।"
-              : "Complete your enrolment by sending money with bKash or Nagad."
+              ? "মোবাইল ব্যাংকিং বা ব্যাংকে টাকা পাঠিয়ে ভর্তি সম্পন্ন করুন।"
+              : "Complete your enrolment by sending money through mobile banking or bank transfer."
           }
           isInView={isInView}
           bengaliClass={bn}
@@ -84,29 +80,46 @@ const PaymentMethod = () => {
 
           {/* Numbers / call box */}
           <div className="space-y-3">
-            {withNumbers.length > 0 ? (
-              withNumbers.map((m) => (
+            {withNumbers.length + banks.length > 0 ? (
+              <>
+              {withNumbers.map((m) => (
                 <button
                   key={m.key}
                   type="button"
-                  onClick={() => copyToClipboard(m.key, PAYMENT_NUMBERS[m.key])}
+                  onClick={() => copyToClipboard(m.key, m.number)}
                   className="group flex w-full items-center gap-4 rounded-md border border-slate-200 bg-white px-4 py-3.5 text-left transition hover:border-[#0142b2]/30 hover:shadow-md"
                 >
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-slate-50">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={m.logo} alt={m.name} className="h-7 w-7 object-contain" />
+                    {m.logo
+                      // eslint-disable-next-line @next/next/no-img-element
+                      ? <img src={m.logo} alt={m.name} className="h-7 w-7 object-contain" />
+                      : <span className="text-xs font-bold" style={{ color: m.color }}>{m.name}</span>}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-xs text-slate-400 work">{m.name} · Send Money</span>
+                    <span className="block text-xs text-slate-400 work">{m.name}{m.accountType ? ` (${m.accountType})` : ""} · Send Money</span>
                     <span className="block text-lg font-bold tracking-wide outfit" style={{ color: m.color }}>
-                      {PAYMENT_NUMBERS[m.key]}
+                      {m.number}
                     </span>
                   </span>
                   <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-50 text-slate-400 transition group-hover:bg-blue-50 group-hover:text-[#0142b2]">
                     {copiedKey === m.key ? <LuCheck className="text-[#027a1e]" /> : <LuCopy />}
                   </span>
                 </button>
-              ))
+              ))}
+              {banks.map((b, i) => (
+                <div key={`bank-${i}`} className="flex w-full items-center gap-4 rounded-md border border-slate-200 bg-white px-4 py-3.5">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-slate-50 text-[#0b1b4a]"><LuLandmark className="text-xl" /></span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-xs text-slate-400 work">{b.bankName || "Bank"}{b.branch ? ` · ${b.branch}` : ""}</span>
+                    <span className="block text-base font-bold text-[#0b1b4a] outfit">{b.accountNumber}</span>
+                    {b.accountName && <span className="block text-xs text-slate-500">{b.accountName}</span>}
+                  </span>
+                  <button type="button" onClick={() => copyToClipboard(`bank-${i}`, b.accountNumber)} className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-50 text-slate-400 hover:bg-blue-50 hover:text-[#0142b2]">
+                    {copiedKey === `bank-${i}` ? <LuCheck className="text-[#027a1e]" /> : <LuCopy />}
+                  </button>
+                </div>
+              ))}
+              </>
             ) : (
               <a
                 href={`tel:${PAYMENT_CONTACT_PHONE}`}

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import {
   FiHome, FiUsers, FiAward, FiFileText, FiUserCheck, FiMenu, FiX, FiLogOut, FiChevronDown, FiArrowLeft,
   FiSettings, FiShoppingCart, FiDollarSign, FiBarChart2, FiBell, FiTag, FiGlobe, FiClipboard, FiBook,
-  FiLayers, FiCalendar, FiUser, FiEdit3, FiBookOpen,
+  FiLayers, FiCalendar, FiUser, FiEdit3, FiBookOpen, FiCreditCard,
 } from 'react-icons/fi';
 import { useSettings } from '@/context/SettingsContext';
 
@@ -20,6 +20,7 @@ const MENU = [
     label: 'Payments & Reports',
     items: [
       { title: 'Payment History', href: '/dashboard/admin/payments', icon: FiDollarSign, deny: ['trainingManager'] },
+      { title: 'Payment Info', href: '/dashboard/admin/payment-info', icon: FiCreditCard, deny: ['trainingManager'] },
       { title: 'Income Analytics', href: '/dashboard/admin/analytics', icon: FiBarChart2, deny: ['trainingManager'] },
       { title: 'Reports', href: '/dashboard/admin/reports', icon: FiFileText },
     ],
