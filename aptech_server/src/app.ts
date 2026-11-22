@@ -51,6 +51,8 @@ const corsOptions: CorsOptions = {
     'http://localhost:3000',
     'http://localhost:5005',
     ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : []),
+    // Extra allowed site origins, comma-separated (e.g. the www domain and the old sslip link)
+    ...String(process.env.CORS_ORIGINS || '').split(',').map((o) => o.trim().replace(/\/$/, '')).filter(Boolean),
     /\.vercel\.app$/,
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
