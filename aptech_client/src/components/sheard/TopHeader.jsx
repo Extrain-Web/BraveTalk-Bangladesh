@@ -11,12 +11,14 @@ import { FaInstagram } from "react-icons/fa";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSettings } from "@/context/SettingsContext";
+import { useDesignScale, scaleStyle } from "@/lib/useDesignScale";
 
 const TopHeader = () => {
   const [user, setUser] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { t, language } = useLanguage();
   const { settings } = useSettings();
+  const scale = useDesignScale();
 
   // Dynamic values from settings with fallbacks
   const phoneNumber = settings?.phoneNumber || "+880 1323-878569";
@@ -59,7 +61,7 @@ const TopHeader = () => {
       {/* Gold Accent Line */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#e5251f] to-transparent opacity-80"></div>
 
-      <div className="relative w-full max-w-[1140px] 2xl:max-w-[1280px] mx-auto px-6">
+      <div style={scaleStyle(scale)} className="relative w-full max-w-[1140px] mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between py-1.5">
           {/* Contact Info - Left Side */}
           <div className="flex items-center gap-4">

@@ -7,6 +7,7 @@ import { LuMonitorPlay, LuBuilding2, LuCirclePlay, LuMic, LuArrowRight } from "r
 import { useLanguage } from "@/context/LanguageContext";
 import { useSiteImages } from "@/lib/siteImages";
 import SectionHeader from "./SectionHeader";
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 // Learning formats → course list filtered by type / category
 const MODES = [
@@ -53,6 +54,7 @@ const MODES = [
 ];
 
 const HomeCategory = () => {
+    const modes = OFFLINE_ENABLED ? MODES : MODES.filter((m) => m.key !== "offline");
     const { language } = useLanguage();
     const isBn = language === "bn";
     const bn = isBn ? "hind-siliguri" : "";
@@ -70,8 +72,8 @@ const HomeCategory = () => {
                     titleAccent={isBn ? "শিখতে চান?" : "to learn?"}
                     description={
                         isBn
-                            ? "অনলাইনে, সরাসরি ক্লাসে বা রেকর্ডেড ভিডিওতে — আপনার সুবিধামতো পথ বেছে নিন।"
-                            : "Online, in person or on video — pick the way that fits your day."
+                            ? "অনলাইন লাইভ ক্লাসে বা রেকর্ডেড ভিডিওতে — আপনার সুবিধামতো পথ বেছে নিন।"
+                            : "Live online or on video — pick the way that fits your day."
                     }
                     isInView={isInView}
                     bengaliClass={bn}
@@ -81,9 +83,9 @@ const HomeCategory = () => {
                     initial="hidden"
                     animate={isInView ? "visible" : "hidden"}
                     variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.15 } } }}
-                    className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5"
+                    className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 ${modes.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}
                 >
-                    {MODES.map((m) => {
+                    {modes.map((m) => {
                         const c = isBn ? m.bn : m.en;
                         return (
                             <motion.div

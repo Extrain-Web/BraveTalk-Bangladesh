@@ -1,4 +1,5 @@
 ﻿import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { visibleCourses } from "@/lib/features";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -17,7 +18,7 @@ export const fetchCoursesData = createAsyncThunk(
     if (!response.ok) throw new Error("Failed to fetch courses");
     const result = await response.json();
     // API returns {success: true, data: [...]} so extract data array
-    return result.data || result;
+    return visibleCourses(result.data || result);
   }
 );
 

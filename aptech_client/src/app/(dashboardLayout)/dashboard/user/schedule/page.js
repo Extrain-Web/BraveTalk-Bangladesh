@@ -6,6 +6,7 @@ import {
   FiLoader, FiChevronLeft, FiChevronRight, FiDownload,
   FiUser, FiBookOpen, FiHash,
 } from 'react-icons/fi';
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api';
 
@@ -515,7 +516,7 @@ export default function StudentSchedulePage() {
           <div className="mt-4 flex items-center gap-4 text-[11px] text-slate-500 flex-wrap">
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[#F3A522]/15 border border-[#F3A522]/40"></span> Recurring class day</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-blue-100 border border-blue-200"></span> Live session</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-100 border border-amber-200"></span> Offline session</span>
+            {OFFLINE_ENABLED && <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-100 border border-amber-200"></span> Offline session</span>}
           </div>
         </div>
       )}

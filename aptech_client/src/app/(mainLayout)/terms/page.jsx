@@ -27,7 +27,7 @@ const CONTENT = {
             {
                 h: "Batches and classes",
                 p: [
-                    "For live (online or in-person) courses we place you in a batch. Class days and times are shared in your dashboard.",
+                    "For live online courses we place you in a batch. Class days and times are shared in your dashboard.",
                     "We may change a schedule, mentor or batch when needed and will inform you in advance.",
                 ],
             },

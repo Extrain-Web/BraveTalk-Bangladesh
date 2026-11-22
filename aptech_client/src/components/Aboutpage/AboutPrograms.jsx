@@ -8,7 +8,6 @@ import {
     LuMessagesSquare,
     LuHandshake,
     LuMonitor,
-    LuMapPin,
     LuBookOpen,
     LuArrowRight,
 } from "react-icons/lu";
@@ -37,7 +36,7 @@ const COPY = {
         formatsTitle: "Learn the way that suits you",
         formats: [
             { icon: LuMonitor, title: "Online classes", text: "Join live sessions from anywhere in Bangladesh." },
-            { icon: LuMapPin, title: "In-person classes", text: "Practise face to face at our office in South Badda, Dhaka." },
+            { icon: LuMonitor, title: "Recorded courses", text: "Learn at your own pace — rewatch any lesson, anytime.", href: "/courses?type=Recorded", cta: "See recorded courses" },
             { icon: LuBookOpen, title: "Books & video lessons", text: "Study at your own pace with our books and their video lessons.", href: "/books", cta: "Browse books" },
         ],
         coursesCta: "See all courses",
@@ -57,7 +56,7 @@ const COPY = {
         formatsTitle: "আপনার সুবিধামতো শিখুন",
         formats: [
             { icon: LuMonitor, title: "অনলাইন ক্লাস", text: "বাংলাদেশের যেকোনো জায়গা থেকে লাইভ সেশনে যুক্ত হোন।" },
-            { icon: LuMapPin, title: "সরাসরি ক্লাস", text: "দক্ষিণ বাড্ডা, ঢাকায় আমাদের অফিসে সামনাসামনি প্র্যাকটিস করুন।" },
+            { icon: LuMonitor, title: "রেকর্ডেড কোর্স", text: "নিজের গতিতে শিখুন — যেকোনো লেসন যখন খুশি আবার দেখুন।", href: "/courses?type=Recorded", cta: "রেকর্ডেড কোর্স দেখুন" },
             { icon: LuBookOpen, title: "বই ও ভিডিও লেসন", text: "আমাদের বই ও সাথের ভিডিও লেসনে নিজের গতিতে শিখুন।", href: "/books", cta: "বই দেখুন" },
         ],
         coursesCta: "সব কোর্স দেখুন",

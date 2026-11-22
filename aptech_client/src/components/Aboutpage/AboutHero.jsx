@@ -13,7 +13,7 @@ const COPY = {
         desc: "BraveTalk Bangladesh is a learning platform that helps students speak English with confidence, stand on any stage and lead with their voice. Our mission: empowering students through public speaking, leadership & social advocacy.",
         ctaPrimary: "Explore courses",
         ctaSecondary: "Contact us",
-        ticks: ["Online & in-person classes", "Live practice with mentors", "Verifiable certificates"],
+        ticks: ["Live online classes", "Live practice with mentors", "Verifiable certificates"],
         panelHint: "Our mission",
         panelTitle: "Empowering students through",
         pillars: [
@@ -29,7 +29,7 @@ const COPY = {
         desc: "ব্রেভটক বাংলাদেশ একটি লার্নিং প্ল্যাটফর্ম, যেখানে শিক্ষার্থীরা আত্মবিশ্বাসের সাথে ইংরেজিতে কথা বলা, যেকোনো মঞ্চে দাঁড়ানো এবং নিজের কণ্ঠ দিয়ে নেতৃত্ব দেওয়া শেখে। আমাদের লক্ষ্য: পাবলিক স্পিকিং, লিডারশিপ ও সামাজিক অ্যাডভোকেসির মাধ্যমে শিক্ষার্থীদের ক্ষমতায়ন।",
         ctaPrimary: "কোর্স দেখুন",
         ctaSecondary: "যোগাযোগ করুন",
-        ticks: ["অনলাইন ও সরাসরি ক্লাস", "মেন্টরের সাথে লাইভ প্র্যাকটিস", "যাচাইযোগ্য সার্টিফিকেট"],
+        ticks: ["অনলাইন লাইভ ক্লাস", "মেন্টরের সাথে লাইভ প্র্যাকটিস", "যাচাইযোগ্য সার্টিফিকেট"],
         panelHint: "আমাদের লক্ষ্য",
         panelTitle: "শিক্ষার্থীদের ক্ষমতায়ন যার মাধ্যমে",
         pillars: [

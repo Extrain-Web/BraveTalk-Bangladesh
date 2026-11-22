@@ -8,6 +8,7 @@ import {
   FiGlobe, FiBookOpen, FiUserCheck, FiRefreshCw, FiX, FiTrash2, FiVideo,
 } from 'react-icons/fi';
 import { SkeletonCard, SkeletonRow } from '@/components/Shared/Skeleton';
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api';
 const getToken = () => localStorage.getItem('token') || '';
@@ -191,7 +192,7 @@ export default function EnrollmentsPage() {
     <div className="space-y-5">
       <div>
         <h1 className="text-2xl font-bold text-[#0b1b4a] outfit">Course Enrollments</h1>
-        <p className="text-sm text-slate-500 mt-1">Approved course students. Online/offline students can be moved to another batch here; recorded courses are self-paced.</p>
+        <p className="text-sm text-slate-500 mt-1">Approved course students. Online students can be moved to another batch here; recorded courses are self-paced.</p>
       </div>
 
       {/* Stats */}
@@ -249,7 +250,7 @@ export default function EnrollmentsPage() {
                 }`}>
               <option value="all">All Types</option>
               <option value="online">Online</option>
-              <option value="offline">Offline</option>
+              {OFFLINE_ENABLED && <option value="offline">Offline</option>}
               <option value="recorded">Recorded</option>
             </select>
             <FiChevronDown size={12} className="absolute right-2 top-[9px] pointer-events-none text-slate-300" />

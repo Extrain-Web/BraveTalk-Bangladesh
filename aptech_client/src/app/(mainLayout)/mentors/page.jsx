@@ -37,7 +37,7 @@ const MentorsPage = () => {
           <div className={`mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/80 work ${bn}`}>
             <span className="flex items-center gap-1.5"><LuMic /> {isBn ? "লাইভ প্র্যাকটিস" : "Live practice"}</span>
             <span className="flex items-center gap-1.5"><LuMessagesSquare /> {isBn ? "ব্যক্তিগত ফিডব্যাক" : "Personal feedback"}</span>
-            <span className="flex items-center gap-1.5"><LuUsers /> {isBn ? "অনলাইন ও অফলাইন" : "Online & in-person"}</span>
+            <span className="flex items-center gap-1.5"><LuUsers /> {isBn ? "অনলাইন লাইভ ক্লাস" : "Live online classes"}</span>
           </div>
         </div>
       </section>

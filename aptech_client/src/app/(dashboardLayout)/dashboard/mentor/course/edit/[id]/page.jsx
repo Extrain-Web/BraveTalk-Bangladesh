@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { useRouter, useParams } from 'next/navigation';
 import { FiPlus, FiTrash2, FiSave, FiArrowLeft, FiLoader } from 'react-icons/fi';
 import Link from 'next/link';
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 // Zod Schema
 const courseValidationSchema = z.object({
@@ -45,7 +46,7 @@ const MentorEditCourse = () => {
     const inputClass = "w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-[#41bfb8]/20 focus:border-[#41bfb8] outline-none text-[13px] bg-white transition-all";
     const labelClass = "block text-[11px] font-bold text-slate-500 mb-1 uppercase tracking-widest";
 
-    const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
+    const { register, control, handleSubmit, reset, watch, formState: { errors } } = useForm({
         resolver: zodResolver(courseValidationSchema),
         defaultValues: {
             curriculum: [],
@@ -178,7 +179,7 @@ const MentorEditCourse = () => {
                             <label className={labelClass}>Delivery Type</label>
                             <select {...register('type')} className={inputClass}>
                                 <option value="Online">Online</option>
-                                <option value="Offline">Offline</option>
+                                {(OFFLINE_ENABLED || watch("type") === "Offline") && <option value="Offline">Offline</option>}
                                 <option value="Recorded">Recorded</option>
                             </select>
                         </div>

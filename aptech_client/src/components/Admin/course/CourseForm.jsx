@@ -27,6 +27,7 @@ import { MdOutlineAssignment, MdOutlineQuiz } from 'react-icons/md';
 import { FaCheckCircle } from 'react-icons/fa';
 import ModuleLessonManager from './ModuleLessonManager';
 import { parsePrice } from '@/lib/coursePrice';
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api';
 
@@ -513,8 +514,8 @@ const CourseForm = ({ mode = 'create', courseId = null }) => {
             title="Course Type"
             hint="The form adapts automatically — Recorded courses use Modules & Lessons instead of a topic curriculum"
           />
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {COURSE_TYPES.map(({ key, label, desc, Icon }) => {
+          <div className={`grid grid-cols-1 gap-3 ${OFFLINE_ENABLED || type === 'Offline' ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
+            {COURSE_TYPES.filter((ct) => OFFLINE_ENABLED || ct.key !== 'Offline' || type === 'Offline').map(({ key, label, desc, Icon }) => {
               const active = type === key;
               return (
                 <button

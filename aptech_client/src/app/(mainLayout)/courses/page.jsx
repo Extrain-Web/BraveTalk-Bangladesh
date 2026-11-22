@@ -12,13 +12,14 @@ import Link from "next/link";
 import { LuSearch, LuX, LuSlidersHorizontal, LuWifi, LuMapPin, LuCirclePlay, LuHouse, LuChevronRight } from "react-icons/lu";
 import { useSiteImage } from "@/lib/siteImages";
 import { useLanguage } from "@/context/LanguageContext";
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 const RightCoursesDetalis = dynamic(
   () => import("@/components/coursepage/RightCoursesDetalis"),
   { ssr: false }
 );
 
-const VALID_TYPES = ["Online", "Offline", "Recorded"];
+const VALID_TYPES = OFFLINE_ENABLED ? ["Online", "Offline", "Recorded"] : ["Online", "Recorded"];
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center py-20">
@@ -69,13 +70,13 @@ const CourseContent = () => {
           </h1>
           <p className={`mt-3 max-w-2xl text-sm sm:text-[15px] leading-relaxed text-white/80 work ${bn}`}>
             {isBn
-              ? "আত্মবিশ্বাসের সাথে কথা বলা, মঞ্চে বক্তৃতা আর নেতৃত্বের দক্ষতা — লাইভ ক্লাস, অফলাইন ব্যাচ অথবা রেকর্ডেড কোর্সে নিজের গতিতে শিখুন।"
-              : "Speak with confidence, own the stage and lead — learn in live online classes, in-person batches or self-paced recorded courses."}
+              ? "আত্মবিশ্বাসের সাথে কথা বলা, মঞ্চে বক্তৃতা আর নেতৃত্বের দক্ষতা — অনলাইন লাইভ ক্লাস অথবা রেকর্ডেড কোর্সে নিজের গতিতে শিখুন।"
+              : "Speak with confidence, own the stage and lead — learn in live online classes or self-paced recorded courses."}
           </p>
 
           <div className={`mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-white/80 work ${bn}`}>
             <span className="flex items-center gap-1.5"><LuWifi /> {isBn ? "অনলাইন লাইভ" : "Live online"}</span>
-            <span className="flex items-center gap-1.5"><LuMapPin /> {isBn ? "অফলাইন ক্লাস" : "In-person classes"}</span>
+            {OFFLINE_ENABLED && <span className="flex items-center gap-1.5"><LuMapPin /> {isBn ? "অফলাইন ক্লাস" : "In-person classes"}</span>}
             <span className="flex items-center gap-1.5"><LuCirclePlay /> {isBn ? "রেকর্ডেড কোর্স" : "Recorded courses"}</span>
           </div>
 

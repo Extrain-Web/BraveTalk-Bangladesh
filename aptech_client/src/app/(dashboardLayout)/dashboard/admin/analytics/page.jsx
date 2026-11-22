@@ -7,6 +7,7 @@ import {
   FiDownload, FiPrinter, FiRefreshCw, FiCalendar, FiArrowLeft,
   FiBarChart2, FiPieChart, FiList, FiGrid, FiBookOpen,
 } from 'react-icons/fi';
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 const API = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000') + '/api';
 const getToken = () => localStorage.getItem('token') || '';
@@ -571,7 +572,7 @@ export default function AdminAnalyticsPage() {
             <div className="lg:col-span-2">
               <MonthBarsCard title="Income by Month" subtitle="Course, money received" months={course?.byMonth || []} series={[{ key: 'amount', color: COURSE_C, label: 'Income' }]} loading={loading} />
             </div>
-            <DonutCard title="By Course Type" subtitle="Online / Offline / Recorded" loading={loading}
+            <DonutCard title="By Course Type" subtitle={OFFLINE_ENABLED ? "Online / Offline / Recorded" : "Online / Recorded"} loading={loading}
               slices={(course?.byType || []).map((t) => ({ label: t.type, amount: t.amount, color: TYPE_COLORS[t.type] || '#94a3b8' }))} />
           </div>
 

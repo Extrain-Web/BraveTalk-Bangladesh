@@ -9,6 +9,7 @@ import {
   FiArrowLeft, FiFolder, FiCalendar, FiMapPin,
   FiPlay, FiEye, FiMaximize2, FiMinimize2, FiDownload,
 } from 'react-icons/fi';
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 /* ─── URL helpers for inline embedding ─── */
 const getDriveEmbedUrl = (url) => {
@@ -614,7 +615,7 @@ export default function BatchMaterialDetailPage({ params }) {
                     <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}
                       className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm outline-none focus:border-teal-400">
                       <option value="live">🔴 Live Online</option>
-                      <option value="offline">📍 Offline</option>
+                      {(OFFLINE_ENABLED || form.type === "offline") && <option value="offline">📍 Offline</option>}
                       <option value="recorded">📹 Pre-Recorded</option>
                     </select>
                   </div>
@@ -643,11 +644,13 @@ export default function BatchMaterialDetailPage({ params }) {
                     </select>
                   </div>
                 </div>
-                <div className="mt-3">
+                {(OFFLINE_ENABLED || form.type === "offline") && (
+<div className="mt-3">
                   <label className="text-xs font-bold text-slate-500 mb-1 block">Venue (for offline class)</label>
                   <input type="text" value={form.venue} onChange={e => setForm({ ...form, venue: e.target.value })}
                     placeholder="Room 301, BraveTalk Bangladesh HQ" className="w-full px-3 py-2.5 border border-slate-200 rounded-lg text-sm outline-none focus:border-teal-400" />
                 </div>
+)}
               </div>
 
               {/* Section 4: Recordings (multi) */}

@@ -10,6 +10,8 @@ import { HiOutlineSparkles, HiOutlineUserCircle } from "react-icons/hi2";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSettings } from "@/context/SettingsContext";
+import { useDesignScale, scaleStyle } from "@/lib/useDesignScale";
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
@@ -18,6 +20,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { t, language } = useLanguage();
+  const scale = useDesignScale();
   const { settings } = useSettings();
   const logoSrc = settings?.logo || "/images/logo.png";
   const isCustomLogo = !!settings?.logo;
@@ -50,7 +53,7 @@ const Navbar = () => {
 
   const courseTypes = [
     { key: "Online", label: t("navbar.onlineCourse") },
-    { key: "Offline", label: t("navbar.offlineCourse") },
+    ...(OFFLINE_ENABLED ? [{ key: "Offline", label: t("navbar.offlineCourse") }] : []),
     { key: "Recorded", label: t("navbar.recordedCourse") },
   ];
 
@@ -199,7 +202,7 @@ const Navbar = () => {
         {/* Gold hairline accent along the very top */}
         <div className="h-[3px] w-full bg-gradient-to-r from-[#0142b2] via-[#e5251f] to-[#027a1e]"></div>
 
-        <div className="max-w-[1140px] 2xl:max-w-[1280px] mx-auto px-4 sm:px-6">
+        <div style={scaleStyle(scale)} className="max-w-[1140px] mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center h-[80px]">
             {/* Left cluster: Logo + Category + Nav */}
             <div className="flex items-center gap-4 lg:gap-6">

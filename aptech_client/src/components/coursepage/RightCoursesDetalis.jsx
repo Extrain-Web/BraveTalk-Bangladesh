@@ -7,11 +7,12 @@ import CourseCard from "../sheard/CourseCard";
 import { LuArrowUpDown, LuSearchX } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import { getCoursePricing } from "@/lib/coursePrice";
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 const TYPE_FILTERS = [
   { key: "All", en: "All", bn: "সব" },
   { key: "Online", en: "Online", bn: "অনলাইন" },
-  { key: "Offline", en: "Offline", bn: "অফলাইন" },
+  ...(OFFLINE_ENABLED ? [{ key: "Offline", en: "Offline", bn: "অফলাইন" }] : []),
   { key: "Recorded", en: "Recorded", bn: "রেকর্ডেড" },
 ];
 

@@ -7,6 +7,7 @@ import { FaFacebookF, FaLinkedinIn, FaYoutube, FaInstagram, FaWhatsapp } from "r
 import { LuPhone, LuMail, LuMapPin, LuArrowUpRight } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSettings } from "@/context/SettingsContext";
+import { OFFLINE_ENABLED } from "@/lib/features";
 
 const Footer = () => {
   const { t, language } = useLanguage();
@@ -45,7 +46,7 @@ const Footer = () => {
 
   const formatLinks = [
     { to: "/courses?type=Online", label: isBn ? "অনলাইন লাইভ ক্লাস" : "Online live classes" },
-    { to: "/courses?type=Offline", label: isBn ? "সরাসরি ক্লাস" : "In-person classes" },
+    ...(OFFLINE_ENABLED ? [{ to: "/courses?type=Offline", label: isBn ? "সরাসরি ক্লাস" : "In-person classes" }] : []),
     { to: "/courses?type=Recorded", label: isBn ? "রেকর্ডেড কোর্স" : "Recorded courses" },
   ];
 

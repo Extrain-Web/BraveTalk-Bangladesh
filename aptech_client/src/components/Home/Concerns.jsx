@@ -46,8 +46,8 @@ const Concerns = () => {
           titleAccent={isBn ? "দক্ষিণ বাড্ডায়" : "South Badda"}
           description={
             isBn
-              ? "সরাসরি ক্লাস, ভর্তি বা যেকোনো প্রশ্নের জন্য আমাদের অফিসে আসুন অথবা ফোন করুন।"
-              : "Drop by for in-person classes, admission or any question — or just give us a call."
+              ? "ভর্তি বা যেকোনো প্রশ্নের জন্য আমাদের অফিসে আসুন অথবা ফোন করুন।"
+              : "Drop by for admission or any question — or just give us a call."
           }
           isInView={isInView}
           bengaliClass={bn}
