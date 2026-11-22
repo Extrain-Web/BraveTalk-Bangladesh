@@ -9,7 +9,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import PopularCourseCard from "./PopularCourseCard";
 import SectionHeader from "./SectionHeader";
 
-const MAX_CARDS = 6; // 2 full rows of 3
+const MAX_CARDS = 3; // one row of 3
 
 function CardSkeleton() {
     return (
@@ -56,9 +56,8 @@ const PopularCourse = () => {
     return (
         <section className="relative bg-slate-50 py-12 lg:py-16 border-y border-slate-200">
             <div ref={sectionRef} className="relative mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
-                <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                <div className="mb-8">
                     <SectionHeader
-                        align="left"
                         dot="blue"
                         className="mb-0"
                         badge={isBn ? "জনপ্রিয় কোর্স" : "Popular courses"}
@@ -72,16 +71,10 @@ const PopularCourse = () => {
                         isInView={isInView}
                         bengaliClass={bn}
                     />
-                    <Link
-                        href="/courses"
-                        className={`hidden shrink-0 items-center gap-2 rounded-md border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-[#0142b2]/40 hover:text-[#0142b2] lg:inline-flex work ${bn}`}
-                    >
-                        {isBn ? "সব কোর্স দেখুন" : "View all courses"} <LuArrowRight />
-                    </Link>
                 </div>
 
                 {usedCategories.length > 1 && (
-                    <div className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0 sm:pb-0 [scrollbar-width:none]">
+                    <div className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0 sm:pb-0 [scrollbar-width:none]">
                         {[{ _id: "all", name: isBn ? "সব" : "All" }, ...usedCategories].map((cat) => {
                             const id = String(cat._id || cat.id);
                             const active = selected === id;
@@ -110,7 +103,7 @@ const PopularCourse = () => {
                 >
                     {loading && list.length === 0 ? (
                         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                            {Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)}
+                            {Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)}
                         </div>
                     ) : error && list.length === 0 ? (
                         <div className="rounded-md border border-red-100 bg-red-50/50 px-6 py-12 text-center">
@@ -140,7 +133,7 @@ const PopularCourse = () => {
                     )}
                 </motion.div>
 
-                <div className="mt-8 flex justify-center lg:hidden">
+                <div className="mt-8 flex justify-center">
                     <Link
                         href="/courses"
                         className={`inline-flex items-center gap-2 rounded-md bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] work ${bn}`}
@@ -148,14 +141,6 @@ const PopularCourse = () => {
                         {isBn ? "সব কোর্স দেখুন" : "View all courses"} <LuArrowRight />
                     </Link>
                 </div>
-                {filtered.length > MAX_CARDS && (
-                    <p className={`mt-5 hidden text-center text-xs text-slate-500 lg:block work ${bn}`}>
-                        {isBn ? `আরও ${filtered.length - MAX_CARDS}টি কোর্স আছে — ` : `${filtered.length - MAX_CARDS} more courses — `}
-                        <Link href="/courses" className="font-semibold text-[#0142b2] hover:underline">
-                            {isBn ? "সব দেখুন" : "see all"}
-                        </Link>
-                    </p>
-                )}
             </div>
         </section>
     );

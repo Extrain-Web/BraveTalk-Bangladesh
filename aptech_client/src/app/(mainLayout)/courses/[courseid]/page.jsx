@@ -217,10 +217,12 @@ const SingleCourse = () => {
       const alreadyEnrolled = /already enrolled/i.test(data.message || '');
       if (data.success || alreadyEnrolled) {
         setIsEnrolled(true);
-        alert(language === 'bn'
-          ? '🎉 এনরোল সম্পন্ন! এখন আপনার কোর্সে নিয়ে যাওয়া হচ্ছে।'
-          : '🎉 You are enrolled! Taking you to your course now.');
-        router.push(getContinueHref(course));
+        if (alreadyEnrolled) {
+          router.push(getContinueHref(course));
+        } else {
+          const p = new URLSearchParams({ type: 'course', status: 'active', title: course.title || '', amount: '0', method: 'free', item: `/courses/${course.id}` });
+          router.push(`/order-success?${p.toString()}`);
+        }
       } else if (res.status === 401) {
         setShowLoginModal(true);
       } else {

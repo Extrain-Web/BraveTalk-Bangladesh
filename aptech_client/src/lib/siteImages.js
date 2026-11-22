@@ -9,7 +9,7 @@ import { useSettings } from "@/context/SettingsContext";
 const u = (id, w = 1600) => `https://images.unsplash.com/photo-${id}?w=${w}&q=75&auto=format&fit=crop`;
 
 export const SITE_IMAGE_SLOTS = [
-    { key: "heroImage", page: "Home", label: "Home hero photo", hint: "Speaker / class photo next to the headline (landscape, ~1600×1100)", def: u("1544531586-fde5298cdd40") },
+    { key: "heroImage", page: "Home", label: "Home hero photo", hint: "Speaker / class photo next to the headline (landscape, ~1600×1100)", def: u("1556761175-5973dc0f32e7") },
     { key: "homeOnline", page: "Home", label: "Online class photo", hint: "Learning formats section", def: u("1588196749597-9ff075ee6b5b", 900) },
     { key: "homeInPerson", page: "Home", label: "In-person class photo", hint: "Learning formats section", def: u("1517048676732-d65bc937f952", 900) },
     { key: "homeRecorded", page: "Home", label: "Recorded course photo", hint: "Learning formats section", def: u("1491975474562-1f4e30bc9468", 900) },

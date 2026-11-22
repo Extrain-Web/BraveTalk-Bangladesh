@@ -145,6 +145,29 @@ const createEnrollment = async (payload: {
     }
   };
 
+  // ── Helper: Tell the student their order / enrolment went through ──
+  const notifyStudent = async (status: string) => {
+    try {
+      const course: any = await Course.findById(payload.courseId).select('title').lean();
+      const title = course?.title || 'your course';
+      if (status === 'active') {
+        await NotificationService.create(
+          String(payload.studentId), 'enrollment',
+          '🎉 Enrollment successful',
+          `You're enrolled in "${title}". Open My Courses to start learning.`,
+          '/dashboard/user/courses'
+        );
+      } else {
+        await NotificationService.create(
+          String(payload.studentId), 'payment',
+          '🧾 Order received — payment under review',
+          `Thanks! Your order for "${title}" (৳${Number(payload.payment.amount || 0).toLocaleString()}) is placed. We'll unlock the course as soon as your payment is verified.`,
+          '/dashboard/user/payments'
+        );
+      }
+    } catch { /* never block an order */ }
+  };
+
   // If there's an existing cancelled/expired enrollment, update it
   if (existing) {
     existing.status = payload.payment.method === 'free' ? 'active' : 'pending';
@@ -165,6 +188,7 @@ const createEnrollment = async (payload: {
     await existing.save();
     // Notify admins about re-enrollment too
     await notifyAdmins();
+    await notifyStudent(existing.status);
     return existing;
   }
 
@@ -207,6 +231,7 @@ const createEnrollment = async (payload: {
 
   // ── Notify admins about new order ───────
   await notifyAdmins();
+  await notifyStudent(enrollment.status);
 
   return enrollment;
 };

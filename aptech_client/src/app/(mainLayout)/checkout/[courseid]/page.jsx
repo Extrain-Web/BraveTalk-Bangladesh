@@ -5,8 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import {
-  FiShoppingCart, FiCheck, FiArrowLeft, FiClock, FiVideo,
-  FiBookOpen, FiAward, FiShield, FiLoader, FiCopy, FiTag, FiX
+  FiShoppingCart, FiCheck, FiArrowLeft, FiVideo,
+  FiAward, FiShield, FiLoader, FiCopy, FiTag, FiX
 } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { LuBookOpen, LuUsers, LuClock } from "react-icons/lu";
@@ -30,7 +30,6 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState("manual");
   const [processing, setProcessing] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [successModal, setSuccessModal] = useState(null); // 'auto' | 'manual'
   const [agreed, setAgreed] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -131,6 +130,16 @@ export default function CheckoutPage() {
 
   const removeCoupon = () => { setAppliedCoupon(null); setCouponInput(""); setCouponMsg(null); };
 
+  // After a purchase → shared success page (dashboard + home links)
+  const goSuccess = (status, method, ref = "") => {
+    const { totalNum } = computeAmounts();
+    const p = new URLSearchParams({
+      type: "course", status, title: course?.title || "", amount: String(totalNum),
+      method: method || "", ref, item: `/courses/${course?.id}`,
+    });
+    router.push(`/order-success?${p.toString()}`);
+  };
+
   const handleCheckout = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -159,7 +168,7 @@ export default function CheckoutPage() {
             });
             const execData = await execRes.json();
             if (execData.success) {
-              setSuccessModal("auto");
+              goSuccess("active", "bkash", data.data.paymentID || "");
             } else {
               alert(execData.message || "Payment failed");
             }
@@ -194,7 +203,7 @@ export default function CheckoutPage() {
         });
         const data = await res.json();
         if (data.success) {
-          setSuccessModal("manual");
+          goSuccess("pending", manualForm.paymentType, manualForm.transactionId);
         } else {
           alert(data.message || "Submission failed. Please contact support.");
         }
@@ -633,87 +642,6 @@ export default function CheckoutPage() {
         redirectTo={`/checkout/${courseId}`}
       />
 
-      {/* ═══ Success Popup — auto (paid) vs manual (order placed) ═══ */}
-      {successModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-md bg-white rounded-md shadow-xl overflow-hidden animate-[fadeIn_0.25s_ease]">
-            <div className="h-[3px] w-full bg-gradient-to-r from-[#0142b2] via-[#e5251f] to-[#027a1e]"></div>
-            <div className="p-7 text-center">
-              {successModal === "auto" ? (
-                <>
-                  <div className="relative mx-auto w-20 h-20 mb-5">
-                    <div className="absolute inset-0 bg-green-400/20 rounded-full animate-ping"></div>
-                    <div className="relative w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg shadow-green-200">
-                      <FiCheck className="text-white" size={40} />
-                    </div>
-                  </div>
-                  <h3 className={`text-2xl font-extrabold outfit text-slate-900 mb-1.5 ${bengaliClass}`}>
-                    {language === "bn" ? "🎉 পেমেন্ট সফল!" : "🎉 Payment Successful!"}
-                  </h3>
-                  <p className={`text-slate-500 text-sm ${bengaliClass}`}>
-                    {language === "bn" ? "আপনি সফলভাবে এনরোল হয়েছেন" : "You have been enrolled in"}
-                  </p>
-                  <p className="text-base font-bold text-[#0142b2] outfit mb-5">{course.title}</p>
-                  <div className="grid grid-cols-3 gap-3 mb-6">
-                    {[
-                      ["✅", language === "bn" ? "পেমেন্ট" : "Payment Done"],
-                      ["📚", language === "bn" ? "অ্যাক্সেস" : "Course Activated"],
-                      ["🚀", language === "bn" ? "শুরু করুন" : "Start Learning"],
-                    ].map(([emoji, label]) => (
-                      <div key={label} className="p-3 rounded-md bg-blue-50/60 border border-blue-100">
-                        <p className="text-xl">{emoji}</p>
-                        <p className={`text-[10px] text-slate-500 mt-1 work ${bengaliClass}`}>{label}</p>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center mx-auto mb-5">
-                    <FiClock className="text-amber-500" size={38} />
-                  </div>
-                  <h3 className={`text-2xl font-extrabold outfit text-slate-900 mb-1.5 ${bengaliClass}`}>
-                    {language === "bn" ? "✅ অর্ডার প্লেস হয়েছে!" : "✅ Order Placed!"}
-                  </h3>
-                  <p className={`text-slate-500 text-sm ${bengaliClass}`}>
-                    {language === "bn" ? "পেমেন্ট তথ্য জমা হয়েছে" : "Your payment info is submitted for"}
-                  </p>
-                  <p className="text-base font-bold text-[#0142b2] outfit mb-4">{course.title}</p>
-                  <div className="p-3.5 rounded-md bg-amber-50 border border-amber-200 mb-6">
-                    <p className={`text-xs text-amber-700 leading-relaxed ${bengaliClass}`}>
-                      {language === "bn"
-                        ? "অ্যাডমিন আপনার পেমেন্ট যাচাই ও কনফার্ম করলেই কোর্সের অ্যাক্সেস পাবেন।"
-                        : "You'll get course access once the admin verifies and confirms your payment."}
-                    </p>
-                  </div>
-                </>
-              )}
-
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/dashboard/user"
-                  className={`flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#0142b2] text-white font-semibold text-sm rounded-md hover:bg-[#01368f] transition ${bengaliClass}`}
-                >
-                  <FiBookOpen size={15} /> {language === "bn" ? "ড্যাশবোর্ডে যান" : "Go to Dashboard"}
-                </Link>
-                <Link
-                  href={`/courses/${course.id}`}
-                  className={`flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 border border-slate-200 text-[#0b1b4a] font-semibold text-sm rounded-md hover:border-[#0142b2]/40 hover:text-[#0142b2] transition ${bengaliClass}`}
-                >
-                  <FiArrowLeft size={15} /> {language === "bn" ? "কোর্স পেজে যান" : "Go to Course"}
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <style jsx>{`
-            @keyframes fadeIn {
-              from { opacity: 0; transform: scale(0.96); }
-              to { opacity: 1; transform: scale(1); }
-            }
-          `}</style>
-        </div>
-      )}
     </div>
   );
 }

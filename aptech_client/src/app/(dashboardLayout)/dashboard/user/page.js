@@ -349,7 +349,7 @@ export default function UserDashboard() {
                                 { title: 'Payments', href: '/dashboard/user/payments', icon: FiCreditCard, color: 'text-emerald-600 bg-emerald-50' },
                                 { title: 'Schedule', href: '/dashboard/user/schedule', icon: FiCalendar, color: 'text-violet-600 bg-violet-50' },
                                 { title: 'Certificates', href: '/dashboard/user/certificates', icon: FiAward, color: 'text-amber-600 bg-amber-50' },
-                                { title: 'Exams', href: '/dashboard/user/exams', icon: FiFileText, color: 'text-rose-600 bg-rose-50' },
+                                { title: 'Course Materials', href: '/dashboard/user/materials', icon: FiFileText, color: 'text-rose-600 bg-rose-50' },
                             ].map((link) => {
                                 const Icon = link.icon;
                                 return (

@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import {
-    LuArrowLeft, LuShieldCheck, LuCircleCheck, LuCopy, LuCheck, LuLoader, LuMinus, LuPlus,
-    LuTruck, LuFileText, LuShoppingCart, LuLibrary, LuCircleAlert, LuHourglass,
+    LuArrowLeft, LuShieldCheck, LuCopy, LuCheck, LuLoader, LuMinus, LuPlus,
+    LuTruck, LuFileText, LuShoppingCart, LuCircleAlert,
 } from "react-icons/lu";
 import { useLanguage } from "@/context/LanguageContext";
 import { booksApi, formatTaka, isLoggedIn, FORMAT_LABEL } from "@/lib/booksApi";
@@ -49,7 +49,6 @@ export default function BookCheckoutPage() {
     const [agreed, setAgreed] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
-    const [placed, setPlaced] = useState(null);
     const [copied, setCopied] = useState("");
 
     useEffect(() => {
@@ -157,48 +156,17 @@ export default function BookCheckoutPage() {
                 };
             }
             const order = await booksApi.order(payload);
-            setPlaced(order || {});
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            const p = new URLSearchParams({
+                type: "book", status: "pending", title: book?.title || "", amount: String(order?.amount ?? total),
+                method: payment.paymentType || "", ref: order?.orderNo || "", format: format || "", item: `/books/${slug}`,
+            });
+            router.push(`/order-success?${p.toString()}`);
         } catch (err) {
             setError(err.message);
         } finally {
             setSubmitting(false);
         }
     };
-
-    /* ---------- Success panel ---------- */
-    if (placed) {
-        return (
-            <div className="relative overflow-hidden bg-slate-50 min-h-screen">
-                <div className="relative z-10 mx-auto max-w-lg px-4 py-16 sm:py-24">
-                    <div className="rounded-md border border-slate-200 bg-white p-6 sm:p-8 text-center shadow-sm">
-                        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-3xl text-[#027a1e]">
-                            <LuCircleCheck />
-                        </div>
-                        <h1 className={`mt-4 text-2xl font-bold text-[#0b1b4a] outfit ${bn}`}>{isBn ? "অর্ডার সম্পন্ন হয়েছে" : "Order placed"}</h1>
-                        {placed.orderNo && <p className="mt-1 font-mono text-xs text-slate-400">#{placed.orderNo}</p>}
-                        <div className={`mx-auto mt-4 flex max-w-sm items-start gap-2.5 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-left text-sm text-amber-700 work ${bn}`}>
-                            <LuHourglass className="mt-0.5 shrink-0" />
-                            <span>
-                                {isBn
-                                    ? "আপনার পেমেন্ট যাচাই করা হচ্ছে। যাচাই হলে বইটি আপনার লাইব্রেরিতে যোগ হবে এবং আপনাকে জানানো হবে।"
-                                    : "Your payment is being verified. Once approved, the book will be added to your library and you'll be notified."}
-                                {isPrinted && (isBn ? " ছাপা বইটি আপনার ঠিকানায় পাঠানো হবে।" : " The printed copy will be shipped to your address.")}
-                            </span>
-                        </div>
-                        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
-                            <Link href="/dashboard/user/books" className={`inline-flex items-center justify-center gap-2 rounded-md bg-[#0142b2] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#01368f] work ${bn}`}>
-                                <LuLibrary /> {isBn ? "আমার বই" : "Go to My Books"}
-                            </Link>
-                            <Link href={`/books/${slug}`} className={`inline-flex items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-[#0b1b4a] shadow-sm transition hover:border-slate-300 work ${bn}`}>
-                                <LuArrowLeft /> {isBn ? "বইয়ে ফিরে যান" : "Back to the book"}
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="relative overflow-hidden bg-slate-50 min-h-screen">

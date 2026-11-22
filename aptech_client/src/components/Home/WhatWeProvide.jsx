@@ -59,6 +59,18 @@ const WhatWeProvide = () => {
     return (
         <section className="relative bg-slate-50 py-12 lg:py-16 border-y border-slate-200">
             <div ref={sectionRef} className="relative mx-auto max-w-[1140px] 2xl:max-w-[1280px] px-4 sm:px-6">
+                                <SectionHeader
+                            badge={isBn ? "কেন ব্রেভটক" : "Why BraveTalk"}
+                            title={isBn ? "শুধু শেখা নয়," : "More than lessons —"}
+                            titleAccent={isBn ? "বলতে শেখা" : "you actually speak"}
+                            description={
+                                isBn
+                                    ? "পাবলিক স্পিকিং, লিডারশিপ ও সোশ্যাল অ্যাডভোকেসির মাধ্যমে আমরা শিক্ষার্থীদের আত্মবিশ্বাসী করে তুলি।"
+                                    : "We empower students through public speaking, leadership and social advocacy. Here's what you get."
+                            }
+                            isInView={isInView}
+                            bengaliClass={bn}
+                            />
                 <div className="grid items-stretch gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
                     {/* Photo */}
                     <motion.div
@@ -84,20 +96,6 @@ const WhatWeProvide = () => {
 
                     {/* Benefits */}
                     <div>
-                        <SectionHeader
-                            align="left"
-                            badge={isBn ? "কেন ব্রেভটক" : "Why BraveTalk"}
-                            title={isBn ? "শুধু শেখা নয়," : "More than lessons —"}
-                            titleAccent={isBn ? "বলতে শেখা" : "you actually speak"}
-                            description={
-                                isBn
-                                    ? "পাবলিক স্পিকিং, লিডারশিপ ও সোশ্যাল অ্যাডভোকেসির মাধ্যমে আমরা শিক্ষার্থীদের আত্মবিশ্বাসী করে তুলি।"
-                                    : "We empower students through public speaking, leadership and social advocacy. Here's what you get."
-                            }
-                            isInView={isInView}
-                            bengaliClass={bn}
-                            className="mb-6"
-                        />
 
                         <motion.div
                             initial="hidden"

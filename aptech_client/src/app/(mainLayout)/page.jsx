@@ -13,6 +13,7 @@ import WhatWeProvide from "@/components/Home/WhatWeProvide";
 import HomeCTA from "@/components/Home/HomeCTA";
 import Concerns from "@/components/Home/Concerns";
 import PaymentMethod from "@/components/sheard/PaymentMethod";
+import Testimonials from "@/components/Home/Testimonials";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,8 @@ const HomePage = () => {
       <WhatWeProvide />
       {/* Navy CTA band — the one dark section */}
       <HomeCTA />
+      {/* Student testimonials */}
+      <Testimonials />
       {/* Visit / contact strip */}
       <Concerns />
       {/* Payment methods */}

@@ -55,6 +55,8 @@ const nextConfig = {
       { source: "/dashboard/admin/ielts", destination: "/dashboard/admin", permanent: false },
       { source: "/dashboard/admin/ielts/:path*", destination: "/dashboard/admin", permanent: false },
       { source: "/success-story", destination: "/", permanent: false },
+      { source: "/dashboard/user/:page(my-progress|attendance|assignments|exams|marks)", destination: "/dashboard/user", permanent: false },
+      { source: "/dashboard/user/:page(my-progress|attendance|assignments|exams|marks)/:path*", destination: "/dashboard/user", permanent: false },
       { source: "/dashboard/admin/books/orders", destination: "/dashboard/admin/orders", permanent: false },
       { source: "/dashboard/admin/site-images", destination: "/dashboard/admin/site-content/images", permanent: false },
       { source: "/dashboard/admin/payment-progress", destination: "/dashboard/admin/payments", permanent: false },

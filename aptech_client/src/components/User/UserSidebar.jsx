@@ -7,7 +7,7 @@ import {
     FiHome, FiBook, FiBookOpen, FiAward, FiUser, FiMenu, FiX, FiLogOut,
     FiArrowLeft, FiHelpCircle, FiCalendar, FiCreditCard,
     FiFileText, FiClipboard, FiBarChart2, FiBell,
-    FiCheckSquare, FiChevronLeft, FiFolder, FiTrendingUp, FiHeadphones,
+    FiChevronLeft, FiFolder, FiHeadphones,
 } from 'react-icons/fi';
 
 const UserSidebar = () => {
@@ -47,10 +47,8 @@ const UserSidebar = () => {
                 { title: 'Overview', href: '/dashboard/user', icon: FiHome, exact: true },
                 { title: 'My Courses', href: '/dashboard/user/courses', icon: FiBook },
                 { title: 'My Books', href: '/dashboard/user/books', icon: FiBookOpen },
-                { title: 'My Progress', href: '/dashboard/user/my-progress', icon: FiTrendingUp },
                 { title: 'Course Materials', href: '/dashboard/user/materials', icon: FiFolder },
                 { title: 'Schedule', href: '/dashboard/user/schedule', icon: FiCalendar },
-                { title: 'Attendance', href: '/dashboard/user/attendance', icon: FiCheckSquare },
                 { title: 'Notice Board', href: '/dashboard/user/notice-board', icon: FiClipboard },
             ],
         },

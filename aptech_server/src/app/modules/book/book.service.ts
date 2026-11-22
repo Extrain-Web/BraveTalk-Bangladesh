@@ -176,10 +176,20 @@ const createOrder = async (studentId: string, payload: any) => {
         'payment',
         '📚 নতুন বই অর্ডার!',
         `${name} "${b.title}" বইটি ৳${order.amount.toLocaleString()} দিয়ে অর্ডার করেছে।`,
-        '/dashboard/admin/books/orders'
+        '/dashboard/admin/orders'
       );
     }
   } catch { /* notifications never block an order */ }
+
+  try {
+    await NotificationService.create(
+      String(studentId),
+      'payment',
+      '🧾 Book order received',
+      `Thanks! Your order #${order.orderNo} for "${b.title}" (৳${order.amount.toLocaleString()}) is placed. We'll add it to My Books once your payment is verified.`,
+      '/dashboard/user/books'
+    );
+  } catch { /* never block an order */ }
 
   return order;
 };

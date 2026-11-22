@@ -90,7 +90,8 @@ export default function BookDetailPage() {
         setClaiming(true);
         try {
             await booksApi.claimFree(slug);
-            router.push(`/dashboard/user/books/${slug}`);
+            const p = new URLSearchParams({ type: "book", status: "active", title: book?.title || "", amount: "0", method: "free", item: `/books/${slug}` });
+            router.push(`/order-success?${p.toString()}`);
         } catch (err) {
             setActionError(err.message);
             setClaiming(false);
