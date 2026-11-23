@@ -67,7 +67,8 @@ const Navbar = () => {
     { href: "/courses", label: t("navbar.courses") },
     { href: "/books", label: language === "bn" ? "বই" : "Books" },
 
-    { href: "/mentors", label: t("navbar.mentors") },
+    // Mentors page still exists at /mentors — hidden from the menu bar for now
+    // { href: "/mentors", label: t("navbar.mentors") },
     // { href: "/blogs", label: t("navbar.blogs") },
     { href: "/notice-board", label: language === "bn" ? "নোটিশ" : "Notices" },
     { href: "/about", label: t("navbar.about") },
